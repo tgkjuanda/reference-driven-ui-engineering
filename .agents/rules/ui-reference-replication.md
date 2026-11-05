@@ -1,6 +1,6 @@
 ---
 trigger: always_on
-description: Route reference-led web and app UI design or implementation requests to the ui-reference-replication Skill by default.
+description: Route reference-led web/app UI implementation, redesign, and visual QA to the ui-reference-replication Skill by default.
 ---
 
 # Default UI reference workflow
