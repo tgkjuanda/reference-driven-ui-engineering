@@ -166,3 +166,9 @@ npm run compare:regression -- --baseline artifacts/ui-reference/baseline.json --
 The runner supports explicit browser actions and assertions; it never invents product workflows. Keep checks deterministic and use stable selectors such as `data-testid` where appropriate. Review any environment-dependent failures manually.
 
 The comparator distinguishes new regressions, missing baseline checks, failing new checks, resolved failures, and failures already present before redesign. A report with no new regressions is not equivalent to a completely passing suite if pre-existing failures remain. Store sanitized reports only; do not place credentials, tokens, personal data, or production secrets in fixtures or evidence.
+
+## v3.0 cross-cutting QA
+
+Alongside functional regression, run responsive checks on representative widths and critical routes, measure project-specific lab performance budgets, and complete the lightweight source/dependency security review when the runtime permits. See `references/performance-security.md` for exact scope and commands.
+
+Responsive overflow automation does not judge visual suitability. Performance audit output is lab data, not field Core Web Vitals or INP. The security helper is not a full security audit or penetration test. Mark unavailable checks as Partial or Not Tested and never claim broad compliance from these tools alone.
