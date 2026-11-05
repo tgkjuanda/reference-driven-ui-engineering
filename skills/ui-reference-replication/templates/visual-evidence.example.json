@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0.0",
+  "task": {
+    "id": "redesign-example-001",
+    "workMode": "existing-redesign",
+    "fidelity": "reference-faithful"
+  },
+  "captures": [
+    {
+      "id": "dashboard-desktop-default",
+      "route": "/dashboard",
+      "state": "default",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1
+      },
+      "reference": {
+        "path": "artifacts/ui-reference/reference/dashboard-1440x900.png",
+        "source": "Authorized Figma export or source website capture"
+      },
+      "implementation": {
+        "path": "artifacts/ui-reference/actual/dashboard-1440x900.png"
+      },
+      "visualReview": {
+        "status": "reviewed",
+        "attestation": "agent-declared",
+        "reviewer": "Vision-capable agent/model identifier",
+        "reviewedAt": "2026-11-05T10:00:00.000Z",
+        "inspectedReference": true,
+        "inspectedImplementation": true,
+        "summary": "Both images were directly inspected at matching route, viewport, and UI state.",
+        "findings": [
+          {
+            "severity": "medium",
+            "description": "The content column is slightly wider in the implementation.",
+            "status": "fixed"
+          }
+        ]
+      }
+    }
+  ]
+}
