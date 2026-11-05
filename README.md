@@ -23,6 +23,7 @@ It supports both **new UI builds** and **redesigns of existing applications**. C
 - **Quality assurance:** inspect screenshots, compare visual states, audit accessibility, test responsive behavior, and run functional/regression checks where the project environment supports them.
 - **Functional regression:** execute declared Playwright route/interaction checks before and after redesign, then compare reports to identify regressions and pre-existing failures.
 - **Perceptual visual QA:** record dimension-level findings for layout, hierarchy, typography, color, components, responsive behavior, and product-specific design quality.
+- **Cross-cutting QA:** run responsive overflow matrices, route-level lab performance budgets, and lightweight frontend source/dependency security checks.
 
 ## Choose two modes
 
@@ -172,6 +173,7 @@ all tests and unresolved gaps.
 | [Token-Efficient Execution](skills/ui-reference-replication/references/token-efficient-execution.md) | Context routing, reuse, automation, and bounded iteration. |
 | [Visual Evidence Validation](skills/ui-reference-replication/references/evidence-and-visual-qa.md) | Pairing, validating, and auditing screenshot evidence. |
 | [Perceptual Visual Review Template](skills/ui-reference-replication/templates/perceptual-visual-review.example.json) | Structured visual assessment by fidelity mode. |
+| [Responsive, Performance & Security](skills/ui-reference-replication/references/performance-security.md) | Runtime QA scope, commands, budgets, and limitations. |
 | [Functional Regression Example](skills/ui-reference-replication/templates/functional-regression.example.json) | Explicit browser test scenario format for project workflows. |
 | [Automated Workflow](docs/AUTOMATED-WORKFLOW.md) | Repository CI and consumer-project QA process. |
 | [Agent Compatibility](docs/AGENT-COMPATIBILITY.md) | Agent installation paths and compatibility notes. |
@@ -197,6 +199,9 @@ npm run regression -- --config tests/ui-regression.json --label baseline --out a
 npm run regression -- --config tests/ui-regression.json --label post-redesign --out artifacts/ui-reference/post-redesign.json
 npm run compare:regression -- --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json
 npm run validate:visual-review -- --file artifacts/ui-reference/visual-review.json --evidence artifacts/ui-reference/visual-evidence.json --root .
+npm run audit:responsive -- --config tests/responsive-audit.json --out artifacts/ui-reference/responsive.json
+npm run audit:performance -- --config tests/performance-budget.json --out artifacts/ui-reference/performance.json
+npm run audit:security -- --root . --out artifacts/ui-reference/security.json
 ```
 
 Inspect a target project:
@@ -257,7 +262,7 @@ For existing UI redesign, a visually successful result is still incomplete if it
 
 ## Versioning and changelog
 
-Current Skill version: **2.9.0**
+Current Skill version: **3.0.0**
 
 See [CHANGELOG.md](CHANGELOG.md) for release history and notable changes.
 
