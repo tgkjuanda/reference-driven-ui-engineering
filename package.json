@@ -1,9 +1,9 @@
 {
   "name": "ui-reference-replication",
-  "version": "2.8.0",
+  "version": "2.9.0",
   "private": true,
   "type": "module",
-  "description": "Token-efficient, evidence-led UI reconstruction with visual verification and functional regression tooling",
+  "description": "Token-efficient UI implementation with auditable evidence, functional regression, and structured perceptual visual QA",
   "engines": {
     "node": ">=20"
   },
@@ -14,6 +14,7 @@
     "validate:visual-evidence": "node skills/ui-reference-replication/scripts/validate-visual-evidence.mjs",
     "validate:tokens": "node skills/ui-reference-replication/scripts/validate-tokens.mjs skills/ui-reference-replication/templates/design-tokens.example.json",
     "regression": "node skills/ui-reference-replication/scripts/run-functional-regression.mjs",
-    "compare:regression": "node skills/ui-reference-replication/scripts/compare-regression.mjs"
+    "compare:regression": "node skills/ui-reference-replication/scripts/compare-regression.mjs",
+    "validate:visual-review": "node skills/ui-reference-replication/scripts/validate-visual-review.mjs"
   }
 }
