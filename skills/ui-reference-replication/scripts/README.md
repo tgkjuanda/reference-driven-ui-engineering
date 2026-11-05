@@ -98,3 +98,14 @@ npm run compare:regression -- --baseline artifacts/ui-reference/baseline.json --
 Supported actions include click, fill, select-option, check, uncheck, press, and visibility/text/enabled/URL assertions. The config is explicit; the runner does not infer business behavior. Use sanitized test accounts and data.
 
 The comparator identifies new regressions, missing baseline checks, failing new checks, resolved failures, and pre-existing failures. Its `no-new-regressions-with-existing-failures` status is not a fully passing suite.
+
+
+## Perceptual visual review scorecard
+
+After inspecting the source and implementation images directly, create a scorecard from `skills/ui-reference-replication/templates/perceptual-visual-review.example.json` and run:
+
+```bash
+npm run validate:visual-review -- --file artifacts/ui-reference/visual-review.json --evidence artifacts/ui-reference/visual-evidence.json --root .
+```
+
+The validator checks required review dimensions for the selected fidelity mode and verifies each review references a capture ID, route, and state from the visual evidence manifest. It reports Pass, Partial, or Fail without calculating a single visual score. This is a structural validation of an agent-declared review, not proof of actual visual perception.
