@@ -93,6 +93,17 @@ npx skills remove ui-reference-replication
 
 Use the same scope flags (for example `-g`) when managing a global installation.
 
+## Quality framework
+
+The skill includes a required quality scorecard for reference fidelity, consistency, error minimization, accessibility, responsive behavior, interaction feedback/error recovery, visual hierarchy, design tokens, component-driven development, and Figma-to-code synchronization.
+
+See:
+- [UI/UX Quality Gates](docs/QUALITY-GATES.md)
+- [Agent Compatibility](docs/AGENT-COMPATIBILITY.md)
+- [Evidence and Visual QA](skills/ui-reference-replication/references/evidence-and-visual-qa.md)
+- [Design token example](skills/ui-reference-replication/templates/design-tokens.example.json)
+- [Figma-to-code map example](skills/ui-reference-replication/templates/figma-code-map.example.json)
+
 ## Runtime requirements and limitations
 
 The skill contains the workflow; it does **not** itself grant browser automation, Figma API access, screenshot capture, terminal permissions, credentials, or image-diff tools. These depend on the host agent and installed tools. The skill checks availability and discloses when visual verification is blocked.
