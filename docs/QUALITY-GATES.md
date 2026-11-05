@@ -14,30 +14,45 @@ This document turns the design and implementation principles into reviewable acc
 
 **Evidence:** reference screenshot visibly inspected, implementation screenshot visibly inspected, and motion frames/recording visibly inspected when applicable. Record agent/runtime and tested capabilities.
 
-## 1. Reference-centered design
+## 1. Select work mode and fidelity mode
+
+Work mode and fidelity mode are independent.
+
+**Work mode:** New build / Existing UI redesign / Hybrid.
+
+**Fidelity mode:**
+- **Reference-Faithful:** close reproduction of source composition, hierarchy, visual language, components, and observable interactions.
+- **Reference-Inspired Creative:** original interpretation that preserves selected design anchors but allows layout, component composition, exact colors, typography pairing, imagery, effects, and animation to be reimagined.
+
+For creative mode, create a brief with four lists: Preserve, Reinterpret, Protect, and Avoid. Evaluate against this brief rather than exact pixel equality. Do not invent a numeric similarity score.
+
+**Evidence:** declared modes and, for creative mode, an approved or documented creative direction brief.
+
+## 2. Reference-centered design
 
 - Every screen, major region, component, and key style decision points to a Figma frame/node, URL, screenshot, or explicitly documented inference.
 - Keep an evidence ledger with source, viewport, confidence, and missing information.
 - Resolve conflicts using this order: explicit user direction → authorized structured design data and variables → exact reference frame/screenshot → live rendered page → documented inference.
-- Do not add unrelated visual sections or redesign the reference without permission.
-- A reference with an accessibility defect is not a reason to reproduce the defect; preserve visual language while correcting the barrier and documenting the deviation.
+- Do not add unrelated visual sections or redesign the reference without permission in Reference-Faithful mode.
+- In Reference-Inspired Creative mode, use the reference as visual direction, not a mandate to duplicate exact composition.
+- Respect brand identity, asset licenses, trademarks, and third-party intellectual property.
 
 **Evidence:** reference inventory, hierarchy map, uncertainty log, visual comparison screenshots.
 
-## 2. Consistency
+## 3. Consistency
 
 - Use one canonical token layer for repeated design decisions.
 - Use shared components for repeated patterns.
 - Use explicit component variants rather than near-duplicate components.
 - Keep typography, spacing, controls, icons, radii, borders, and feedback states consistent.
-- Any exception must have a reference-backed reason.
+- Any exception must have a reference-backed reason or a documented creative-direction reason.
 
 **Evidence:** token file, component inventory, exception list.
 
-## 3. Minimize implementation errors
+## 4. Minimize implementation errors
 
 - Inspect project framework, package versions, routes, conventions, and existing components before editing.
-- Trace implementation requirements to reference evidence.
+- Trace implementation requirements to reference evidence and the chosen fidelity mode.
 - Prefer typed interfaces and existing lint/type-check/test commands.
 - Validate form constraints, state transitions, navigation destinations, and data formatting.
 - Check browser console, missing assets, failed requests, build output, and unintended overflow.
@@ -45,7 +60,7 @@ This document turns the design and implementation principles into reviewable acc
 
 **Evidence:** build/test outputs, changed-file summary, unresolved defect list.
 
-## 4. Accessibility
+## 5. Accessibility
 
 Use WCAG 2.2 Level AA as the target for applicable web content; it is not a certification claim.
 
@@ -64,7 +79,7 @@ Review:
 
 **Evidence:** manual keyboard test, accessibility-tool results if available, contrast review, motion-preference checks, list of failed/untested criteria.
 
-## 5. Feedback and error prevention/recovery
+## 6. Feedback and error prevention/recovery
 
 Every meaningful user action should have a perceivable result. Define applicable states:
 - idle/default,
@@ -80,7 +95,7 @@ Prevent avoidable errors with input constraints, helper text, safe defaults, cle
 
 **Evidence:** interaction/state matrix and tested primary flows.
 
-## 6. Responsive behavior
+## 7. Responsive behavior
 
 - Use actual supplied viewport frames as primary evidence.
 - Document how layout changes between them: reflow, collapse, wrap, scroll, reorder, or hide.
@@ -91,16 +106,16 @@ Prevent avoidable errors with input constraints, helper text, safe defaults, cle
 
 **Evidence:** viewport matrix and screenshots for each tested width.
 
-## 7. Visual hierarchy
+## 8. Visual hierarchy and design intent
 
-- Preserve the reference's information hierarchy, primary task, primary action, and reading order.
-- Record the intended hierarchy before coding.
+- Preserve the reference's information hierarchy, primary task, primary action, and reading order in Reference-Faithful mode.
+- In Reference-Inspired Creative mode, preserve the hierarchy required by the target product; reinterpret the reference composition when it improves product fit.
 - Use semantic heading order and landmarks consistent with content meaning.
 - Maintain hierarchy across breakpoints; do not let secondary content visually dominate the primary task.
 
 **Evidence:** hierarchy map and desktop/mobile comparison.
 
-## 8. Design tokens
+## 9. Design tokens
 
 - Create one canonical token source and semantic mapping.
 - Separate raw/primitive values from semantic roles.
@@ -111,7 +126,7 @@ Prevent avoidable errors with input constraints, helper text, safe defaults, cle
 
 **Evidence:** token JSON/CSS and source-to-token mapping.
 
-## 9. Component-driven development
+## 10. Component-driven development
 
 - Identify repeated patterns before building page-specific markup.
 - Define component anatomy, variants, props, accessibility semantics, and states.
@@ -121,7 +136,7 @@ Prevent avoidable errors with input constraints, helper text, safe defaults, cle
 
 **Evidence:** component inventory, implementation file map, story/test coverage where available.
 
-## 10. Figma-to-code synchronization
+## 11. Figma-to-code synchronization
 
 When authorized Figma structured access exists:
 - Inspect variables, styles, components, variants, annotations, frames, and Code Connect mappings.
@@ -135,7 +150,7 @@ Without Figma API/MCP access, create a manual evidence map and label synchroniza
 
 **Evidence:** Figma-to-code map and drift report, or explicit access limitation.
 
-## 11. Motion behavior and visual effects
+## 12. Motion behavior and visual effects
 
 Treat motion and effects as part of the design system, not optional decoration.
 
@@ -154,21 +169,34 @@ Use `prefers-reduced-motion: reduce` to respect user system preferences. WCAG 2.
 
 **Evidence:** motion inventory, token map, normal/reduced-motion test results, key-state captures or recordings, automatic-motion review, performance observations, fallback and defect log.
 
-## 12. Existing UI redesign and behavior preservation
+## 13. Existing UI redesign and behavior preservation
 
-When redesigning an existing application to match a visual reference:
+When redesigning an existing application to match or reinterpret a visual reference:
 
 - Create a current-product baseline before editing: routes, navigation, permissions, forms, validation, API/data contracts, tables, search/filter/sort, dialogs, loading/error/empty/success states, analytics hooks, and critical workflows.
 - Record baseline screenshots, current tests, and known defects.
-- Separate target visual style from target product behavior. The reference controls appearance; the existing application remains the default source of truth for business rules and workflows.
-- Map reference visual patterns to existing components and tokens before implementation.
+- Separate visual direction from product behavior. The reference informs desired appearance; the existing application remains the source of truth for business behavior by default.
+- Map reference visual patterns or design anchors to existing components before implementation.
 - Preserve routes, features, data, permissions, validation, keyboard behavior, APIs, and workflows unless the user explicitly approves a functional change.
 - Apply changes incrementally to shared tokens/components and migrate page families in controlled steps.
 - Do not remove features because they are absent from the reference; do not replace live data with static/demo content.
 - Do not change API payloads, database schemas, authentication, authorization, or business rules during a visual-only redesign.
-- Run both reference-fidelity QA and existing-product regression QA after changes.
+- Run both visual-direction QA and existing-product regression QA after changes.
 
 **Evidence:** baseline inventory, route/component migration map, baseline vs post-redesign test results, visually inspected before/after screenshots, preserved-contract record, regression/defect log.
+
+## 14. Creative direction and originality (Reference-Inspired Creative mode)
+
+Evaluate against the user's creative direction brief rather than exact pixel equality.
+
+- **Preserve:** selected design anchors such as mood, broad color character, typography personality, density/rhythm, shape language, and motion personality.
+- **Reinterpret:** layout, component composition, exact palette values, typography pairing, illustrations, imagery, visual effects, and motion choreography.
+- **Protect:** target product identity, primary tasks, accessibility, responsive behavior, performance, existing product behavior in redesign mode, and asset rights.
+- **Avoid:** literal copying when originality is requested, generic template output, inconsistent style mixtures, and decorative effects that weaken usability.
+
+Judge whether the selected anchors remain recognizable, the implementation is original and coherent, and the design fits the product's content, audience, and tasks. A large pixel difference from the reference is not automatically a defect in this mode. Do not invent a similarity percentage.
+
+**Evidence:** creative direction brief, visually inspected implementation, rationale for intentional deviations, product-fit and regression findings.
 
 ## Delivery scorecard
 
@@ -177,7 +205,8 @@ Use a status per gate:
 | Gate | Status | Evidence | Known gap |
 |---|---|---|---|
 | Visual perception prerequisite | Pass / Fail / Not tested | | |
-| Reference fidelity | Pass / Partial / Fail / Not tested | | |
+| Work mode and fidelity mode declared | Pass / Fail / Not tested | | |
+| Reference intent and fidelity-mode alignment | Pass / Partial / Fail / Not tested | | |
 | Consistency | Pass / Partial / Fail / Not tested | | |
 | Error minimization | Pass / Partial / Fail / Not tested | | |
 | Accessibility | Pass / Partial / Fail / Not tested | | |
@@ -189,8 +218,9 @@ Use a status per gate:
 | Figma/code sync | Pass / Partial / Fail / Not tested | | |
 | Motion/effects | Pass / Partial / Fail / Not tested | | |
 | Existing UI behavior preservation (redesign mode) | Pass / Partial / Fail / Not tested | | |
+| Creative anchors/originality/product fit (creative mode) | Pass / Partial / Fail / Not tested | | |
 
-If the visual-perception prerequisite fails or is not tested, do not begin implementation and do not report an overall pass. In redesign mode, behavior preservation must be backed by baseline and post-change evidence.
+If the visual-perception prerequisite fails or is not tested, do not begin implementation and do not report an overall pass. In redesign mode, behavior preservation must be backed by baseline and post-change evidence. In creative mode, evaluate against the design brief, not minimum pixel difference.
 
 ## Reference standards and implementation guidance
 
