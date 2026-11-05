@@ -48,3 +48,16 @@ Not accepted:
 This gate applies to the core promise of reconstructing a reference image, screenshot, rendered site, or its motion. A separately requested coding task based only on a written specification is a different task and must not be represented as a completed UI Reference Replication run.
 
 Passing this gate only establishes that the agent has the required perception capability. It does not prove quality. The agent must still inspect both source and output, execute the visual correction loop, test functionality/accessibility/responsiveness/performance, and report unresolved differences honestly.
+
+
+## Evidence record and integrity
+
+For every reference-to-implementation comparison used as delivery evidence, create a structured manifest using `templates/visual-evidence.example.json`. Validate it with:
+
+```bash
+node <skill>/scripts/validate-visual-evidence.mjs --file artifacts/ui-reference/visual-evidence.json --root .
+```
+
+The validator checks that each evidence pair has a route, state, viewport, accessible PNG files, matching image dimensions, SHA-256 hashes, and a completed review declaration covering both images. A missing or unreviewed pair fails the evidence gate.
+
+**Integrity limitation:** this validator proves file existence, pairing, dimensions, hashes, and completeness of the declared review record. It cannot prove that a model actually perceived or correctly interpreted the images. The review is explicitly labelled `agent-declared`; the mandatory visual-capability rule remains in force.
