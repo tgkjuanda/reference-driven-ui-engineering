@@ -8,7 +8,7 @@ from pathlib import Path
 try:
     from PIL import Image, ImageChops, ImageStat, ImageOps
 except ImportError:
-    print("Pillow is required. Install it with: python -m pip install -r requirements-qa.txt", file=sys.stderr)
+    print("Pillow is required. Install it with: python -m pip install Pillow", file=sys.stderr)
     raise SystemExit(2)
 
 
