@@ -148,3 +148,15 @@ Do not hide a failed or untested gate behind an overall "complete" status.
 - [Design Tokens Community Group — 2025.10](https://www.designtokens.org/tr/2025.10/): portable token format reference.
 
 These sources guide the workflow; the skill must still inspect the actual project and reference. Do not assert conformance to WCAG or the DTCG format merely because the workflow references these standards.
+
+
+## Automated evidence available in this repository
+
+- `scripts/inspect-project.mjs`: detects the existing project stack and available test/browser tools.
+- `scripts/validate-tokens.mjs`: validates a supported subset of DTCG 2025.10 token values, aliases, and common structural errors. It is not a complete DTCG conformance validator.
+- `scripts/capture-screenshots.mjs`: captures the implementation at configured routes and viewport sizes using Playwright.
+- `scripts/compare-screenshots.py`: produces a raw pixel diff, colorized heatmap, optional overlay, and pixel metrics.
+- `scripts/accessibility-audit.mjs`: runs axe-core against a target URL. It does not replace manual accessibility testing.
+- `npm test` and `npm run check`: test the repository's validator and skill structure.
+
+A screenshot comparison still requires an authorized reference screenshot. Figma MCP may supply a source screenshot when connected; a screenshot capture of the local app alone cannot establish reference fidelity.
