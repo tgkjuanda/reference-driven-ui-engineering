@@ -43,10 +43,10 @@ test("existing creative plan routes required guidance without duplicating refere
   assert.ok(plan.loadOnlyWhenNeeded.includes("skills/ui-reference-replication/references/accessibility.md"));
   assert.ok(plan.suggestedChecks.some(item => item.includes("accessibility-audit.mjs")));
   assert.ok(plan.suggestedChecks.some(item => item.includes("validate-visual-evidence.mjs")));
-  assert.ok(plan.suggestedChecks.some(item => item.includes("responsive-audit.mjs")));
-  assert.ok(plan.suggestedChecks.some(item => item.includes("performance-audit.mjs")));
-  assert.ok(plan.suggestedChecks.some(item => item.includes("security-audit.mjs")));
-  assert.ok(plan.readBeforeImplementation.includes("skills/ui-reference-replication/references/performance-security.md"));
+  assert.ok(plan.suggestedChecks.some(item => item.includes("audit:responsive")));
+  assert.ok(plan.suggestedChecks.some(item => item.includes("audit:performance")));
+  assert.ok(plan.suggestedChecks.some(item => item.includes("audit:security")));
+  assert.ok(plan.loadOnlyWhenNeeded.includes("skills/ui-reference-replication/references/performance-security.md"));
 });
 
 test("planner rejects missing or invalid work mode", () => {
