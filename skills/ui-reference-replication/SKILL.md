@@ -5,7 +5,7 @@ license: MIT
 metadata:
   domain: frontend-engineering
   workflow: reference-to-ui
-  version: "2.5.0"
+  version: "2.6.0"
   standard: agent-skills
 ---
 
@@ -47,11 +47,22 @@ This Skill requires the current agent to directly perceive:
 
 If the agent cannot visually inspect both the reference and its own rendered output, **reject the Skill for this task and stop**. Do not fall back to text-only reconstruction, DOM/CSS inspection, Figma metadata, OCR, screenshot paths, or pixel-diff numbers as a substitute for visual perception. State the missing capability and request a vision-capable agent/runtime. Do not modify the project after this prerequisite fails.
 
+## Token-efficient execution
+
+**Read `references/token-efficient-execution.md` before planning a task.** When the bundled planner is available, run it before loading task-specific references:
+
+```bash
+node <skill>/scripts/plan-task.mjs --work-mode <new-build|existing-redesign|hybrid> --fidelity <reference-faithful|reference-inspired-creative>
+```
+
+Read only the references under **Read before implementation**. Load conditional references only when their subject is in scope. Do not preload the full reference library, repeat verified scans, or paste full logs into context. Preserve mandatory visual, functional, accessibility, and regression checks; token efficiency must come from targeted context and deterministic automation, not skipped verification. Never claim a token/cost reduction without reliable runtime measurements.
+
 ## Portability
 
 This is a vendor-neutral Agent Skill. Use the host agent's available browser, Figma, filesystem, terminal, and testing tools. Detect actual capabilities; never assume a tool exists or invent a tool call. The Skill does not grant credentials, browser access, Figma permissions, write access, or image/video perception.
 
 Read the bundled references as needed:
+- `references/token-efficient-execution.md` for task-aware context loading and bounded execution.
 - `references/visual-capability-gate.md` for the mandatory vision prerequisite and rejection behavior.
 - `references/creative-reference-mode.md` for original designs inspired by a visual reference.
 - `references/anti-ai-slop.md` for product-specific visual originality, restraint, anti-template checks, and the required de-slop review.
