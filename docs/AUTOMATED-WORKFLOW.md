@@ -61,6 +61,20 @@ npm run validate:visual-evidence -- --file artifacts/ui-reference/visual-evidenc
 
 The validator checks evidence paths, PNG headers/dimensions, route/state/viewport metadata, SHA-256 hashes, and review-record completeness. The review status is agent-declared; the validator cannot prove actual image perception or correctness of judgement.
 
+## Functional regression runner
+
+For existing UI redesign and hybrid work, create a project-specific config from `skills/ui-reference-replication/templates/functional-regression.example.json`. Use stable selectors and define only real application workflows.
+
+Run the same config before and after implementation:
+
+```bash
+npm run regression -- --config tests/ui-regression.json --label baseline --out artifacts/ui-reference/baseline.json
+npm run regression -- --config tests/ui-regression.json --label post-redesign --out artifacts/ui-reference/post-redesign.json
+npm run compare:regression -- --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json --out artifacts/ui-reference/regression-comparison.json
+```
+
+The runner requires Playwright in the target project and executes declared route checks and safe browser actions only. The comparator distinguishes regressions from pre-existing failures and missing checks. No-new-regressions is not a claim that every test passes.
+
 ## Consumer-project visual QA
 
 After the preflight passes:
