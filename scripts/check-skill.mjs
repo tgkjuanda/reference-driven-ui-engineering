@@ -46,7 +46,8 @@ if (versionMatch && !/^\d+\.\d+\.\d+$/.test(versionMatch[1])) {
 const lines = skill.split(/\r?\n/);
 if (!skill.startsWith("---\n")) errors.push("SKILL.md must start with YAML frontmatter.");
 if (lines.length > 500) errors.push(`SKILL.md has ${lines.length} lines; keep it below 500 lines.`);
-  if (field && !skill.includes(field)) errors.push(`SKILL.md frontmatter/content missing: ${field}`);
+for (const field of ["name: ui-reference-replication", "description:", "license: MIT"]) {
+  if (!skill.includes(field)) errors.push(`SKILL.md frontmatter/content missing: ${field}`);
 }
 if (skill.includes("compatibility: opencode")) errors.push("Core skill must not be locked to OpenCode.");
 for (const required of [
