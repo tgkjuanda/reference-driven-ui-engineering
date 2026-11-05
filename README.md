@@ -3,7 +3,7 @@
 [![Validate Agent Skill](https://github.com/tgkjuanda/ui-reference-replication/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/tgkjuanda/ui-reference-replication/actions/workflows/validate-skill.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**Rebuild or redesign interfaces from visual references—faithfully or with an original creative direction.**
+**Rebuild or redesign interfaces from visual references—faithfully or with an original creative direction, using task-routed context and evidence-led QA.**
 
 UI Reference Replication is a vendor-neutral Agent Skill for vision-capable coding agents. It helps agents inspect Figma designs, live websites, and screenshots; understand the visual system; implement the interface in an existing codebase; and verify the rendered result.
 
@@ -61,6 +61,19 @@ The anti-slop guide treats gradients, glassmorphism, neon, blur, 3D, rounded car
 The review also rejects interchangeable hero/card-grid templates, repetitive card layouts, decorative badges, generic filler imagery, fabricated metrics/testimonials/logos, and inconsistent mixes of visual styles.
 
 Read [Anti-AI-Slop and Design Originality](skills/ui-reference-replication/references/anti-ai-slop.md) and [Creative Reference Mode](skills/ui-reference-replication/references/creative-reference-mode.md).
+
+## Token-efficient task planning
+
+The bundled planner selects the minimum task-relevant references and suggested checks. It is dependency-free:
+
+```bash
+node skills/ui-reference-replication/scripts/plan-task.mjs \\
+  --work-mode existing-redesign \\
+  --fidelity reference-inspired-creative \\
+  --motion --accessibility --responsive
+```
+
+Read only the required references first; load conditional material when its topic is in scope. This reduces unnecessary context loading but does not meter provider tokens or guarantee a fixed percentage of cost savings.
 
 ## Installation
 
@@ -154,6 +167,7 @@ all tests and unresolved gaps.
 | Document | Purpose |
 |---|---|
 | [Quality Gates](docs/QUALITY-GATES.md) | Acceptance criteria and delivery scorecard. |
+| [Token-Efficient Execution](skills/ui-reference-replication/references/token-efficient-execution.md) | Context routing, reuse, automation, and bounded iteration. |
 | [Automated Workflow](docs/AUTOMATED-WORKFLOW.md) | Repository CI and consumer-project QA process. |
 | [Agent Compatibility](docs/AGENT-COMPATIBILITY.md) | Agent installation paths and compatibility notes. |
 | [Visual Capability Gate](skills/ui-reference-replication/references/visual-capability-gate.md) | Mandatory visual-perception prerequisite and rejection behavior. |
@@ -225,7 +239,7 @@ For existing UI redesign, a visually successful result is still incomplete if it
 
 ## Versioning and changelog
 
-Current Skill version: **2.5.0**
+Current Skill version: **2.6.0**
 
 See [CHANGELOG.md](CHANGELOG.md) for release history and notable changes.
 

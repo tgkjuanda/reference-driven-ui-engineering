@@ -11,6 +11,19 @@ npm run validate:tokens
 node skills/ui-reference-replication/scripts/inspect-project.mjs --root .
 ```
 
+## Token-efficient task plan
+
+Select only the guidance relevant to the task:
+
+```bash
+node skills/ui-reference-replication/scripts/plan-task.mjs \\
+  --work-mode existing-redesign \\
+  --fidelity reference-inspired-creative \\
+  --motion --accessibility --responsive
+```
+
+The planner is dependency-free and supports `--json` for automation. It does not measure provider token usage.
+
 ## Screenshot capture
 
 Requires Playwright in the target app/project:

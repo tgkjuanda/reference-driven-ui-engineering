@@ -1,13 +1,14 @@
 {
   "name": "ui-reference-replication",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "private": true,
   "type": "module",
-  "description": "Vision-required UI reconstruction and redesign skill with creative originality and anti-AI-slop quality checks",
+  "description": "Token-efficient, vision-required UI reconstruction and redesign skill with evidence-led quality checks",
   "engines": { "node": ">=20" },
   "scripts": {
     "test": "node --test tests/*.test.mjs",
     "check": "node scripts/check-skill.mjs",
+    "plan:task": "node skills/ui-reference-replication/scripts/plan-task.mjs",
     "validate:tokens": "node skills/ui-reference-replication/scripts/validate-tokens.mjs skills/ui-reference-replication/templates/design-tokens.example.json"
   }
 }

@@ -256,3 +256,15 @@ These sources guide the workflow; the skill must still inspect the actual projec
 - `npm test` and `npm run check`: test the repository's validator and skill structure.
 
 Repository CI validates the Skill and helper scripts; it does not prove the consumer UI's perceptual quality. Screenshot comparison only contributes to QA when the agent itself can inspect the source/output images.
+
+
+## 16. Token-efficient execution
+
+- Run the task planner with the selected work mode and fidelity mode before loading task-specific references.
+- Read only mandatory and task-routed references; load conditional guidance when that subject enters scope.
+- Keep a compact ledger of routes, viewports, states, protected behavior, verified findings, and unresolved unknowns.
+- Reuse valid findings and rerun checks only when their inputs or code changed, or when new evidence contradicts prior results.
+- Return concise diagnostic summaries while preserving links/paths to source evidence.
+- Do not invent token counts or savings; do not skip mandatory quality gates to reduce context.
+
+**Evidence:** planner output, task ledger, and actual checks performed. The planner is a context-selection aid, not a token meter.
