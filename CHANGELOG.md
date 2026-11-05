@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.7.0] - 2026-11-05
+
+### Added
+- Structured visual evidence manifest template with route, state, viewport, reference/output pair, reviewer declaration, and findings.
+- Dependency-free visual evidence validator checking path containment, file existence, PNG headers, dimensions, duplicate IDs, review completeness, and SHA-256 hashes.
+- Unit tests for valid evidence, missing review, dimension mismatch, and path traversal.
+
+### Changed
+- Visual QA and delivery workflow require a validated evidence package for significant screenshot comparisons.
+- Explicitly distinguishes manifest integrity and agent-declared review from independently proven image perception.
+
+
 ## [2.6.0] - 2026-11-05
 
 ### Added
