@@ -1,6 +1,18 @@
 # UI/UX Quality Gates
 
-This document turns the skill's design principles into reviewable acceptance criteria. A rendered page is not automatically a good interface.
+This document turns the design and implementation principles into reviewable acceptance criteria. A rendered page is not automatically a good interface.
+
+## 0. Mandatory visual-perception prerequisite
+
+**Hard gate — must pass before implementation begins.**
+
+- The executing agent must directly perceive the supplied reference image/screenshot or rendered website.
+- The executing agent must directly perceive screenshots of its own implementation at matching routes, viewports, and UI states.
+- If motion is in scope, the executing agent must inspect the relevant recording or captured animation frames.
+- Screenshot capture, file paths, OCR, DOM/CSS inspection, Figma metadata, and pixel-diff values alone do not satisfy this requirement.
+- If the executing agent cannot inspect both source and output visuals, reject the task and stop before changing the project.
+
+**Evidence:** reference screenshot visibly inspected, implementation screenshot visibly inspected, and motion frames/recording visibly inspected when applicable. Record agent/runtime and tested capabilities.
 
 ## 1. Reference-centered design
 
@@ -148,6 +160,7 @@ Use a status per gate:
 
 | Gate | Status | Evidence | Known gap |
 |---|---|---|---|
+| Visual perception prerequisite | Pass / Fail / Not tested | | |
 | Reference fidelity | Pass / Partial / Fail / Not tested | | |
 | Consistency | Pass / Partial / Fail / Not tested | | |
 | Error minimization | Pass / Partial / Fail / Not tested | | |
@@ -160,8 +173,7 @@ Use a status per gate:
 | Figma/code sync | Pass / Partial / Fail / Not tested | | |
 | Motion/effects | Pass / Partial / Fail / Not tested | | |
 
-Do not hide a failed or untested gate behind an overall "complete" status.
-
+If the visual-perception prerequisite fails or is not tested, do not begin implementation and do not report an overall pass.
 
 ## Reference standards and implementation guidance
 
@@ -175,7 +187,6 @@ Do not hide a failed or untested gate behind an overall "complete" status.
 
 These sources guide the workflow; the skill must still inspect the actual project and reference. Do not assert conformance to WCAG or the DTCG format merely because the workflow references these standards.
 
-
 ## Automated evidence available in this repository
 
 - `scripts/inspect-project.mjs`: detects the existing project stack and available test/browser tools.
@@ -185,4 +196,4 @@ These sources guide the workflow; the skill must still inspect the actual projec
 - `scripts/accessibility-audit.mjs`: runs axe-core against a target URL. It does not replace manual accessibility testing.
 - `npm test` and `npm run check`: test the repository's validator and skill structure.
 
-Motion inventory, recording, reduced-motion behavior, and performance profiling remain consumer-project runtime checks; the current repository CI does not test a user's rendered animations. A screenshot comparison still requires an authorized reference screenshot. Figma MCP may supply a source screenshot when connected; a screenshot capture of the local app alone cannot establish reference fidelity.
+Repository CI validates the Skill and helper scripts; it does not prove the consumer UI's perceptual quality. Screenshot comparison only contributes to QA when the agent itself can inspect the source/output images.
