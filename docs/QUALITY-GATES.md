@@ -280,3 +280,17 @@ Repository CI validates the Skill and helper scripts; it does not prove the cons
 - A validator pass does not prove actual perception or correct judgement; the review remains agent-declared and subject to audit.
 
 **Evidence:** validated manifest and preserved original screenshots.
+
+
+## 18. Functional regression evidence
+
+For existing UI redesign and hybrid projects with a runnable browser environment:
+
+- Define project-specific checks for critical routes and interactions; do not infer undocumented workflows.
+- Run the same declared checks against the pre-change baseline and post-change application.
+- Compare reports by stable check ID.
+- Detect new failures, missing baseline coverage, failed new checks, resolved failures, and pre-existing failures separately.
+- Store sanitized reports without credentials, access tokens, personal information, or production secrets.
+- Report a no-new-regressions outcome separately from a fully passing suite when pre-existing failures remain.
+
+**Evidence:** baseline report, post-change report, comparison report, and the exact config used.

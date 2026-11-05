@@ -16,6 +16,9 @@ for (const relative of [
   "skills/ui-reference-replication/references/token-efficient-execution.md",
   "skills/ui-reference-replication/scripts/plan-task.mjs",
   "skills/ui-reference-replication/scripts/validate-visual-evidence.mjs",
+  "skills/ui-reference-replication/scripts/run-functional-regression.mjs",
+  "skills/ui-reference-replication/scripts/compare-regression.mjs",
+  "skills/ui-reference-replication/templates/functional-regression.example.json",
   "skills/ui-reference-replication/templates/visual-evidence.example.json",
   "skills/ui-reference-replication/references/visual-capability-gate.md",
   "skills/ui-reference-replication/references/existing-ui-redesign.md",
@@ -55,6 +58,8 @@ if (skill.includes("compatibility: opencode")) errors.push("Core skill must not 
 for (const required of [
   "references/token-efficient-execution.md",
   "scripts/plan-task.mjs",
+  "scripts/run-functional-regression.mjs",
+  "scripts/compare-regression.mjs",
   "references/visual-capability-gate.md",
   "references/existing-ui-redesign.md",
   "references/creative-reference-mode.md",
@@ -103,6 +108,17 @@ if (versionMatch && !planner.includes(`version: "${versionMatch[1]}"`)) {
   errors.push("Task planner version is out of sync with SKILL.md.");
 }
 if (!packageJson.scripts?.["plan:task"]) errors.push("package.json must expose the plan:task script.");
+if (!packageJson.scripts?.["regression"] || !packageJson.scripts?.["compare:regression"]) errors.push("package.json must expose regression and compare:regression scripts.");
+
+const regressionTemplate = JSON.parse(await readFile(path.join(root, "skills/ui-reference-replication/templates/functional-regression.example.json"), "utf8"));
+if (regressionTemplate.schemaVersion !== "1.0.0" || !Array.isArray(regressionTemplate.checks)) {
+  errors.push("Functional regression example must contain schemaVersion 1.0.0 and a checks array.");
+}
+const regressionRunner = await readFile(path.join(root, "skills/ui-reference-replication/scripts/run-functional-regression.mjs"), "utf8");
+const regressionComparator = await readFile(path.join(root, "skills/ui-reference-replication/scripts/compare-regression.mjs"), "utf8");
+if (!regressionRunner.includes("validateConfig") || !regressionComparator.includes("compareReports")) {
+  errors.push("Functional regression runner/comparator is missing its validation exports.");
+}
 
 const evidenceTemplate = JSON.parse(await readFile(path.join(root, "skills/ui-reference-replication/templates/visual-evidence.example.json"), "utf8"));
 if (evidenceTemplate.schemaVersion !== "1.0.0" || !Array.isArray(evidenceTemplate.captures)) {
