@@ -95,6 +95,13 @@ if (!creativeGuide.includes("Mandatory anti-AI-slop review") || !creativeGuide.i
   errors.push("Creative mode does not require the anti-AI-slop review.");
 }
 
+const plannerPath = "skills/ui-reference-replication/scripts/plan-task.mjs";
+const planner = await readFile(path.join(root, plannerPath), "utf8");
+if (versionMatch && !planner.includes(`version: "${versionMatch[1]}"`)) {
+  errors.push("Task planner version is out of sync with SKILL.md.");
+}
+if (!packageJson.scripts?.["plan:task"]) errors.push("package.json must expose the plan:task script.");
+
 const tokenFile = "skills/ui-reference-replication/templates/design-tokens.example.json";
 await mustExist(tokenFile);
 const tokenDocument = JSON.parse(await readFile(path.join(root, tokenFile), "utf8"));
