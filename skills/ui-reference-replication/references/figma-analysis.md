@@ -1,66 +1,67 @@
-# Reference Intelligence and Design Reverse Engineering
+# Figma MCP Integration Guide
 
-## Evidence precedence
+## What the integration actually provides
 
-Use this order when sources disagree:
-1. Explicit user instruction about the authoritative source.
-2. Authorized structured design data (Figma nodes, variables, component properties).
-3. Exact supplied frame export or screenshot.
-4. Live rendered reference at the matching state/viewport.
-5. Clearly labeled inference.
+Figma MCP is a context bridge between Figma and an AI client. It can expose structured design information and, on supported clients/servers, write design content. It does not automatically convert a design into production-ready frontend code or repair implementation defects; the Agent is responsible for implementation, component reuse, and validation.
 
-Never let a low-confidence screenshot estimate override an exact Figma variable.
+Official setup documentation: https://developers.figma.com/docs/figma-mcp-server/
 
-## Figma inspection
+## Recommended read workflow
 
-When an authorized Figma MCP/API connection is available, use the tools it actually exposes. Common Figma MCP capabilities include design context, variable definitions, component/variant inspection, Code Connect maps, and asset downloads. Tool availability differs by MCP version and plan.
+When the host agent exposes the official Figma MCP tools, use the capabilities that are actually available:
 
-For each target frame:
-- Record file, page, frame/node IDs and revision/timestamp when available.
-- Inspect the frame hierarchy and selected node bounds.
-- Extract Auto Layout direction, gap, padding, alignment, sizing mode, constraints, and clipping.
-- Extract text content, font family, size, weight, line height, letter spacing, text alignment, and text resizing.
-- Extract fills, strokes, opacity, corner radius, effects, and blend modes.
-- Inspect component properties, variants, nested instances, variables, and modes.
-- Identify image fills, vector assets, icon sources, and export settings.
-- Prefer existing project components using Code Connect mappings where available.
+1. `get_metadata`: discover top-level pages and inspect IDs, names, node types, positions, and dimensions. Use this first for large files.
+2. `get_design_context`: retrieve selected frame/layer design context, including structure and styling. Request the target framework and existing project components in the prompt.
+3. `get_variable_defs`: extract variables and styles used in the selected Figma scope.
+4. `get_screenshot`: capture the selected frame for visual inspection and comparison.
+5. `download_assets`: retrieve exports or original image assets when the implementation needs actual files.
+6. `get_code_connect_map`: retrieve mappings between Figma instance nodes and code components.
+7. `get_code_connect_suggestions`: request suggestions when mappings are missing.
+8. `get_motion_context`: inspect keyframe/easing data for animated designs when available.
 
-A Figma MCP server supplies structured context; it does not one-click produce correct production code. The agent remains responsible for mapping the context to the repository and validating the rendered result.
+Tool availability varies by server mode, client, selection type, and account permissions. Discover tools from the connected MCP rather than assuming every method is enabled.
 
-## URL and screenshot inspection
+## Remote Figma MCP setup
 
-For a website:
-- Capture the full page and required states.
-- Inspect at source-like viewport dimensions.
-- Wait for fonts and image loading.
-- Record visible navigation destinations and behavior.
+The official remote MCP endpoint documented by Figma is:
 
-For screenshots:
-- Preserve original dimensions.
-- Record viewport boundaries and any browser chrome/cropping.
-- Estimate positions proportionally only when exact node data is unavailable.
-- Mark unreadable text and unseen content as unknown.
+```text
+https://mcp.figma.com/mcp
+```
 
-## Evidence ledger
+Follow the host AI client's own MCP connection instructions. The desktop MCP server is a separate option and has different selection/context behavior. Remote server capabilities also differ from desktop capabilities.
 
-For every screen, create records with:
-- Reference source and stable identifier.
-- Viewport and UI state.
-- Observed facts.
-- Inferred values and confidence.
-- Missing evidence/assets.
-- Implementation route/component mapping.
+For remote context extraction, provide a link to the relevant Figma frame or layer. Selection-based prompts are supported by the desktop MCP server; remote MCP expects a frame/layer link.
+
+## Required extraction record
+
+For each target screen, record:
+- File key, page ID, node/frame ID.
+- Inspected revision/time if exposed.
+- Canvas/frame dimensions.
+- Layout, Auto Layout, constraints, spacing, and alignment.
+- Variables, typography, effects, strokes, fills, and radii.
+- Component instances, variants, and Code Connect mappings.
+- Screenshot/export references and source asset names.
 
 ## Figma-to-code synchronization
 
-Maintain a mapping:
-Figma variable/component/node → semantic token/code component → source file/export.
+Use a traceable mapping:
+Figma variable or node ID → semantic token/component → source file and export.
 
-Detect:
-- Changed token values.
-- Missing or unused code tokens.
-- Unmapped Figma components.
-- Missing code variants.
-- Visual drift after a design revision.
+On each change:
+1. Re-read only affected Figma nodes/variables.
+2. Compare against the previous mapping.
+3. Generate a drift report.
+4. Review the impact on shared components and other viewports.
+5. Apply the smallest code correction.
+6. Re-run screenshots and relevant tests.
 
-Default direction is Figma/reference → code. Only write to Figma after explicit user direction and verified write permission. Generate a diff before changing shared libraries.
+Default direction is Figma → code. Do not write changes back to Figma unless the user explicitly asks and the connected tool has authorized write access. If writing back is requested, inspect first, present the planned change, and avoid replacing shared components/variables wholesale.
+
+## Limitations
+
+- MCP output quality depends on the design file structure, selected scope, available variables, model, and prompt.
+- Very large frames may need to be inspected in smaller sections.
+- Exported assets and write operations depend on available Figma MCP capabilities and permissions.
+- A Figma MCP connection does not automatically provide browser automation, Playwright, axe-core, or access to the user's local files unless the host agent separately provides those capabilities.
