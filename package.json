@@ -1,9 +1,9 @@
 {
   "name": "ui-reference-replication",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "type": "module",
-  "description": "Cross-agent UI reference replication skill with automated validation tools",
+  "description": "Cross-agent UI reference replication skill with motion design and automated QA guidance",
   "engines": { "node": ">=20" },
   "scripts": {
     "test": "node --test tests/*.test.mjs",
