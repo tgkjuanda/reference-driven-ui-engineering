@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.0.0] - 2026-11-05
+
+### Added
+- Responsive audit for viewport matrices, document overflow, mobile viewport metadata, navigation failures, and uncaught page errors.
+- Browser lab performance budget audit for TTFB, FCP, LCP, CLS, observed long-task blocking time, and resource transfer sizes.
+- npm dependency advisory audit with configurable severity threshold and no automatic dependency changes.
+- Unified quality report validator with conditional gates, evidence-file checks, path containment, and Pass/Partial/Fail/Not Tested semantics.
+- Templates and unit tests for responsive, performance, dependency-security, and aggregate quality reporting.
+
+### Changed
+- Full task plans now route to responsive, accessibility, performance, dependency-security, and unified-report checks.
+- Reports distinguish browser lab measurements and dependency advisories from field Core Web Vitals and full security audits.
+
+
 ## [2.9.0] - 2026-11-05
 
 ### Added

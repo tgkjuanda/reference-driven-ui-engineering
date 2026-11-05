@@ -14,14 +14,22 @@ const skillPath = "skills/ui-reference-replication/SKILL.md";
 await mustExist(skillPath);
 for (const relative of [
   "skills/ui-reference-replication/references/token-efficient-execution.md",
+  "skills/ui-reference-replication/references/complete-quality-assurance.md",
   "skills/ui-reference-replication/scripts/plan-task.mjs",
   "skills/ui-reference-replication/scripts/validate-visual-evidence.mjs",
   "skills/ui-reference-replication/scripts/validate-visual-review.mjs",
   "skills/ui-reference-replication/templates/perceptual-visual-review.example.json",
   "skills/ui-reference-replication/scripts/run-functional-regression.mjs",
   "skills/ui-reference-replication/scripts/compare-regression.mjs",
+  "skills/ui-reference-replication/scripts/run-responsive-audit.mjs",
+  "skills/ui-reference-replication/scripts/run-performance-audit.mjs",
+  "skills/ui-reference-replication/scripts/run-dependency-audit.mjs",
+  "skills/ui-reference-replication/scripts/validate-quality-report.mjs",
   "skills/ui-reference-replication/templates/functional-regression.example.json",
   "skills/ui-reference-replication/templates/visual-evidence.example.json",
+  "skills/ui-reference-replication/templates/performance-budget.example.json",
+  "skills/ui-reference-replication/templates/responsive-matrix.example.json",
+  "skills/ui-reference-replication/templates/quality-report.example.json",
   "skills/ui-reference-replication/references/visual-capability-gate.md",
   "skills/ui-reference-replication/references/existing-ui-redesign.md",
   "skills/ui-reference-replication/references/creative-reference-mode.md",
@@ -112,6 +120,20 @@ if (versionMatch && !planner.includes(`version: "${versionMatch[1]}"`)) {
 if (!packageJson.scripts?.["plan:task"]) errors.push("package.json must expose the plan:task script.");
 if (!packageJson.scripts?.["regression"] || !packageJson.scripts?.["compare:regression"]) errors.push("package.json must expose regression and compare:regression scripts.");
 if (!packageJson.scripts?.["validate:visual-review"]) errors.push("package.json must expose validate:visual-review script.");
+for (const script of ["responsive:audit", "performance:audit", "security:audit", "validate:quality-report"]) {
+  if (!packageJson.scripts?.[script]) errors.push("package.json must expose " + script + " script.");
+}
+const qualityTemplate = JSON.parse(await readFile(path.join(root, "skills/ui-reference-replication/templates/quality-report.example.json"), "utf8"));
+if (qualityTemplate.schemaVersion !== "1.0.0" || !Array.isArray(qualityTemplate.gates)) errors.push("Quality report template must contain schemaVersion 1.0.0 and a gates array.");
+for (const [relative, required] of [
+  ["skills/ui-reference-replication/scripts/run-responsive-audit.mjs", ["evaluateResponsiveMetrics", "horizontal overflow"]],
+  ["skills/ui-reference-replication/scripts/run-performance-audit.mjs", ["evaluatePerformanceMetrics", "largest-contentful-paint"]],
+  ["skills/ui-reference-replication/scripts/run-dependency-audit.mjs", ["npm audit", "metadata.vulnerabilities"]],
+  ["skills/ui-reference-replication/scripts/validate-quality-report.mjs", ["requiredGates", "evidence file", "not-tested"]]
+]) {
+  const source = await readFile(path.join(root, relative), "utf8");
+  for (const phrase of required) if (!source.toLowerCase().includes(phrase.toLowerCase())) errors.push(relative + " missing required marker: " + phrase);
+}
 
 const regressionTemplate = JSON.parse(await readFile(path.join(root, "skills/ui-reference-replication/templates/functional-regression.example.json"), "utf8"));
 if (regressionTemplate.schemaVersion !== "1.0.0" || !Array.isArray(regressionTemplate.checks)) {

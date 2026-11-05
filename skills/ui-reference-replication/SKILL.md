@@ -5,7 +5,7 @@ license: MIT
 metadata:
   domain: frontend-engineering
   workflow: reference-to-ui
-  version: "2.9.0"
+  version: "3.0.0"
   standard: agent-skills
 ---
 
@@ -63,6 +63,7 @@ This is a vendor-neutral Agent Skill. Use the host agent's available browser, Fi
 
 Read the bundled references as needed:
 - `references/token-efficient-execution.md` for task-aware context loading and bounded execution.
+- `references/complete-quality-assurance.md` for responsive, performance, dependency-security, and unified quality-report gates.
 - `references/visual-capability-gate.md` for the mandatory vision prerequisite and rejection behavior.
 - `references/creative-reference-mode.md` for original designs inspired by a visual reference.
 - `references/anti-ai-slop.md` for product-specific visual originality, restraint, anti-template checks, and the required de-slop review.
@@ -92,6 +93,7 @@ Read the bundled references as needed:
 12. **Verify, then claim:** only report tests that actually ran. Do not claim pixel-perfect, perceptually verified, WCAG-compliant, or fully tested without evidence.
 13. **Respect rights and access:** use authorized reference assets. Do not bypass authentication, paywalls, or licensing restrictions.
 14. **Reject generic AI aesthetics:** in creative mode, do not stack fashionable effects or reuse interchangeable page templates without a product-specific reason. Follow `references/anti-ai-slop.md`; justify major visual decisions by product context, user task, or reference evidence.
+15. **Complete and evidence the quality report:** do not claim delivery-wide pass unless all required task-specific gates have valid evidence. Use `references/complete-quality-assurance.md`; report untested checks explicitly.
 
 ## Operating workflow
 
@@ -164,7 +166,11 @@ Scripts live beside this file in `scripts/`. Run them from the user's project ro
 - `node <skill>/scripts/validate-tokens.mjs <path-to-token-json>`
 - `node <skill>/scripts/capture-screenshots.mjs --url http://localhost:3000 --routes /,/dashboard --out artifacts/ui-reference`
 - `node <skill>/scripts/validate-visual-evidence.mjs --file artifacts/ui-reference/visual-evidence.json --root .`
-- `node <skill>/scripts/validate-visual-review.mjs --file artifacts/ui-reference/visual-review.json --evidence artifacts/ui-reference/visual-evidence.json --root .`
+- `node <skill>/scripts/validate-visual-review.mjs --file artifacts/ui-reference/visual-review.json --evidence artifacts/ui-reference/visual-evidence.json --root .
+- `node <skill>/scripts/run-responsive-audit.mjs --url http://localhost:3000 --routes /,/dashboard --out artifacts/ui-reference/responsive.json`
+- `node <skill>/scripts/run-performance-audit.mjs --url http://localhost:3000 --budget artifacts/ui-reference/performance-budget.json --out artifacts/ui-reference/performance.json`
+- `node <skill>/scripts/run-dependency-audit.mjs --root . --fail-on high --out artifacts/ui-reference/dependency-audit.json`
+- `node <skill>/scripts/validate-quality-report.mjs --file artifacts/ui-reference/quality-report.json --root .``
 - `node <skill>/scripts/run-functional-regression.mjs --config <regression-config.json> --label baseline --out artifacts/ui-reference/baseline.json`
 - `node <skill>/scripts/compare-regression.mjs --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json`
 - `python <skill>/scripts/compare-screenshots.py reference.png actual.png --diff artifacts/ui-reference/diff.png`
@@ -214,6 +220,10 @@ For screenshot comparisons used as delivery evidence, maintain a manifest based 
 
 Report work mode, fidelity mode, creative direction brief and anti-slop review when applicable, routes/screens covered, files changed, reference limitations, current behavior preserved, approved functional changes, intentional creative deviations, design and motion tokens/components reused, interactions and animations implemented, viewports and motion preferences tested, screenshot/recording evidence visually inspected, baseline vs post-change test results, visual-diff diagnostics, accessibility findings, performance observations, and unresolved deviations.
 
+### 12. Unified quality report
+
+Create a report from the quality-report template. Every required gate must be Pass, Partial, Fail, or Not Tested. Pass requires an existing evidence file; Partial/Fail require a next action; Not Tested requires a reason. Validate the report with validate-quality-report.mjs. This checks report structure and referenced files, not the truth of an agent declaration.
+
 ## Required quality gates
 
 Give every gate one status: **Pass**, **Partial**, **Fail**, or **Not tested**.
@@ -230,6 +240,10 @@ Give every gate one status: **Pass**, **Partial**, **Fail**, or **Not tested**.
 10. Motion behavior, visual effects, reduced-motion alternatives, and motion performance.
 11. In redesign mode: preservation of existing routes, features, data/API contracts, permissions, and critical workflows.
 12. In Reference-Inspired Creative mode: preservation of selected design anchors, originality, coherence, and product fit.
+13. Responsive audit across declared representative routes and viewports.
+14. Performance budget review using recorded browser lab metrics and documented limitations.
+15. Dependency advisory audit where the target package manager and lockfile permit it; other security review remains explicitly scoped.
+16. Unified quality report with evidence-backed status for every required gate.
 
 Gate 1 is a hard prerequisite. If it fails, reject and stop; do not mark the rest of the gates as passed or imply the task was completed. In redesign mode, gate 11 must have baseline and post-change evidence. Do not collapse failed or untested gates into a global pass.
 

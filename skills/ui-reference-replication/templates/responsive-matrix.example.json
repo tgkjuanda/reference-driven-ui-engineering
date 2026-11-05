@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "1.0.0",
+  "viewports": [
+    { "width": 390, "height": 844, "label": "mobile" },
+    { "width": 768, "height": 1024, "label": "tablet" },
+    { "width": 1440, "height": 900, "label": "desktop" }
+  ],
+  "routes": ["/", "/dashboard"]
+}

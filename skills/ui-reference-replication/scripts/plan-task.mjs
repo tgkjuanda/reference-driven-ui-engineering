@@ -17,6 +17,8 @@ function parseArgs(argv) {
     motion: false,
     accessibility: false,
     responsive: false,
+    performance: false,
+    security: false,
     json: false
   };
   const flags = {
@@ -29,6 +31,8 @@ function parseArgs(argv) {
     "--motion": "motion",
     "--accessibility": "accessibility",
     "--responsive": "responsive",
+    "--performance": "performance",
+    "--security": "security",
     "--json": "json"
   };
 
@@ -101,8 +105,20 @@ function createPlan(options) {
     scripts.push("node <skill>/scripts/validate-visual-evidence.mjs --file <visual-evidence.json> --root .");
     scripts.push("node <skill>/scripts/validate-visual-review.mjs --file <visual-review.json> --evidence <visual-evidence.json> --root .");
   }
-  if (options.accessibility) {
+  if (options.accessibility || options.scope === "full") {
     scripts.push("node <skill>/scripts/accessibility-audit.mjs --url <local-url>");
+  }
+  if (options.responsive || options.scope === "full") {
+    scripts.push("node <skill>/scripts/run-responsive-audit.mjs --url <local-url> --routes <routes> --out artifacts/ui-reference/responsive.json");
+  }
+  if (options.performance || options.scope === "full") {
+    scripts.push("node <skill>/scripts/run-performance-audit.mjs --url <local-url> --budget <performance-budget.json> --routes <routes> --out artifacts/ui-reference/performance.json");
+  }
+  if (options.security || options.scope === "full" || options.scope === "audit") {
+    scripts.push("node <skill>/scripts/run-dependency-audit.mjs --root . --fail-on high --out artifacts/ui-reference/dependency-audit.json");
+  }
+  if (options.scope === "full" || options.scope === "audit") {
+    scripts.push("node <skill>/scripts/validate-quality-report.mjs --file artifacts/ui-reference/quality-report.json --root .");
   }
   if (options.scope === "full" || options.scope === "functional") {
     scripts.push("npm run regression -- --config <regression-config.json> --label baseline --out <baseline-report.json>");
@@ -115,7 +131,7 @@ function createPlan(options) {
   const uniqueOnDemand = [...new Set(loadWhenNeeded)].filter(item => !uniqueReadBefore.includes(item));
 
   return {
-    version: "2.9.0",
+    version: "3.0.0",
     workMode: options.workMode,
     fidelity: options.fidelity,
     scope: options.scope,
@@ -123,7 +139,9 @@ function createPlan(options) {
       figma: options.figma,
       motion: options.motion,
       accessibility: options.accessibility,
-      responsive: options.responsive
+      responsive: options.responsive,
+      performance: options.performance,
+      security: options.security
     },
     readBeforeImplementation: uniqueReadBefore,
     loadOnlyWhenNeeded: uniqueOnDemand,
@@ -151,7 +169,9 @@ function usage() {
     "  --figma       Include Figma analysis guidance",
     "  --motion      Include motion design guidance",
     "  --accessibility Include accessibility guidance and scan",
-    "  --responsive  Include responsive/interaction guidance",
+    "  --responsive  Include responsive/interaction guidance and audit",
+    "  --performance Include browser lab performance audit",
+    "  --security    Include npm dependency advisory audit",
     "  --json        Print machine-readable JSON",
     "  --help        Show this help",
     "",
