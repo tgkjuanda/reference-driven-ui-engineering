@@ -1,68 +1,97 @@
-# UI Reference Replication — OpenCode Skill
+# UI Reference Replication
 
-An OpenCode Agent Skill for reconstructing high-fidelity, responsive web interfaces from Figma links, live website URLs, screenshots, and image references.
+[![skills.sh](https://skills.sh/b/tgkjuanda/ui-reference-replication)](https://skills.sh/tgkjuanda/ui-reference-replication)
 
-## What it does
+A cross-agent **Agent Skill** for recreating web UI from Figma files, website URLs, screenshots, and image references. It reverse-engineers layout and design tokens, implements the interface in the existing frontend stack, and requires visual QA instead of claiming fidelity without evidence.
 
-- Inspects the source design and current project before implementation.
-- Reverse-engineers layout geometry, typography, color, spacing, components, and assets.
-- Preserves the existing frontend stack and conventions.
-- Implements visible interactions and responsive adaptations.
-- Uses browser screenshots and iterative visual comparison when tools are available.
-- Clearly distinguishes verified facts, estimates, and access limitations.
+## Install with skills.sh CLI
 
-## Install in one project
+Requires Node.js **22.20 or later** for the current Vercel Skills CLI.
 
-Clone this repository, then copy the included skill directory:
+### Interactive install
+
+Run this inside the target project:
 
 ```bash
-git clone https://github.com/tgkjuanda/ui-reference-replication.git
+npx skills add tgkjuanda/ui-reference-replication
 ```
 
-Copy:
+The CLI downloads the repository skill, lets you choose the skill and detected AI agents, and installs it in their project-level skill directories.
+
+### Install to Antigravity, Claude Code, and OpenCode together
+
+```bash
+npx skills add tgkjuanda/ui-reference-replication \
+  --skill ui-reference-replication \
+  --agent antigravity \
+  --agent claude-code \
+  --agent opencode \
+  --yes
+```
+
+### Install globally
+
+Add `--global` (or `-g`) to either command to install for the selected agents at user scope:
+
+```bash
+npx skills add tgkjuanda/ui-reference-replication \
+  --skill ui-reference-replication \
+  --agent antigravity \
+  --agent claude-code \
+  --agent opencode \
+  --global \
+  --yes
+```
+
+Project-scope installation is recommended when the same skill should be available to a team or workspace. For other agents supported by the CLI, use the interactive command and select them in the agent picker.
+
+## Supported agent locations
+
+| Agent | Project skill directory | Notes |
+|---|---|---|
+| Google Antigravity IDE | `.agents/skills/ui-reference-replication/` | Workspace skills; Antigravity also supports a global skills directory. |
+| Google Antigravity CLI | `.agents/skills/ui-reference-replication/` | Workspace skill path. Global path differs from the IDE. |
+| Claude Code | `.claude/skills/ui-reference-replication/` | Native project skill location. |
+| OpenCode | `.opencode/skills/ui-reference-replication/` | Native project location; OpenCode also discovers shared `.agents/skills/` and Claude-compatible locations. |
+| Codex and other agents | Agent-specific | Use the Skills CLI agent picker; it writes to the selected agent's supported path. |
+
+The core skill content is vendor-neutral. The Skills CLI handles agent-specific placement; it does not translate or rewrite the instructions for each model.
+
+## What the skill does
+
+- Inspects the reference and existing repository before coding.
+- Extracts layout geometry, typography, colors, spacing, components, and assets.
+- Preserves the existing project framework and conventions.
+- Implements visible interactions and responsive behavior.
+- Captures and compares screenshots when browser tooling exists.
+- Reports verified facts, estimates, deviations, and access limitations honestly.
+
+## Manual installation
+
+If you do not use the Skills CLI, copy:
 
 ```text
-ui-reference-replication/.opencode/skills/ui-reference-replication/
+skills/ui-reference-replication/
 ```
 
-into your target project's:
+to the target agent's skill directory shown above. The installed directory must contain `SKILL.md` and its `references/` folder.
 
-```text
-your-project/.opencode/skills/ui-reference-replication/
+## Update or remove
+
+```bash
+npx skills check
+npx skills update ui-reference-replication
+npx skills remove ui-reference-replication
 ```
 
-The installed directory should contain:
+Use the same scope flags (for example `-g`) when managing a global installation.
 
-```text
-.opencode/skills/ui-reference-replication/
-├── SKILL.md
-└── references/
-    └── evidence-and-visual-qa.md
-```
+## Runtime requirements and limitations
 
-## Install globally
+The skill contains the workflow; it does **not** itself grant browser automation, Figma API access, screenshot capture, terminal permissions, credentials, or image-diff tools. These depend on the host agent and installed tools. The skill checks availability and discloses when visual verification is blocked.
 
-Copy `.opencode/skills/ui-reference-replication/` to:
-
-- macOS/Linux: `~/.config/opencode/skills/ui-reference-replication/`
-- Windows: `%USERPROFILE%\.config\opencode\skills\ui-reference-replication\`
-
-## Invoke in OpenCode
-
-```text
-@ui-reference-replication Recreate this reference as closely as possible:
-https://www.figma.com/community/file/1381931496411280342/schoolhub-school-management-admin-dashboard-template
-
-Inspect the reference and this repository first. Preserve the current stack.
-Do not invent inaccessible frames or assets. Implement and visually verify.
-```
-
-You can also attach screenshots/images directly and invoke `@ui-reference-replication`.
-
-## Runtime capabilities
-
-The skill defines the workflow; it does not itself grant browser, Figma API, screenshot, or image-diff capabilities. Those depend on tools/MCPs and dependencies available to the OpenCode runtime. The skill instructs the agent to detect available tools and disclose verification limits.
+Figma URLs may expose only a public preview. Do not invent hidden frames or assets; request authorized exports or screenshots when required.
 
 ## License and source assets
 
-The skill instructions in this repository are provided under the MIT License. This does not grant rights to third-party Figma templates, logos, images, fonts, or other assets. Confirm the source design's license and use authorized assets.
+The instructions in this repository are licensed under MIT. This does not grant rights to third-party Figma templates, logos, images, fonts, or other assets. Confirm the source design's license before redistributing those assets.
