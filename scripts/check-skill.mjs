@@ -15,6 +15,8 @@ await mustExist(skillPath);
 for (const relative of [
   "skills/ui-reference-replication/references/token-efficient-execution.md",
   "skills/ui-reference-replication/scripts/plan-task.mjs",
+  "skills/ui-reference-replication/scripts/validate-visual-evidence.mjs",
+  "skills/ui-reference-replication/templates/visual-evidence.example.json",
   "skills/ui-reference-replication/references/visual-capability-gate.md",
   "skills/ui-reference-replication/references/existing-ui-redesign.md",
   "skills/ui-reference-replication/references/creative-reference-mode.md",
@@ -101,6 +103,15 @@ if (versionMatch && !planner.includes(`version: "${versionMatch[1]}"`)) {
   errors.push("Task planner version is out of sync with SKILL.md.");
 }
 if (!packageJson.scripts?.["plan:task"]) errors.push("package.json must expose the plan:task script.");
+
+const evidenceTemplate = JSON.parse(await readFile(path.join(root, "skills/ui-reference-replication/templates/visual-evidence.example.json"), "utf8"));
+if (evidenceTemplate.schemaVersion !== "1.0.0" || !Array.isArray(evidenceTemplate.captures)) {
+  errors.push("Visual evidence example must contain schemaVersion 1.0.0 and a captures array.");
+}
+const evidenceValidator = await readFile(path.join(root, "skills/ui-reference-replication/scripts/validate-visual-evidence.mjs"), "utf8");
+if (!evidenceValidator.includes("agent-declared") || !evidenceValidator.includes("SHA-256")) {
+  errors.push("Visual evidence validator must disclose agent-declared review and generate image hashes.");
+}
 
 const tokenFile = "skills/ui-reference-replication/templates/design-tokens.example.json";
 await mustExist(tokenFile);
