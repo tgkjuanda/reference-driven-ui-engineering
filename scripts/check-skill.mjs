@@ -109,7 +109,7 @@ if (evidenceTemplate.schemaVersion !== "1.0.0" || !Array.isArray(evidenceTemplat
   errors.push("Visual evidence example must contain schemaVersion 1.0.0 and a captures array.");
 }
 const evidenceValidator = await readFile(path.join(root, "skills/ui-reference-replication/scripts/validate-visual-evidence.mjs"), "utf8");
-if (!evidenceValidator.includes("agent-declared") || !evidenceValidator.includes("SHA-256")) {
+if (!evidenceValidator.includes("agent-declared") || !evidenceValidator.includes("createHash")) {
   errors.push("Visual evidence validator must disclose agent-declared review and generate image hashes.");
 }
 
