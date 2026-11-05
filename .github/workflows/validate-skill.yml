@@ -33,6 +33,9 @@ jobs:
           node --check skills/ui-reference-replication/scripts/responsive-audit.mjs
           node --check skills/ui-reference-replication/scripts/performance-audit.mjs
           node --check skills/ui-reference-replication/scripts/security-audit.mjs
+          node --check skills/ui-reference-replication/scripts/responsive-audit.mjs
+          node --check skills/ui-reference-replication/scripts/performance-audit.mjs
+          node --check skills/ui-reference-replication/scripts/security-audit.mjs
           node --check skills/ui-reference-replication/scripts/inspect-project.mjs
           node --check skills/ui-reference-replication/scripts/validate-tokens.mjs
           node --check skills/ui-reference-replication/scripts/capture-screenshots.mjs
