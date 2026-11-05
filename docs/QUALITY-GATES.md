@@ -268,3 +268,15 @@ Repository CI validates the Skill and helper scripts; it does not prove the cons
 - Do not invent token counts or savings; do not skip mandatory quality gates to reduce context.
 
 **Evidence:** planner output, task ledger, and actual checks performed. The planner is a context-selection aid, not a token meter.
+
+
+## 17. Visual evidence package integrity
+
+- Each important reference/implementation comparison has a unique ID, route, UI state, viewport, and device scale factor.
+- Both source and implementation PNGs exist within the evidence root and have matching dimensions.
+- The manifest records SHA-256 hashes for traceability.
+- The review record identifies who/what declared the review, when it occurred, confirms both images were inspected, and records findings.
+- Unreviewed or incomplete evidence cannot pass the manifest validator.
+- A validator pass does not prove actual perception or correct judgement; the review remains agent-declared and subject to audit.
+
+**Evidence:** validated manifest and preserved original screenshots.

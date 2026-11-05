@@ -72,3 +72,14 @@ The axe-core scan is automated evidence only. Keyboard, screen reader, focus ord
 ## Token validator scope
 
 The included validator checks a useful subset of DTCG 2025.10 token structure and common value types, including colors, dimensions, durations, font family/weight, typography, curly-brace aliases, unresolved aliases, and circular aliases. It is not a complete DTCG conformance validator; advanced composite types and JSON Pointer property-level references are not fully validated.
+
+
+## Visual evidence manifest validation
+
+Start from `skills/ui-reference-replication/templates/visual-evidence.example.json`, replace the example paths and review notes, and run:
+
+```bash
+npm run validate:visual-evidence -- --file artifacts/ui-reference/visual-evidence.json --root .
+```
+
+The dependency-free validator checks relative paths, file existence, PNG headers, matching image dimensions, duplicate capture IDs, review completeness, and SHA-256 hashes. It rejects path traversal outside the evidence root. A passing report confirms manifest integrity and a declared review record—not actual visual perception or design correctness.

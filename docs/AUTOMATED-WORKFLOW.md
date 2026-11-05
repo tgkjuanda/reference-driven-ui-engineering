@@ -51,6 +51,16 @@ Fidelity modes:
 
 Work mode and fidelity mode are independent. For existing UI redesign, the reference determines visual direction while the current application remains the source of truth for business behavior unless the user approves functional changes.
 
+## Structured visual evidence
+
+For each significant reference/implementation comparison, maintain a manifest based on `skills/ui-reference-replication/templates/visual-evidence.example.json` and validate it:
+
+```bash
+npm run validate:visual-evidence -- --file artifacts/ui-reference/visual-evidence.json --root .
+```
+
+The validator checks evidence paths, PNG headers/dimensions, route/state/viewport metadata, SHA-256 hashes, and review-record completeness. The review status is agent-declared; the validator cannot prove actual image perception or correctness of judgement.
+
 ## Consumer-project visual QA
 
 After the preflight passes:

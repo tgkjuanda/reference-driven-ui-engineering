@@ -168,6 +168,7 @@ all tests and unresolved gaps.
 |---|---|
 | [Quality Gates](docs/QUALITY-GATES.md) | Acceptance criteria and delivery scorecard. |
 | [Token-Efficient Execution](skills/ui-reference-replication/references/token-efficient-execution.md) | Context routing, reuse, automation, and bounded iteration. |
+| [Visual Evidence Validation](skills/ui-reference-replication/references/evidence-and-visual-qa.md) | Pairing, validating, and auditing screenshot evidence. |
 | [Automated Workflow](docs/AUTOMATED-WORKFLOW.md) | Repository CI and consumer-project QA process. |
 | [Agent Compatibility](docs/AGENT-COMPATIBILITY.md) | Agent installation paths and compatibility notes. |
 | [Visual Capability Gate](skills/ui-reference-replication/references/visual-capability-gate.md) | Mandatory visual-perception prerequisite and rejection behavior. |
@@ -187,6 +188,7 @@ Run repository validation from the repository root:
 npm test
 npm run check
 npm run validate:tokens
+npm run validate:visual-evidence -- --file artifacts/ui-reference/visual-evidence.json --root .
 ```
 
 Inspect a target project:
@@ -203,6 +205,14 @@ node skills/ui-reference-replication/scripts/capture-screenshots.mjs \
   --routes /,/dashboard \
   --out artifacts/ui-reference
 ```
+
+Validate the screenshot evidence manifest after completing the required direct visual review:
+
+```bash
+node skills/ui-reference-replication/scripts/validate-visual-evidence.mjs --file artifacts/ui-reference/visual-evidence.json --root .
+```
+
+The manifest validator checks integrity and review declarations; it does not prove perceptual understanding.
 
 Compare an authorized reference screenshot with the implementation:
 
@@ -239,7 +249,7 @@ For existing UI redesign, a visually successful result is still incomplete if it
 
 ## Versioning and changelog
 
-Current Skill version: **2.6.0**
+Current Skill version: **2.7.0**
 
 See [CHANGELOG.md](CHANGELOG.md) for release history and notable changes.
 

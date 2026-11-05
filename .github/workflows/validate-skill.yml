@@ -26,6 +26,7 @@ jobs:
         run: |
           node --check scripts/check-skill.mjs
           node --check skills/ui-reference-replication/scripts/plan-task.mjs
+          node --check skills/ui-reference-replication/scripts/validate-visual-evidence.mjs
           node --check skills/ui-reference-replication/scripts/inspect-project.mjs
           node --check skills/ui-reference-replication/scripts/validate-tokens.mjs
           node --check skills/ui-reference-replication/scripts/capture-screenshots.mjs
