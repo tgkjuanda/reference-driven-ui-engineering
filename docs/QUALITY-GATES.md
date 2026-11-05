@@ -138,3 +138,13 @@ Use a status per gate:
 | Figma/code sync | Pass / Partial / Fail / Not tested | | |
 
 Do not hide a failed or untested gate behind an overall "complete" status.
+
+
+## Reference standards and implementation guidance
+
+- [WCAG 2.2 — W3C Recommendation](https://www.w3.org/TR/WCAG22/): use as the accessibility target and test applicable success criteria.
+- [Figma MCP Server documentation](https://developers.figma.com/docs/figma-mcp-server/): structured design context, variables, components, and design-to-code workflow.
+- [Figma file-structure guidance](https://developers.figma.com/docs/figma-mcp-server/structure-figma-file/): component naming, variables, Auto Layout, annotations, and Code Connect.
+- [Design Tokens Community Group — 2025.10](https://www.designtokens.org/tr/2025.10/): portable token format reference.
+
+These sources guide the workflow; the skill must still inspect the actual project and reference. Do not assert conformance to WCAG or the DTCG format merely because the workflow references these standards.
