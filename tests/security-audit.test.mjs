@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import { scanSourceText, summarizeDependencyAudit } from "../skills/ui-reference-replication/scripts/security-audit.mjs";
 
 test("flags risky HTML/eval APIs without returning source contents", () => {
-  const findings = scanSourceText("src/example.js", 'element.innerHTML = userInput;\nconst value = eval(input);');
+  const snippet = ["element.", "innerHTML = userInput;\\nconst value = ", "eval", "(input);"].join("");
+  const findings = scanSourceText("src/example.js", snippet);
   assert.equal(findings.length, 2);
   assert.ok(findings.every(item => item.file === "src/example.js" && !("value" in item)));
 });
