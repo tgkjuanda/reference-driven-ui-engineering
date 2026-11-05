@@ -88,3 +88,24 @@ Use the browser/screenshot tool actually available in the host agent. Tool names
 If Playwright is installed in the project, use its existing configuration and scripts. Avoid adding dependencies without need. Capture reference and local implementation at identical viewport dimensions.
 
 If a required reference item is unavailable, report it and request the relevant export or screenshot.
+
+
+## Machine-checkable visual evidence manifest
+
+Use `templates/visual-evidence.example.json` as the schema example. Each capture pair records:
+- Unique capture ID, route, UI state, CSS viewport, and device scale factor.
+- Relative path to the authorized reference PNG and implementation PNG.
+- A review record identifying the reviewer, timestamp, whether both images were inspected, a concise summary, and findings with severity and status.
+- Optional source description for the reference capture.
+
+Validate before delivery:
+
+```bash
+node skills/ui-reference-replication/scripts/validate-visual-evidence.mjs \
+  --file artifacts/ui-reference/visual-evidence.json \
+  --root .
+```
+
+The validator rejects missing files, paths escaping the evidence root, malformed PNG headers, mismatched dimensions, duplicate IDs, and incomplete/unreviewed review records. It reports SHA-256 hashes for traceability.
+
+A passing result means the evidence package is structurally complete and contains a declared review record. It does **not** prove that an agent genuinely perceived the images or that its visual judgement was correct. Preserve original screenshots and inspect them directly.
