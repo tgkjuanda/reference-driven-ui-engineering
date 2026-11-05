@@ -9,7 +9,8 @@ test("flags risky HTML/eval APIs without returning source contents", () => {
 });
 
 test("detects common secret patterns while redacting values", () => {
-  const findings = scanSourceText("src/config.js", 'const token = "ghp_abcdefghijklmnopqrstuvwxyz0123456789";');
+  const token = ["ghp_", "abcdefghijklmnopqrstuvwxyz0123456789"].join("");
+  const findings = scanSourceText("src/config.js", `const token = "${token}";`);
   assert.equal(findings.length, 1);
   assert.equal(findings[0].category, "github-token");
   assert.match(findings[0].message, /redacted/);
