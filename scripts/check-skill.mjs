@@ -16,6 +16,7 @@ for (const relative of [
   "skills/ui-reference-replication/references/visual-capability-gate.md",
   "skills/ui-reference-replication/references/existing-ui-redesign.md",
   "skills/ui-reference-replication/references/creative-reference-mode.md",
+  "skills/ui-reference-replication/references/anti-ai-slop.md",
   "skills/ui-reference-replication/references/figma-analysis.md",
   "skills/ui-reference-replication/references/design-system-engineering.md",
   "skills/ui-reference-replication/references/accessibility.md",
@@ -42,12 +43,14 @@ for (const required of [
   "references/visual-capability-gate.md",
   "references/existing-ui-redesign.md",
   "references/creative-reference-mode.md",
+  "references/anti-ai-slop.md",
   "references/accessibility.md",
   "references/motion-design.md",
   "If the agent cannot visually inspect both the reference and its own rendered output, **reject the Skill for this task and stop**.",
   "**Reference-Faithful:**",
   "**Reference-Inspired Creative:**",
   "Preserve, Reinterpret, Protect, and Avoid",
+  "anti-AI-slop review",
   "Existing UI redesign"
 ]) {
   if (!skill.includes(required)) errors.push(`Core skill missing required rule: ${required}`);
@@ -68,6 +71,15 @@ for (const required of ["Establish the existing-product baseline", "Regression a
 const creative = await readFile(path.join(root, "skills/ui-reference-replication/references/creative-reference-mode.md"), "utf8");
 for (const required of ["Preserve — design anchors", "Reinterpret — areas of creative freedom", "Protect — non-negotiable constraints", "Avoid — undesired outcomes", "Do not optimize for minimum changed-pixel ratio"]) {
   if (!creative.includes(required)) errors.push(`Creative reference mode missing: ${required}`);
+}
+
+const antiSlop = await readFile(path.join(root, "skills/ui-reference-replication/references/anti-ai-slop.md"), "utf8");
+for (const required of ["product reality", "product-specific", "trend stacking", "The de-slop review", "fabricated trust claims"]) {
+  if (!antiSlop.toLowerCase().includes(required.toLowerCase())) errors.push(`Anti-AI-slop guide missing: ${required}`);
+}
+const creativeGuide = await readFile(path.join(root, "skills/ui-reference-replication/references/creative-reference-mode.md"), "utf8");
+if (!creativeGuide.includes("Mandatory anti-AI-slop review") || !creativeGuide.includes("anti-ai-slop.md")) {
+  errors.push("Creative mode does not require the anti-AI-slop review.");
 }
 
 const tokenFile = "skills/ui-reference-replication/templates/design-tokens.example.json";
