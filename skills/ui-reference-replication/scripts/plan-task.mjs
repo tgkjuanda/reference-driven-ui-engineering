@@ -94,7 +94,7 @@ function createPlan(options) {
   if (options.figma) readBefore.push(`${ROOT}/references/figma-analysis.md`);
   if (options.motion) loadWhenNeeded.push(`${ROOT}/references/motion-design.md`);
   if (options.accessibility) loadWhenNeeded.push(`${ROOT}/references/accessibility.md`);
-  if (options.responsive) {
+  if (options.responsive || options.scope === "full") {
     loadWhenNeeded.push(`${ROOT}/references/responsive-and-interactions.md`);
     scripts.push("npm run audit:responsive -- --config <responsive-config.json> --out <responsive-report.json>");
   }
@@ -113,7 +113,7 @@ function createPlan(options) {
     scripts.push("node <skill>/scripts/validate-visual-evidence.mjs --file <visual-evidence.json> --root .");
     scripts.push("node <skill>/scripts/validate-visual-review.mjs --file <visual-review.json> --evidence <visual-evidence.json> --root .");
   }
-  if (options.accessibility) {
+  if (options.accessibility || options.scope === "full") {
     scripts.push("node <skill>/scripts/accessibility-audit.mjs --url <local-url>");
   }
   if (options.scope === "full" || options.scope === "functional") {
