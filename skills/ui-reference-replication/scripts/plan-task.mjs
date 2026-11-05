@@ -98,6 +98,7 @@ function createPlan(options) {
   if (options.scope === "full" || options.scope === "visual") {
     scripts.push("node <skill>/scripts/capture-screenshots.mjs --url <local-url> --routes <routes>");
     scripts.push("python <skill>/scripts/compare-screenshots.py <reference.png> <actual.png>");
+    scripts.push("node <skill>/scripts/validate-visual-evidence.mjs --file <visual-evidence.json> --root .");
   }
   if (options.accessibility) {
     scripts.push("node <skill>/scripts/accessibility-audit.mjs --url <local-url>");
@@ -110,7 +111,7 @@ function createPlan(options) {
   const uniqueOnDemand = [...new Set(loadWhenNeeded)].filter(item => !uniqueReadBefore.includes(item));
 
   return {
-    version: "2.6.0",
+    version: "2.7.0",
     workMode: options.workMode,
     fidelity: options.fidelity,
     scope: options.scope,
