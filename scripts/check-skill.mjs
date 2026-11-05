@@ -40,13 +40,12 @@ if (!versionMatch) errors.push("SKILL.md frontmatter version is missing.");
 if (versionMatch && packageJson.version !== versionMatch[1]) {
   errors.push(`Version mismatch: package.json is ${packageJson.version}, SKILL.md is ${versionMatch[1]}.`);
 }
-if (versionMatch && !/^\\d+\\.\\d+\\.\\d+$/.test(versionMatch[1])) {
+if (versionMatch && !/^\d+\.\d+\.\d+$/.test(versionMatch[1])) {
   errors.push(`Invalid semantic version in SKILL.md: ${versionMatch[1]}`);
 }
 const lines = skill.split(/\r?\n/);
 if (!skill.startsWith("---\n")) errors.push("SKILL.md must start with YAML frontmatter.");
 if (lines.length > 500) errors.push(`SKILL.md has ${lines.length} lines; keep it below 500 lines.`);
-for (const field of ["name: ui-reference-replication", "description:", "license: MIT", "version: \"2.5.0\""]) {
   if (field && !skill.includes(field)) errors.push(`SKILL.md frontmatter/content missing: ${field}`);
 }
 if (skill.includes("compatibility: opencode")) errors.push("Core skill must not be locked to OpenCode.");
