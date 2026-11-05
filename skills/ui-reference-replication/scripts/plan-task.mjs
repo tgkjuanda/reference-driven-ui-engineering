@@ -104,14 +104,17 @@ function createPlan(options) {
     scripts.push("node <skill>/scripts/accessibility-audit.mjs --url <local-url>");
   }
   if (options.scope === "full" || options.scope === "functional") {
-    scripts.push("Run the target project's existing build, unit, interaction, and regression tests.");
+    scripts.push("npm run regression -- --config <regression-config.json> --label baseline --out <baseline-report.json>");
+    scripts.push("npm run regression -- --config <regression-config.json> --label post-redesign --out <post-report.json>");
+    scripts.push("npm run compare:regression -- --baseline <baseline-report.json> --actual <post-report.json>");
+    scripts.push("Run the target-project build, unit, interaction, and regression tests.");
   }
 
   const uniqueReadBefore = [...new Set(readBefore)];
   const uniqueOnDemand = [...new Set(loadWhenNeeded)].filter(item => !uniqueReadBefore.includes(item));
 
   return {
-    version: "2.7.0",
+    version: "2.8.0",
     workMode: options.workMode,
     fidelity: options.fidelity,
     scope: options.scope,
