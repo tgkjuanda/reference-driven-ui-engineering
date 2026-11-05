@@ -44,9 +44,11 @@ function resolveInside(root, relative) {
 function validateReview(review, evidence) {
   const errors = [];
   if (review?.schemaVersion !== "1.0.0") errors.push("schemaVersion must be 1.0.0.");
+  if (evidence?.schemaVersion !== "1.0.0") errors.push("evidence manifest schemaVersion must be 1.0.0.");
   if (!review?.task?.id || typeof review.task.id !== "string") errors.push("task.id is required.");
   const fidelity = review?.task?.fidelity;
   if (!MODES[fidelity]) errors.push("task.fidelity must be reference-faithful or reference-inspired-creative.");
+  if (review?.task?.id && evidence?.task?.id && review.task.id !== evidence.task.id) errors.push("review task.id must match evidence task.id.");
   if (!Array.isArray(review?.reviews) || review.reviews.length === 0) {
     errors.push("reviews must contain at least one capture review.");
     return { status: "fail", errors, reviews: [] };
@@ -65,6 +67,9 @@ function validateReview(review, evidence) {
     seen.add(id);
     const source = evidenceCaptures.get(id);
     if (!source) errors.push({ captureId: id, message: "captureId does not exist in visual evidence manifest." });
+    if (source && (source.visualReview?.status !== "reviewed" || source.visualReview?.inspectedReference !== true || source.visualReview?.inspectedImplementation !== true)) {
+      errors.push({ captureId: id, message: "The referenced evidence capture must contain a completed visualReview declaration for both images." });
+    }
     if (source && item.route !== source.route) errors.push({ captureId: id, message: "route does not match the visual evidence manifest." });
     if (source && item.state !== source.state) errors.push({ captureId: id, message: "state does not match the visual evidence manifest." });
     if (typeof item?.reviewer !== "string" || !item.reviewer.trim()) errors.push({ captureId: id, message: "reviewer is required." });
