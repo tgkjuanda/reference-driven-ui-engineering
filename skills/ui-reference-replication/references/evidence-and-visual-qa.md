@@ -89,22 +89,21 @@ If Playwright is installed in the project, use its existing configuration and sc
 
 If a required reference item is unavailable, report it and request the relevant export or screenshot.
 
-
 ## Machine-checkable visual evidence manifest
 
-Use `templates/visual-evidence.example.json` as the schema example. Each capture pair records:
+Use \`$SKILL_DIR/templates/visual-evidence.example.json\` as the schema example. Each capture pair records:
 - Unique capture ID, route, UI state, CSS viewport, and device scale factor.
 - Relative path to the authorized reference PNG and implementation PNG.
 - A review record identifying the reviewer, timestamp, whether both images were inspected, a concise summary, and findings with severity and status.
 - Optional source description for the reference capture.
 
-Validate before delivery:
+Set \`SKILL_DIR\` to the installed Skill directory as described in \`scripts/README.md\`, then validate before delivery:
 
-```bash
-node skills/ui-reference-replication/scripts/validate-visual-evidence.mjs \
-  --file artifacts/ui-reference/visual-evidence.json \
+\`\`\`bash
+node "$SKILL_DIR/scripts/validate-visual-evidence.mjs" \\
+  --file artifacts/ui-reference/visual-evidence.json \\
   --root .
-```
+\`\`\`
 
 The validator rejects missing files, paths escaping the evidence root, malformed PNG headers, mismatched dimensions, duplicate IDs, and incomplete/unreviewed review records. It reports SHA-256 hashes for traceability.
 
