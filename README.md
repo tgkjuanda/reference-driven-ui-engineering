@@ -6,7 +6,7 @@
 
 **Build or redesign UI from references — faithfully or with original creative interpretation.**
 
-A cross-agent Agent Skill for vision-capable coding agents. It supports new UI builds and redesigns of existing applications using Figma, live websites, and screenshots. Choose between close reference replication and an original design inspired by the reference; then verify visual, functional, responsive, accessibility, motion, and regression quality.
+A cross-agent Agent Skill for vision-capable coding agents. It supports new UI builds and redesigns of existing applications using Figma, live websites, and screenshots. Choose between close reference replication and an original design inspired by the reference. Creative mode includes an anti-AI-slop review to prevent generic templates, trend stacking, filler imagery, and unjustified effects.
 
 **Visual perception is mandatory.** The agent must inspect both the source reference and its own rendered screenshots/recordings. Agents that cannot perceive those visuals must reject the task; text-only analysis, DOM/CSS inspection, Figma metadata, OCR, and pixel-diff numbers are not substitutes for visual review.
 
@@ -23,7 +23,7 @@ A cross-agent Agent Skill for vision-capable coding agents. It supports new UI b
 
 Work mode and fidelity mode are independent. For example, an existing dashboard can be redesigned in Reference-Inspired Creative mode without changing its business logic.
 
-Read [Creative Reference Mode](skills/ui-reference-replication/references/creative-reference-mode.md) and [Existing UI Redesign](skills/ui-reference-replication/references/existing-ui-redesign.md).
+Read [Creative Reference Mode](skills/ui-reference-replication/references/creative-reference-mode.md), [Anti-AI-Slop](skills/ui-reference-replication/references/anti-ai-slop.md), and [Existing UI Redesign](skills/ui-reference-replication/references/existing-ui-redesign.md).
 
 ## Install
 
@@ -78,7 +78,7 @@ result, rerun regression tests, and report remaining gaps.
 
 - **Reference intelligence:** inspect Figma frames, website layouts, screenshots, typography, assets, and component structure.
 - **Existing UI redesign:** migrate an existing product's visual theme and components while protecting its current behavior and data/API contracts.
-- **Creative design:** retain selected visual DNA while producing an original and coherent interpretation.
+- **Creative design:** retain selected visual DNA while producing an original and coherent interpretation, with a mandatory anti-AI-slop review for product specificity, visual restraint, authentic assets, and deliberate composition.
 - **Design system:** map semantic design tokens, visual hierarchy, reusable components, and variants.
 - **Motion design:** inspect and reconstruct or reinterpret micro-interactions, transitions, scroll-linked motion, animation timing/easing, and reduced-motion alternatives.
 - **Visual effects:** reproduce or creatively reinterpret gradients, blur, shadows, glow, masks, transparency, and advanced visual treatments with fallbacks.
@@ -96,7 +96,7 @@ npm run validate:tokens
 node skills/ui-reference-replication/scripts/inspect-project.mjs --root .
 ```
 
-See [QA Toolkit Guide](skills/ui-reference-replication/scripts/README.md), [Visual Capability Gate](skills/ui-reference-replication/references/visual-capability-gate.md), [Creative Reference Mode](skills/ui-reference-replication/references/creative-reference-mode.md), [Existing UI Redesign](skills/ui-reference-replication/references/existing-ui-redesign.md), [Motion Design](skills/ui-reference-replication/references/motion-design.md), and [Figma MCP Integration](skills/ui-reference-replication/references/figma-analysis.md).
+See [QA Toolkit Guide](skills/ui-reference-replication/scripts/README.md), [Visual Capability Gate](skills/ui-reference-replication/references/visual-capability-gate.md), [Creative Reference Mode](skills/ui-reference-replication/references/creative-reference-mode.md), [Anti-AI-Slop](skills/ui-reference-replication/references/anti-ai-slop.md), [Existing UI Redesign](skills/ui-reference-replication/references/existing-ui-redesign.md), [Motion Design](skills/ui-reference-replication/references/motion-design.md), and [Figma MCP Integration](skills/ui-reference-replication/references/figma-analysis.md).
 
 ## Runtime requirements and limitations
 
@@ -110,7 +110,7 @@ The Skill does not provide browser/Figma/image perception by itself.
 - Structured Figma analysis: an authorized Figma MCP/API connection.
 - Code Connect: configured Figma-to-code mappings in the relevant project.
 
-Screenshot capture and pixel metrics are supporting evidence, not perceptual judgment. If the agent cannot visually inspect the reference and the rendered implementation, the Skill must reject the task. In creative mode, visual QA evaluates the selected design anchors, originality, coherence, and product fit rather than minimum pixel difference. In redesign mode, the Skill also requires existing-product baseline and post-redesign regression evidence.
+Screenshot capture and pixel metrics are supporting evidence, not perceptual judgment. If the agent cannot visually inspect the reference and the rendered implementation, the Skill must reject the task. In creative mode, visual QA evaluates the selected design anchors, originality, coherence, and product fit rather than minimum pixel difference. The anti-AI-slop gate rejects generic template output, unmotivated trend effects, and fabricated product content. In redesign mode, the Skill also requires existing-product baseline and post-redesign regression evidence.
 
 ## Quality standards
 
