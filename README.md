@@ -4,7 +4,7 @@ An OpenCode Agent Skill for reconstructing high-fidelity, responsive web interfa
 
 ## What it does
 
-- Inspects the source design and the current project before implementation.
+- Inspects the source design and current project before implementation.
 - Reverse-engineers layout geometry, typography, color, spacing, components, and assets.
 - Preserves the existing frontend stack and conventions.
 - Implements visible interactions and responsive adaptations.
@@ -13,23 +13,36 @@ An OpenCode Agent Skill for reconstructing high-fidelity, responsive web interfa
 
 ## Install in one project
 
-Copy this repository's skill folder into:
+Clone this repository, then copy the included skill directory:
 
-```text
-your-project/
-└── .opencode/
-    └── skills/
-        └── ui-reference-replication/
-            ├── SKILL.md
-            └── references/
-                └── evidence-and-visual-qa.md
+```bash
+git clone https://github.com/tgkjuanda/ui-reference-replication.git
 ```
 
-This repository is itself structured as the skill source. For simplest installation, copy the repository root contents into `.opencode/skills/ui-reference-replication/`.
+Copy:
+
+```text
+ui-reference-replication/.opencode/skills/ui-reference-replication/
+```
+
+into your target project's:
+
+```text
+your-project/.opencode/skills/ui-reference-replication/
+```
+
+The installed directory should contain:
+
+```text
+.opencode/skills/ui-reference-replication/
+├── SKILL.md
+└── references/
+    └── evidence-and-visual-qa.md
+```
 
 ## Install globally
 
-Copy the skill folder to:
+Copy `.opencode/skills/ui-reference-replication/` to:
 
 - macOS/Linux: `~/.config/opencode/skills/ui-reference-replication/`
 - Windows: `%USERPROFILE%\.config\opencode\skills\ui-reference-replication\`
@@ -44,7 +57,7 @@ Inspect the reference and this repository first. Preserve the current stack.
 Do not invent inaccessible frames or assets. Implement and visually verify.
 ```
 
-Or provide screenshots/images directly and invoke `@ui-reference-replication`.
+You can also attach screenshots/images directly and invoke `@ui-reference-replication`.
 
 ## Runtime capabilities
 
