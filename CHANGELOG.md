@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.8.0] - 2026-11-05
+
+### Added
+- Playwright functional regression runner driven by an explicit project-owned route and interaction config.
+- Baseline/post-redesign report comparator that identifies new regressions, missing baseline checks, failed new checks, resolved failures, and pre-existing failures.
+- Example functional test config and unit tests for config validation and report comparison.
+
+### Changed
+- Existing UI Redesign workflow now requires identical declared checks before and after migration when a runnable browser environment exists.
+- Reports distinguish no-new-regressions from a fully passing test suite.
+- Task planner routes baseline, post-redesign, and comparison commands for functional tasks.
+
+
 ## [2.7.0] - 2026-11-05
 
 ### Added
