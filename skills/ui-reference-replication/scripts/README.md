@@ -35,10 +35,12 @@ Requires Python and Pillow:
 python -m pip install -r requirements-qa.txt
 python skills/ui-reference-replication/scripts/compare-screenshots.py \
   reference.png actual.png \
-  --diff artifacts/ui-reference/diff.png
+  --diff artifacts/ui-reference/diff.png \\
+  --heatmap artifacts/ui-reference/heatmap.png \\
+  --overlay artifacts/ui-reference/overlay.png
 ```
 
-The output contains a changed-pixel ratio and normalized mean absolute error. These metrics are browser/font/antialiasing sensitive and are not a complete perceptual score. Capture the same viewport, state, and device scale factor.
+The output contains a raw diff, colorized heatmap, optional overlay, changed-pixel ratio, and normalized mean absolute error. These metrics are browser/font/antialiasing sensitive and are not a complete perceptual score. Capture the same viewport, state, and device scale factor.
 
 ## Accessibility audit
 
