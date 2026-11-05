@@ -1,46 +1,44 @@
 {
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
   "color": {
     "$type": "color",
-    "background": { "$value": "#F7F8FA" },
-    "surface": { "$value": "#FFFFFF" },
-    "text": { "$value": "#172033" },
-    "text-muted": { "$value": "#667085" },
-    "border": { "$value": "#E4E7EC" },
-    "action-primary": { "$value": "#3157D5" },
-    "focus-ring": { "$value": "#2563EB" },
-    "success": { "$value": "#16845B" },
-    "warning": { "$value": "#B66A12" },
-    "danger": { "$value": "#C43232" }
+    "background": { "$value": { "colorSpace": "srgb", "components": [0.969, 0.973, 0.980], "hex": "#F7F8FA" } },
+    "surface": { "$value": { "colorSpace": "srgb", "components": [1, 1, 1], "hex": "#FFFFFF" } },
+    "text": { "$value": { "colorSpace": "srgb", "components": [0.09, 0.125, 0.20], "hex": "#172033" } },
+    "text-muted": { "$value": { "colorSpace": "srgb", "components": [0.40, 0.44, 0.50], "hex": "#667080" } },
+    "border": { "$value": { "colorSpace": "srgb", "components": [0.89, 0.91, 0.93], "hex": "#E3E8ED" } },
+    "action-primary": { "$value": { "colorSpace": "srgb", "components": [0.192, 0.341, 0.835], "hex": "#3157D5" } },
+    "focus-ring": { "$value": { "colorSpace": "srgb", "components": [0.145, 0.388, 0.922], "hex": "#2563EB" } },
+    "success": { "$value": { "colorSpace": "srgb", "components": [0.086, 0.518, 0.357], "hex": "#16845B" } },
+    "warning": { "$value": { "colorSpace": "srgb", "components": [0.714, 0.416, 0.071], "hex": "#B66A12" } },
+    "danger": { "$value": { "colorSpace": "srgb", "components": [0.769, 0.196, 0.196], "hex": "#C43232" } }
   },
   "space": {
     "$type": "dimension",
-    "1": { "$value": "4px" },
-    "2": { "$value": "8px" },
-    "3": { "$value": "12px" },
-    "4": { "$value": "16px" },
-    "6": { "$value": "24px" },
-    "8": { "$value": "32px" }
+    "1": { "$value": { "value": 4, "unit": "px" } },
+    "2": { "$value": { "value": 8, "unit": "px" } },
+    "3": { "$value": { "value": 12, "unit": "px" } },
+    "4": { "$value": { "value": 16, "unit": "px" } },
+    "6": { "$value": { "value": 24, "unit": "px" } },
+    "8": { "$value": { "value": 32, "unit": "px" } }
   },
   "radius": {
     "$type": "dimension",
-    "small": { "$value": "4px" },
-    "medium": { "$value": "8px" },
-    "large": { "$value": "12px" },
-    "pill": { "$value": "999px" }
+    "small": { "$value": { "value": 4, "unit": "px" } },
+    "medium": { "$value": { "value": 8, "unit": "px" } },
+    "large": { "$value": { "value": 12, "unit": "px" } },
+    "pill": { "$value": { "value": 999, "unit": "px" } }
   },
   "typography": {
-    "font-family": {
-      "$type": "fontFamily",
-      "$value": ["Inter", "Arial", "sans-serif"]
-    },
+    "family": { "$type": "fontFamily", "$value": ["Inter", "Arial", "sans-serif"] },
+    "regular": { "$type": "fontWeight", "$value": 400 },
     "body": {
       "$type": "typography",
       "$value": {
-        "fontFamily": ["Inter", "Arial", "sans-serif"],
-        "fontSize": "14px",
-        "fontWeight": 400,
-        "letterSpacing": "0px",
-        "lineHeight": "20px"
+        "fontFamily": "{typography.family}",
+        "fontSize": { "value": 14, "unit": "px" },
+        "fontWeight": "{typography.regular}",
+        "lineHeight": 1.4286
       }
     }
   }
