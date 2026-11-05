@@ -150,3 +150,21 @@ npm run validate:quality-report -- --file artifacts/ui-reference/quality-report.
 ```
 
 The validator requires task-specific gates and checks that cited evidence files exist under the report root. It does not execute the reported tests or prove agent-declared visual perception.
+
+
+## Benchmark comparison
+
+Use the same scenario/fixture, project commit, and agent/model/runtime. Run at least three repetitions per side. Only provider/host-reported token data are eligible for measured savings claims; quality regressions block savings claims.
+
+```bash
+npm run benchmark:validate -- --file artifacts/ui-reference/benchmark.json --root .
+npm run benchmark:compare -- --baseline artifacts/ui-reference/baseline-benchmark.json --candidate artifacts/ui-reference/candidate-benchmark.json --minimum-runs 3
+```
+
+## Agent compatibility matrix
+
+Record real installation evidence and separate runtime outcomes for visual input, browser, terminal, file-write, Figma MCP, and motion review. Do not populate untested agent records.
+
+```bash
+npm run compatibility:validate -- --file artifacts/ui-reference/agent-compatibility.json --root .
+```

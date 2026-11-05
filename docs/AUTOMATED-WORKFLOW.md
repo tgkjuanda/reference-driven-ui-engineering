@@ -155,3 +155,25 @@ The report requires task-dependent gates and existing evidence files. Pass/Parti
 ## Token and compute budget
 
 Reuse the same route/viewport matrix, retain baseline reports until relevant code or environment changes, and store full machine output in artifacts. During iteration, run checks targeted to changed surfaces; run all required gates before delivery. Do not skip mandatory checks to reduce token usage.
+
+
+## Controlled benchmark and token-cost comparison
+
+Use the benchmark protocol only when comparing Skill versions or agent execution efficiency. Keep the same task fixture, project commit, agent/model/runtime, and measurement source; run at least three repetitions per side.
+
+```bash
+npm run benchmark:validate -- --file artifacts/ui-reference/benchmark.json --root .
+npm run benchmark:compare -- --baseline artifacts/ui-reference/baseline-benchmark.json --candidate artifacts/ui-reference/candidate-benchmark.json --minimum-runs 3
+```
+
+Only provider/host-reported tokens and actual cost can support measured savings claims. Estimates are excluded. Any visual/functional quality regression or critical defect blocks the comparison from claiming savings.
+
+## Agent compatibility evidence
+
+Keep installation and runtime capabilities separate. Record actual test evidence for visual input, browser, terminal, file-write, Figma MCP, and motion review:
+
+```bash
+npm run compatibility:validate -- --file artifacts/ui-reference/agent-compatibility.json --root .
+```
+
+An empty matrix remains Not Tested. Do not claim support because a CLI installer lists an agent. The validator checks declared statuses and evidence-file existence, not the truth of model-perception claims.

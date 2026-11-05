@@ -55,3 +55,29 @@ Some agents, including OpenCode, can discover shared `.agents/skills/` directori
 ## Important limitations
 
 Installation only copies the Skill files. It does not automatically configure or authorize Figma MCP, browser automation, Playwright, axe-core, project terminal permissions, external credentials, or visual perception. Those are runtime/model capabilities and must be configured separately. This Skill requires direct visual perception to proceed.
+
+
+## Evidence-backed compatibility matrix
+
+The CLI agent selector identifies installation destinations; it does not certify the model or runtime. Keep the tested matrix separate from the installation table above.
+
+Start from `skills/ui-reference-replication/templates/agent-compatibility.example.json`. Leave the `agents` array empty until an actual test is performed. For each tested agent/runtime/model, record the Skill version, test timestamp, installation evidence, and separate results for:
+
+| Capability | What must be demonstrated |
+|---|---|
+| Visual input | Inspect a supplied reference image and a rendered implementation screenshot. |
+| Browser | Open target routes, capture screenshots, and inspect browser states. |
+| Terminal | Run project commands and report exit status. |
+| File write | Create or edit a controlled test file in the target workspace. |
+| Figma MCP | Read an authorized frame/variable/component when this integration is in scope. |
+| Motion review | Inspect an actual animation recording or sampled frames when motion is in scope. |
+
+Validate the actual test records:
+
+```bash
+npm run compatibility:validate -- --file artifacts/ui-reference/agent-compatibility.json --root .
+```
+
+An agent is marked compatible only when installation plus visual input, browser, terminal, and file-write checks pass. Untested Figma MCP or motion capabilities remain explicitly Not Tested and do not invalidate the core compatibility result. A successful Skills CLI installation alone is only partial compatibility.
+
+The validator checks declared outcomes and that evidence files exist within the project root. It does not independently prove that a model perceived an image or that a capability remains stable across model/runtime upgrades. Record agent/model/runtime versions and repeat tests after meaningful upgrades.

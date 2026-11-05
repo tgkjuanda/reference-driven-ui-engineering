@@ -321,3 +321,17 @@ For existing UI redesign and hybrid projects with a runnable browser environment
 - npm audit is dependency-advisory coverage only, not a complete security assessment.
 
 **Evidence:** the validated quality report and linked original reports/screenshots. The aggregate validator checks report structure and evidence-file existence; it does not independently execute the checks or prove agent declarations.
+
+
+## 21. Benchmark integrity and agent compatibility
+
+- Use the same scenario ID, fixture ID, prompt, reference assets, project commit, routes, test data, and work/fidelity modes for baseline and candidate.
+- Keep agent, model, runtime, and usage measurement source identical when isolating Skill-version changes.
+- Run at least three repetitions per side and compare medians; do not use a single best run.
+- Count token usage only when provider/host runtime reports input/output tokens. Estimates and unavailable values do not support savings claims.
+- Compare actual cost only when provider/host reports actual cost from the same source on both sides. Do not infer cost from public pricing.
+- Withhold token/cost savings claims unless both sides pass visual review, functional regression, and zero critical defects.
+- Record installation separately from visual input, browser, terminal, file-write, Figma MCP, and motion-review capability.
+- An empty compatibility matrix means Not Tested, not supported. Installation alone does not mean a model can visually inspect images.
+
+**Evidence:** baseline/candidate benchmark files, original quality reports, usage records, and agent compatibility evidence. The validators check schema and evidence references; they do not independently verify provider billing, image perception, or benchmark fairness.
