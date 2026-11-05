@@ -64,7 +64,7 @@ npm run validate:tokens
 node skills/ui-reference-replication/scripts/inspect-project.mjs --root .
 ```
 
-See [QA Toolkit Guide](skills/ui-reference-replication/scripts/README.md) for screenshot and accessibility commands.
+See [QA Toolkit Guide](skills/ui-reference-replication/scripts/README.md) for screenshot and accessibility commands, and [Figma MCP Integration](skills/ui-reference-replication/references/figma-analysis.md) for structured design extraction.
 
 ## Runtime dependencies
 
