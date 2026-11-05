@@ -44,7 +44,7 @@ for (const required of [
   "references/motion-design.md",
   "If the agent cannot visually inspect both the reference and its own rendered output, **reject the Skill for this task and stop**.",
   "Existing UI redesign",
-  "preserve its existing routes, features, data, permissions, and workflows"
+  "while preserving its existing routes, features, data, permissions, and workflows"
 ]) {
   if (!skill.includes(required)) errors.push(`Core skill missing required rule: ${required}`);
 }
