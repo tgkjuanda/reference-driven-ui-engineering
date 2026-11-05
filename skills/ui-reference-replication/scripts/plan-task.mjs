@@ -17,6 +17,8 @@ function parseArgs(argv) {
     motion: false,
     accessibility: false,
     responsive: false,
+    performance: false,
+    security: false,
     json: false
   };
   const flags = {
@@ -29,6 +31,8 @@ function parseArgs(argv) {
     "--motion": "motion",
     "--accessibility": "accessibility",
     "--responsive": "responsive",
+    "--performance": "performance",
+    "--security": "security",
     "--json": "json"
   };
 
@@ -90,7 +94,15 @@ function createPlan(options) {
   if (options.figma) readBefore.push(`${ROOT}/references/figma-analysis.md`);
   if (options.motion) loadWhenNeeded.push(`${ROOT}/references/motion-design.md`);
   if (options.accessibility) loadWhenNeeded.push(`${ROOT}/references/accessibility.md`);
-  if (options.responsive) loadWhenNeeded.push(`${ROOT}/references/responsive-and-interactions.md`);
+  if (options.responsive) {
+    loadWhenNeeded.push(`${ROOT}/references/responsive-and-interactions.md`);
+    scripts.push("npm run audit:responsive -- --config <responsive-config.json> --out <responsive-report.json>");
+  }
+  if (options.performance || options.scope === "full") scripts.push("npm run audit:performance -- --config <performance-config.json> --out <performance-report.json>");
+  if (options.security || options.scope === "full" || options.scope === "audit") {
+    readBefore.push(`${ROOT}/references/performance-security.md`);
+    scripts.push("npm run audit:security -- --root . --out <security-report.json>");
+  }
 
   if (options.scope === "full" || options.scope === "audit") {
     scripts.push("node <skill>/scripts/inspect-project.mjs --root .");
@@ -115,7 +127,7 @@ function createPlan(options) {
   const uniqueOnDemand = [...new Set(loadWhenNeeded)].filter(item => !uniqueReadBefore.includes(item));
 
   return {
-    version: "2.9.0",
+    version: "3.0.0",
     workMode: options.workMode,
     fidelity: options.fidelity,
     scope: options.scope,
@@ -123,7 +135,9 @@ function createPlan(options) {
       figma: options.figma,
       motion: options.motion,
       accessibility: options.accessibility,
-      responsive: options.responsive
+      responsive: options.responsive,
+      performance: options.performance,
+      security: options.security
     },
     readBeforeImplementation: uniqueReadBefore,
     loadOnlyWhenNeeded: uniqueOnDemand,
@@ -151,12 +165,14 @@ function usage() {
     "  --figma       Include Figma analysis guidance",
     "  --motion      Include motion design guidance",
     "  --accessibility Include accessibility guidance and scan",
-    "  --responsive  Include responsive/interaction guidance",
+    "  --responsive  Include responsive/interaction guidance and overflow checks",
+    "  --performance Include lab performance budget audit",
+    "  --security    Include frontend security review and dependency audit",
     "  --json        Print machine-readable JSON",
     "  --help        Show this help",
     "",
     "Example:",
-    "  node plan-task.mjs --work-mode existing-redesign --fidelity reference-inspired-creative --motion --accessibility --responsive"
+    "  node plan-task.mjs --work-mode existing-redesign --fidelity reference-inspired-creative --motion --accessibility --responsive --performance --security"
   ].join("\n");
 }
 
