@@ -1,0 +1,81 @@
+# Changelog
+
+All notable changes to UI Reference Replication are documented here.
+
+The project follows a practical versioning scheme for its Agent Skill and bundled QA tooling. Versions below describe repository changes; they do not imply that every external agent/runtime or consumer application has been independently tested.
+
+## [2.5.0] - 2026-11-05
+
+### Added
+- Anti-AI-Slop and Design Originality guide.
+- Product-specific design thesis requirement for creative mode.
+- De-slop review covering generic templates, repetitive card layouts, trend stacking, decorative badges, filler assets/copy, fabricated metrics/testimonials/logos, and unjustified effects.
+- Element-level rationale for major visual decisions.
+- Anti-slop quality gate in the project scorecard.
+- Repository checker assertions for the anti-slop guide and its required use in creative mode.
+
+### Changed
+- Creative mode now explicitly requires the anti-AI-slop review before delivery.
+- README reorganized around capabilities, work modes, fidelity modes, installation, examples, QA, limitations, and documentation.
+- Broken/unverified skills.sh listing badge omitted from README; the GitHub Actions and MIT badges remain.
+
+## [2.4.0] - 2026-11-05
+
+### Added
+- Reference-Inspired Creative fidelity mode, independent from work mode.
+- Creative direction brief with Preserve, Reinterpret, Protect, and Avoid.
+- Creative evaluation based on retained design anchors, originality, coherence, and product fit rather than minimum pixel difference.
+- Quality gate and workflow guidance for creative interpretation.
+
+## [2.3.0] - 2026-11-05
+
+### Added
+- Existing UI Redesign work mode for transforming an existing application using a visual reference.
+- Baseline inventory for routes, permissions, forms, APIs, data views, states, and critical workflows.
+- Reference-to-existing-component migration map.
+- Controlled migration and regression verification guidance.
+
+### Changed
+- Explicitly protects existing product behavior, data/API contracts, permissions, and business rules unless the user approves functional changes.
+
+## [2.2.0] - 2026-11-05
+
+### Added
+- Mandatory Visual Capability Gate.
+- Explicit rejection behavior for agents that cannot directly inspect both the source reference and rendered implementation.
+- Visual-perception quality gate and CI checks for required gate documentation.
+
+### Changed
+- Clarified that agent-platform installation support does not prove model/runtime visual capability.
+
+## [2.1.0] - 2026-11-05
+
+### Added
+- Motion Design, Effects, and Animation Engineering reference.
+- Motion inventory for triggers, timing, easing, sequencing, interruption, responsive behavior, and reduced-motion alternatives.
+- Motion tokens, performance guidance, and motion QA protocol.
+- Motion/effects quality gate.
+
+## [2.0.0] - 2026-11-05
+
+### Added
+- Refactored core Skill for progressive disclosure.
+- Design system engineering, Figma analysis, responsive/interaction, accessibility, and visual QA references.
+- Project inspection, token validation, screenshot capture, screenshot comparison, and axe-core audit scripts.
+- Node and Python tests plus GitHub Actions validation workflow.
+- Automated workflow, quality gate, agent compatibility, and launch documentation.
+
+### Changed
+- Established evidence-led implementation and explicit reporting of limitations and untested checks.
+
+## [1.2.0] - Earlier release
+
+### Added
+- Expanded UI/UX quality principles covering consistency, accessibility, responsive behavior, visual hierarchy, error prevention/recovery, design tokens, component-driven development, and Figma-to-code mapping.
+- WCAG 2.2 AA target and DTCG-oriented token guidance.
+
+## [1.0.0] - Initial release
+
+### Added
+- Initial UI Reference Replication Agent Skill for reconstructing interfaces from visual references.
+- Core instructions and supporting reference material.
