@@ -77,7 +77,7 @@ function validateValue(type, value, token, errors, warnings) {
 }
 function findAliases(value, owner, aliases) {
   if (typeof value === "string") {
-    const exact = value.match(/^\\{([^{}]+)\\}$/);
+    const exact = value.match(/^\{([^{}]+)\}$/);
     if (exact) aliases.push({ owner, reference: exact[1] });
     return;
   }
