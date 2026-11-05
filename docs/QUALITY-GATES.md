@@ -294,3 +294,16 @@ For existing UI redesign and hybrid projects with a runnable browser environment
 - Report a no-new-regressions outcome separately from a fully passing suite when pre-existing failures remain.
 
 **Evidence:** baseline report, post-change report, comparison report, and the exact config used.
+
+
+## 19. Structured perceptual visual review
+
+- Use a structured review for the required dimensions: geometry, hierarchy, typography, spacing, color, components, responsive behavior, and composition.
+- Reference-Faithful adds explicit reference-fidelity assessment.
+- Reference-Inspired Creative adds design anchors, product fit, originality, and anti-slop assessment.
+- Every dimension must be Pass, Partial, Fail, or Not Tested with observations.
+- Partial/Fail findings require evidence and a corrective action; Not Tested requires a reason.
+- A single numeric visual-quality score is not accepted as a substitute for dimension-level findings.
+- The scorecard must refer to capture IDs in the validated visual evidence manifest.
+
+**Evidence:** validated visual-review report plus the original reference and implementation screenshots. Review declarations are agent-reported and do not independently prove perception.
