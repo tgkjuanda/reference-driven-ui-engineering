@@ -1,9 +1,9 @@
 {
   "name": "ui-reference-replication",
-  "version": "2.9.0",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
-  "description": "Token-efficient UI implementation with auditable evidence, functional regression, and structured perceptual visual QA",
+  "description": "Token-efficient UI implementation with auditable visual, functional, responsive, performance, accessibility, and security QA",
   "engines": {
     "node": ">=20"
   },
@@ -15,6 +15,9 @@
     "validate:tokens": "node skills/ui-reference-replication/scripts/validate-tokens.mjs skills/ui-reference-replication/templates/design-tokens.example.json",
     "regression": "node skills/ui-reference-replication/scripts/run-functional-regression.mjs",
     "compare:regression": "node skills/ui-reference-replication/scripts/compare-regression.mjs",
-    "validate:visual-review": "node skills/ui-reference-replication/scripts/validate-visual-review.mjs"
+    "validate:visual-review": "node skills/ui-reference-replication/scripts/validate-visual-review.mjs",
+    "audit:responsive": "node skills/ui-reference-replication/scripts/responsive-audit.mjs",
+    "audit:performance": "node skills/ui-reference-replication/scripts/performance-audit.mjs",
+    "audit:security": "node skills/ui-reference-replication/scripts/security-audit.mjs"
   }
 }
