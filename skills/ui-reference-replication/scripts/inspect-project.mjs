@@ -45,8 +45,6 @@ const directories = [];
 for (const relative of candidates) {
   if (await exists(path.join(root, relative))) directories.push(relative);
 }
-const manifests = ["package-lock.json", "pnpm-lock.yaml", "yarn.lock", "bun.lockb", "bun.lock"]
-  .filter(async name => exists(path.join(root, name)));
 const lockfiles = [];
 for (const name of ["package-lock.json", "pnpm-lock.yaml", "yarn.lock", "bun.lockb", "bun.lock"]) {
   if (await exists(path.join(root, name))) lockfiles.push(name);
