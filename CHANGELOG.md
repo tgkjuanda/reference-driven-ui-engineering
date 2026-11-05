@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.9.0] - 2026-11-05
+
+### Added
+- Perceptual visual review scorecard with dimension-level requirements for Reference-Faithful and Reference-Inspired Creative modes.
+- Validator that cross-references capture IDs, routes, and states from the visual evidence manifest.
+- Explicit Pass, Partial, Fail, and Not Tested reporting; missing dimensions and incomplete findings fail validation.
+- Unit tests for missing dimensions, partial states, creative-mode requirements, and evidence-reference mismatches.
+
+### Changed
+- Visual QA now requires dimension-level assessment instead of a single subjective quality score.
+- Documentation emphasizes that the scorecard is agent-declared and does not prove visual perception or correctness.
+
+
 ## [2.8.0] - 2026-11-05
 
 ### Added
