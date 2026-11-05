@@ -16,7 +16,15 @@ Run this inside the target project:
 npx skills add tgkjuanda/ui-reference-replication
 ```
 
-The CLI downloads the repository skill, lets you choose the skill and detected AI agents, and installs it in their project-level skill directories.
+The CLI downloads the repository skill, lets you choose agents, and installs it in their project-level skill directories.
+
+### Automatic install to all supported agents
+
+This repository contains one skill, so `--all` installs that skill to all agents supported by the CLI without interactive selection:
+
+```bash
+npx skills add tgkjuanda/ui-reference-replication --all
+```
 
 ### Install to Antigravity, Claude Code, and OpenCode together
 
