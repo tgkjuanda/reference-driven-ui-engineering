@@ -35,7 +35,7 @@ const skill = await readFile(path.join(root, skillPath), "utf8");
 const lines = skill.split(/\r?\n/);
 if (!skill.startsWith("---\n")) errors.push("SKILL.md must start with YAML frontmatter.");
 if (lines.length > 500) errors.push(`SKILL.md has ${lines.length} lines; keep it below 500 lines.`);
-for (const field of ["name: ui-reference-replication", "description:", "license: MIT", "version: \"2.4.0\""]) {
+for (const field of ["name: ui-reference-replication", "description:", "license: MIT", "version: \"2.5.0\""]) {
   if (!skill.includes(field)) errors.push(`SKILL.md frontmatter/content missing: ${field}`);
 }
 if (skill.includes("compatibility: opencode")) errors.push("Core skill must not be locked to OpenCode.");
@@ -74,7 +74,7 @@ for (const required of ["Preserve — design anchors", "Reinterpret — areas of
 }
 
 const antiSlop = await readFile(path.join(root, "skills/ui-reference-replication/references/anti-ai-slop.md"), "utf8");
-for (const required of ["product reality", "product-specific", "trend stacking", "The de-slop review", "fabricated trust claims"]) {
+for (const required of ["product reality", "product-specific", "trend stacking", "The de-slop review", "invented testimonials"]) {
   if (!antiSlop.toLowerCase().includes(required.toLowerCase())) errors.push(`Anti-AI-slop guide missing: ${required}`);
 }
 const creativeGuide = await readFile(path.join(root, "skills/ui-reference-replication/references/creative-reference-mode.md"), "utf8");
