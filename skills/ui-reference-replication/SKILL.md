@@ -5,7 +5,7 @@ license: MIT
 metadata:
   domain: frontend-engineering
   workflow: reference-to-ui
-  version: "2.7.0"
+  version: "2.8.0"
   standard: agent-skills
 ---
 
@@ -164,6 +164,8 @@ Scripts live beside this file in `scripts/`. Run them from the user's project ro
 - `node <skill>/scripts/validate-tokens.mjs <path-to-token-json>`
 - `node <skill>/scripts/capture-screenshots.mjs --url http://localhost:3000 --routes /,/dashboard --out artifacts/ui-reference`
 - `node <skill>/scripts/validate-visual-evidence.mjs --file artifacts/ui-reference/visual-evidence.json --root .`
+- `node <skill>/scripts/run-functional-regression.mjs --config <regression-config.json> --label baseline --out artifacts/ui-reference/baseline.json`
+- `node <skill>/scripts/compare-regression.mjs --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json`
 - `python <skill>/scripts/compare-screenshots.py reference.png actual.png --diff artifacts/ui-reference/diff.png`
 - `node <skill>/scripts/accessibility-audit.mjs --url http://localhost:3000`
 
@@ -179,11 +181,23 @@ Compare reference and implementation at identical viewport, route, scroll positi
 
 Map discrepancies to responsible components/tokens, change the smallest responsible code surface, re-capture, and visually confirm improvement without regression. Keep a defect log with severity, evidence, correction, and retest result.
 
-### 8. Visual evidence validation
+### 8. Functional regression execution
+
+For existing UI redesign and hybrid work, define explicit functional checks from the application's real routes and workflows using `templates/functional-regression.example.json`. Run the same checks before and after implementation, saving separate baseline and post-redesign reports:
+
+```bash
+npm run regression -- --config tests/ui-regression.json --label baseline --out artifacts/ui-reference/baseline.json
+npm run regression -- --config tests/ui-regression.json --label post-redesign --out artifacts/ui-reference/post-redesign.json
+npm run compare:regression -- --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json --out artifacts/ui-reference/regression-comparison.json
+```
+
+The Playwright runner executes only declared route and interaction steps. It does not infer undocumented product behavior. Compare reports to identify regressions, resolved failures, pre-existing failures, missing baseline coverage, and failing new checks. A no-new-regressions result must not be reported as a fully passing test suite when pre-existing failures remain.
+
+### 9. Visual evidence validation
 
 For screenshot comparisons used as delivery evidence, maintain a manifest based on `templates/visual-evidence.example.json` and validate it with `scripts/validate-visual-evidence.mjs`. Include matching reference/implementation PNG pairs, route, state, viewport, image hashes, reviewer declaration, and visual findings. A structurally valid manifest is not proof of actual visual perception; never misrepresent the declared review as machine-verified understanding.
 
-### 9. Delivery report
+### 10. Delivery report
 
 Report work mode, fidelity mode, creative direction brief and anti-slop review when applicable, routes/screens covered, files changed, reference limitations, current behavior preserved, approved functional changes, intentional creative deviations, design and motion tokens/components reused, interactions and animations implemented, viewports and motion preferences tested, screenshot/recording evidence visually inspected, baseline vs post-change test results, visual-diff diagnostics, accessibility findings, performance observations, and unresolved deviations.
 
