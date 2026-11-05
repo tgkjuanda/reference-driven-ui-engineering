@@ -31,6 +31,7 @@ class ScreenshotComparisonTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0)
             self.assertEqual(report["changed_pixel_ratio"], 0)
             self.assertTrue(diff.exists())
+            self.assertTrue((root / "heatmap.png").exists())
 
     def test_different_images_fail_configured_threshold(self):
         with tempfile.TemporaryDirectory() as tmp:
