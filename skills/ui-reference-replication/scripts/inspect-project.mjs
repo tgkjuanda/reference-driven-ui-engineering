@@ -26,7 +26,8 @@ const frameworkCandidates = [
 ];
 const frameworks = frameworkCandidates.filter(([key]) => deps[key]).map(([, name]) => name);
 const tools = {
-  playwright: Boolean(deps.playwright || deps["@playwright/test"] || deps["playwright-core"]),
+  playwright: Boolean(deps.playwright || deps["@playwright/test"]),
+  playwrightCoreOnly: Boolean(deps["playwright-core"] && !deps.playwright && !deps["@playwright/test"]),
   cypress: Boolean(deps.cypress),
   axeCore: Boolean(deps["axe-core"]),
   vitest: Boolean(deps.vitest),
@@ -51,7 +52,7 @@ for (const name of ["package-lock.json", "pnpm-lock.yaml", "yarn.lock", "bun.loc
 }
 const warnings = [];
 if (!pkg) warnings.push("No package.json found at project root; framework/dependency detection is incomplete.");
-if (!tools.playwright) warnings.push("Playwright is not detected. Browser screenshot capture will require installing or configuring it.");
+if (!tools.playwright) warnings.push(tools.playwrightCoreOnly ? "Only playwright-core is detected. The bundled capture script expects playwright or @playwright/test; playwright-core also requires a configured browser executable." : "Playwright is not detected. Browser screenshot capture will require installing or configuring it.");
 if (!tools.axeCore) warnings.push("axe-core is not detected. Automated accessibility audit will require axe-core.");
 if (!directories.some(dir => /components|ui/.test(dir))) warnings.push("No conventional component directory detected; inspect project structure manually.");
 const report = {
