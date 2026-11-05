@@ -5,7 +5,7 @@ license: MIT
 metadata:
   domain: frontend-engineering
   workflow: reference-to-ui
-  version: "3.1.0"
+  version: "3.2.0"
   standard: agent-skills
 ---
 
@@ -65,6 +65,7 @@ Read the bundled references as needed:
 - `references/token-efficient-execution.md` for task-aware context loading and bounded execution.
 - `references/complete-quality-assurance.md` for responsive, performance, dependency-security, and unified quality-report gates.
 - `references/design-intelligence.md` for scoped Figma variables/components mapping and drift validation.
+- `references/benchmark-protocol.md` only for requested benchmark/compatibility work; skip it for ordinary UI tasks.
 - `references/visual-capability-gate.md` for the mandatory vision prerequisite and rejection behavior.
 - `references/creative-reference-mode.md` for original designs inspired by a visual reference.
 - `references/anti-ai-slop.md` for product-specific visual originality, restraint, anti-template checks, and the required de-slop review.
@@ -95,6 +96,8 @@ Read the bundled references as needed:
 13. **Respect rights and access:** use authorized reference assets. Do not bypass authentication, paywalls, or licensing restrictions.
 14. **Reject generic AI aesthetics:** in creative mode, do not stack fashionable effects or reuse interchangeable page templates without a product-specific reason. Follow `references/anti-ai-slop.md`; justify major visual decisions by product context, user task, or reference evidence.
 15. **Complete and evidence the quality report:** do not claim delivery-wide pass unless all required task-specific gates have valid evidence. Use `references/complete-quality-assurance.md`; report untested checks explicitly.
+16. **Measure before claiming efficiency:** use repeated same-fixture benchmarks and provider/host-reported usage. Quality regression blocks token/cost savings claims.
+17. **Separate installation from runtime compatibility:** report installation and visual/browser/terminal/file-write capabilities independently.
 
 ## Operating workflow
 
@@ -167,12 +170,15 @@ Scripts live beside this file in `scripts/`. Run them from the user's project ro
 - `node <skill>/scripts/validate-tokens.mjs <path-to-token-json>`
 - `node <skill>/scripts/capture-screenshots.mjs --url http://localhost:3000 --routes /,/dashboard --out artifacts/ui-reference`
 - `node <skill>/scripts/validate-visual-evidence.mjs --file artifacts/ui-reference/visual-evidence.json --root .`
-- `node <skill>/scripts/validate-visual-review.mjs --file artifacts/ui-reference/visual-review.json --evidence artifacts/ui-reference/visual-evidence.json --root .
+- `node <skill>/scripts/validate-visual-review.mjs --file artifacts/ui-reference/visual-review.json --evidence artifacts/ui-reference/visual-evidence.json --root .`
 - `node <skill>/scripts/run-responsive-audit.mjs --url http://localhost:3000 --routes /,/dashboard --out artifacts/ui-reference/responsive.json`
 - `node <skill>/scripts/run-performance-audit.mjs --url http://localhost:3000 --budget artifacts/ui-reference/performance-budget.json --out artifacts/ui-reference/performance.json`
 - `node <skill>/scripts/run-dependency-audit.mjs --root . --fail-on high --out artifacts/ui-reference/dependency-audit.json`
-- `node <skill>/scripts/validate-quality-report.mjs --file artifacts/ui-reference/quality-report.json --root .
-- `node <skill>/scripts/validate-design-map.mjs --file artifacts/ui-reference/figma-code-map.json --root .```
+- `node <skill>/scripts/validate-quality-report.mjs --file artifacts/ui-reference/quality-report.json --root .`
+- `node <skill>/scripts/validate-design-map.mjs --file artifacts/ui-reference/figma-code-map.json --root .`
+- `node <skill>/scripts/benchmark.mjs validate --file artifacts/ui-reference/benchmark.json --root .`
+- `node <skill>/scripts/benchmark.mjs compare --baseline artifacts/ui-reference/baseline-benchmark.json --candidate artifacts/ui-reference/candidate-benchmark.json --minimum-runs 3`
+- `node <skill>/scripts/validate-agent-compatibility.mjs --file artifacts/ui-reference/agent-compatibility.json --root .`
 - `node <skill>/scripts/run-functional-regression.mjs --config <regression-config.json> --label baseline --out artifacts/ui-reference/baseline.json`
 - `node <skill>/scripts/compare-regression.mjs --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json`
 - `python <skill>/scripts/compare-screenshots.py reference.png actual.png --diff artifacts/ui-reference/diff.png`
@@ -229,6 +235,10 @@ Create a report from the quality-report template. Every required gate must be Pa
 ### 13. Design intelligence and Figma mapping
 
 When structured Figma access is part of scope, create a scoped Figma-to-code map for selected variables, components, variants, and implementation paths. Validate it against project files. Unmapped records or drift must remain Partial; a missing mapped source or invalid path fails the gate. The validator does not independently connect to Figma or prove visual synchronization.
+
+### 14. Benchmark and agent compatibility
+
+Run only when requested. Follow `references/benchmark-protocol.md`. Compare the same scenario/fixture and agent/model/runtime across at least three runs. Only provider/host-reported token and cost data support savings claims. Require passing visual review, functional regression, and zero critical defects on both sides. Record installation separately from visual input, browser, terminal, file-write, Figma MCP, and motion capabilities.
 
 ## Required quality gates
 

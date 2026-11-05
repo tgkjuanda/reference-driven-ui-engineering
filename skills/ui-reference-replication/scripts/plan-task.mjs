@@ -19,6 +19,8 @@ function parseArgs(argv) {
     responsive: false,
     performance: false,
     security: false,
+    benchmark: false,
+    agentCompatibility: false,
     json: false
   };
   const flags = {
@@ -33,6 +35,8 @@ function parseArgs(argv) {
     "--responsive": "responsive",
     "--performance": "performance",
     "--security": "security",
+    "--benchmark": "benchmark",
+    "--agent-compatibility": "agentCompatibility",
     "--json": "json"
   };
 
@@ -91,6 +95,10 @@ function createPlan(options) {
       `${ROOT}/references/anti-ai-slop.md`
     );
   }
+  if (options.benchmark || options.agentCompatibility) readBefore.push(`${ROOT}/references/benchmark-protocol.md`);
+  if (options.benchmark) scripts.push("npm run benchmark:validate -- --file <benchmark.json> --root .");
+  if (options.benchmark) scripts.push("npm run benchmark:compare -- --baseline <baseline-benchmark.json> --candidate <candidate-benchmark.json> --minimum-runs 3");
+  if (options.agentCompatibility) scripts.push("npm run compatibility:validate -- --file <agent-compatibility.json> --root .");
   if (options.figma) {
     readBefore.push(`${ROOT}/references/figma-analysis.md`, `${ROOT}/references/design-intelligence.md`);
     scripts.push("node <skill>/scripts/validate-design-map.mjs --file <figma-code-map.json> --root .");
@@ -134,7 +142,7 @@ function createPlan(options) {
   const uniqueOnDemand = [...new Set(loadWhenNeeded)].filter(item => !uniqueReadBefore.includes(item));
 
   return {
-    version: "3.1.0",
+    version: "3.2.0",
     workMode: options.workMode,
     fidelity: options.fidelity,
     scope: options.scope,
@@ -144,7 +152,9 @@ function createPlan(options) {
       accessibility: options.accessibility,
       responsive: options.responsive,
       performance: options.performance,
-      security: options.security
+      security: options.security,
+      benchmark: options.benchmark,
+      agentCompatibility: options.agentCompatibility
     },
     readBeforeImplementation: uniqueReadBefore,
     loadOnlyWhenNeeded: uniqueOnDemand,
@@ -175,6 +185,8 @@ function usage() {
     "  --responsive  Include responsive/interaction guidance and audit",
     "  --performance Include browser lab performance audit",
     "  --security    Include npm dependency advisory audit",
+    "  --benchmark  Include measured benchmark validation/comparison",
+    "  --agent-compatibility Include agent capability validation",
     "  --json        Print machine-readable JSON",
     "  --help        Show this help",
     "",

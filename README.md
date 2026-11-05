@@ -27,6 +27,8 @@ It supports both **new UI builds** and **redesigns of existing applications**. C
 - **Performance budget:** record browser lab TTFB, FCP, LCP, CLS, observed long-task blocking, and resource transfer metrics against project budgets.
 - **Dependency security:** summarize npm dependency advisories from a committed lockfile without modifying dependencies.
 - **Unified quality report:** require evidence-backed status for task-specific visual, functional, responsive, accessibility, performance, security, and design-system gates.
+- **Benchmark & cost discipline:** compare repeated same-fixture runs using measured provider/host token usage; withhold savings claims when quality regresses.
+- **Agent compatibility:** separate installation from tested visual input, browser, terminal, file-write, Figma MCP, and motion capabilities.
 - **Perceptual visual QA:** record dimension-level findings for layout, hierarchy, typography, color, components, responsive behavior, and product-specific design quality.
 
 ## Choose two modes
@@ -178,6 +180,9 @@ all tests and unresolved gaps.
 | [Performance Budget Template](skills/ui-reference-replication/templates/performance-budget.example.json) | Explicit browser lab thresholds for a target application. |
 | [Quality Report Template](skills/ui-reference-replication/templates/quality-report.example.json) | Evidence-backed gate status for task delivery. |
 | [Design Intelligence](skills/ui-reference-replication/references/design-intelligence.md) | Scoped Figma-to-code mapping and drift interpretation. |
+| [Benchmark Protocol](skills/ui-reference-replication/references/benchmark-protocol.md) | Controlled token/cost comparison and agent capability verification. |
+| [Benchmark Template](skills/ui-reference-replication/templates/benchmark.example.json) | Repeatable records without fabricated usage data. |
+| [Agent Compatibility Template](skills/ui-reference-replication/templates/agent-compatibility.example.json) | Separate installation and runtime capability evidence. |
 | [Token-Efficient Execution](skills/ui-reference-replication/references/token-efficient-execution.md) | Context routing, reuse, automation, and bounded iteration. |
 | [Visual Evidence Validation](skills/ui-reference-replication/references/evidence-and-visual-qa.md) | Pairing, validating, and auditing screenshot evidence. |
 | [Perceptual Visual Review Template](skills/ui-reference-replication/templates/perceptual-visual-review.example.json) | Structured visual assessment by fidelity mode. |
@@ -211,6 +216,9 @@ npm run performance:audit -- --url http://localhost:3000 --budget artifacts/ui-r
 npm run security:audit -- --root . --fail-on high --out artifacts/ui-reference/dependency-audit.json
 npm run validate:quality-report -- --file artifacts/ui-reference/quality-report.json --root .
 npm run validate:design-map -- --file artifacts/ui-reference/figma-code-map.json --root .
+npm run benchmark:validate -- --file artifacts/ui-reference/benchmark.json --root .
+npm run benchmark:compare -- --baseline artifacts/ui-reference/baseline-benchmark.json --candidate artifacts/ui-reference/candidate-benchmark.json --minimum-runs 3
+npm run compatibility:validate -- --file artifacts/ui-reference/agent-compatibility.json --root .
 ```
 
 Inspect a target project:
@@ -277,9 +285,13 @@ The bundled token validator supports a subset of DTCG token structures; it is no
 
 For existing UI redesign, a visually successful result is still incomplete if it breaks the product's existing features or workflows. For creative mode, a large pixel difference from the reference is not automatically a defect; the result is evaluated against the creative direction brief, product fit, and design quality.
 
+## Benchmark and agent compatibility
+
+Benchmark at least three runs with the same fixture and agent/model/runtime. Only provider/host-reported token usage supports savings claims, and visual/functional regression blocks them. Agent support is not prefilled: test installation and runtime capabilities separately. See [Benchmark Protocol](skills/ui-reference-replication/references/benchmark-protocol.md).
+
 ## Versioning and changelog
 
-Current Skill version: **3.1.0**
+Current Skill version: **3.2.0**
 
 See [CHANGELOG.md](CHANGELOG.md) for release history and notable changes.
 

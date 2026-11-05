@@ -1,9 +1,9 @@
 {
   "name": "ui-reference-replication",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "private": true,
   "type": "module",
-  "description": "Token-efficient UI reference implementation with auditable QA, Figma-to-code mapping, and benchmark tooling",
+  "description": "Token-efficient UI reference implementation with evidence-backed QA, Figma mapping, benchmarks, and agent capability validation",
   "engines": {
     "node": ">=20"
   },
@@ -20,6 +20,9 @@
     "performance:audit": "node skills/ui-reference-replication/scripts/run-performance-audit.mjs",
     "security:audit": "node skills/ui-reference-replication/scripts/run-dependency-audit.mjs",
     "validate:quality-report": "node skills/ui-reference-replication/scripts/validate-quality-report.mjs",
-    "validate:design-map": "node skills/ui-reference-replication/scripts/validate-design-map.mjs"
+    "validate:design-map": "node skills/ui-reference-replication/scripts/validate-design-map.mjs",
+    "benchmark:validate": "node skills/ui-reference-replication/scripts/benchmark.mjs validate",
+    "benchmark:compare": "node skills/ui-reference-replication/scripts/benchmark.mjs compare",
+    "compatibility:validate": "node skills/ui-reference-replication/scripts/validate-agent-compatibility.mjs"
   }
 }

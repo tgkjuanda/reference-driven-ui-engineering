@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.2.0] - 2026-11-05
+
+### Added
+- Repeatable benchmark validation/comparison with same-scenario, fixture, agent/model/runtime controls and median metrics.
+- Token/cost savings restricted to provider/host-reported usage, at least three runs, passing visual/functional quality, and zero critical defects.
+- Agent compatibility validator separates Skill installation from visual input, browser, terminal, file-write, Figma MCP, and motion capabilities.
+- Empty benchmark and compatibility templates; unit tests cover measured data, quality guardrails, evidence, and installation-versus-capability separation.
+
+### Changed
+- Planner loads benchmark/compatibility guidance only when explicitly requested to preserve lean context.
+- Skill and README require measured evidence before claims about token savings or full agent compatibility.
+
+
 ## [3.1.0] - 2026-11-05
 
 ### Added
