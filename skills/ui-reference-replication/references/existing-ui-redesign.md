@@ -152,3 +152,17 @@ Report:
 ## Stop conditions
 
 Stop before implementation if the visual-capability gate fails. Stop and request approval before any unrequested change to business logic, data contracts, permissions, APIs, routes, or destructive functionality. A redesign is complete only when the visual reference checks and existing-product regression checks have both been reported honestly.
+
+## Executable baseline and post-redesign regression
+
+Where the application has a testable local runtime, define real route and interaction checks in `templates/functional-regression.example.json`. Run identical checks against the baseline before edits and the redesigned application after edits:
+
+```bash
+npm run regression -- --config tests/ui-regression.json --label baseline --out artifacts/ui-reference/baseline.json
+npm run regression -- --config tests/ui-regression.json --label post-redesign --out artifacts/ui-reference/post-redesign.json
+npm run compare:regression -- --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json --out artifacts/ui-reference/regression-comparison.json
+```
+
+The runner supports explicit browser actions and assertions; it never invents product workflows. Keep checks deterministic and use stable selectors such as `data-testid` where appropriate. Review any environment-dependent failures manually.
+
+The comparator distinguishes new regressions, missing baseline checks, failing new checks, resolved failures, and failures already present before redesign. A report with no new regressions is not equivalent to a completely passing suite if pre-existing failures remain. Store sanitized reports only; do not place credentials, tokens, personal data, or production secrets in fixtures or evidence.
