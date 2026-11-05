@@ -13,6 +13,8 @@ async function mustExist(relative) {
 const skillPath = "skills/ui-reference-replication/SKILL.md";
 await mustExist(skillPath);
 for (const relative of [
+  "skills/ui-reference-replication/references/token-efficient-execution.md",
+  "skills/ui-reference-replication/scripts/plan-task.mjs",
   "skills/ui-reference-replication/references/visual-capability-gate.md",
   "skills/ui-reference-replication/references/existing-ui-redesign.md",
   "skills/ui-reference-replication/references/creative-reference-mode.md",
@@ -32,14 +34,25 @@ for (const relative of [
 ]) await mustExist(relative);
 
 const skill = await readFile(path.join(root, skillPath), "utf8");
+const packageJson = JSON.parse(await readFile(path.join(root, "package.json"), "utf8"));
+const versionMatch = skill.match(/^  version: "([^"]+)"$/m);
+if (!versionMatch) errors.push("SKILL.md frontmatter version is missing.");
+if (versionMatch && packageJson.version !== versionMatch[1]) {
+  errors.push(`Version mismatch: package.json is ${packageJson.version}, SKILL.md is ${versionMatch[1]}.`);
+}
+if (versionMatch && !/^\\d+\\.\\d+\\.\\d+$/.test(versionMatch[1])) {
+  errors.push(`Invalid semantic version in SKILL.md: ${versionMatch[1]}`);
+}
 const lines = skill.split(/\r?\n/);
 if (!skill.startsWith("---\n")) errors.push("SKILL.md must start with YAML frontmatter.");
 if (lines.length > 500) errors.push(`SKILL.md has ${lines.length} lines; keep it below 500 lines.`);
 for (const field of ["name: ui-reference-replication", "description:", "license: MIT", "version: \"2.5.0\""]) {
-  if (!skill.includes(field)) errors.push(`SKILL.md frontmatter/content missing: ${field}`);
+  if (field && !skill.includes(field)) errors.push(`SKILL.md frontmatter/content missing: ${field}`);
 }
 if (skill.includes("compatibility: opencode")) errors.push("Core skill must not be locked to OpenCode.");
 for (const required of [
+  "references/token-efficient-execution.md",
+  "scripts/plan-task.mjs",
   "references/visual-capability-gate.md",
   "references/existing-ui-redesign.md",
   "references/creative-reference-mode.md",
