@@ -53,7 +53,7 @@ Start from the quality-report template. Replace placeholders with actual results
 npm run validate:quality-report -- --file artifacts/ui-reference/quality-report.json --root .
 ```
 
-The validator checks required gate coverage for the declared work/fidelity mode, status semantics, evidence-file existence, and path containment. Pass requires an existing evidence file. Partial/Fail require a next action. Not Tested requires a reason.
+The validator checks required gate coverage for the declared work/fidelity mode, status semantics, evidence-file existence, and path containment. Pass, Partial, and Fail each require at least one existing evidence file. Partial/Fail additionally require a next action. Not Tested requires a reason.
 
 The validator checks structure and evidence references. It does not execute Playwright, npm audit, axe-core, or visual inspection and cannot prove an agent's declarations are truthful. Keep original test reports and screenshots alongside the aggregate report.
 

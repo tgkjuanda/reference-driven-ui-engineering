@@ -45,14 +45,16 @@ export async function validateQualityReport(report, root = process.cwd()) {
     if (!STATUSES.has(gate.status)) errors.push(id + ": status must be pass, partial, fail, or not-tested.");
     if (typeof gate.summary !== "string" || !gate.summary.trim()) errors.push(id + ": summary is required.");
     if (!Array.isArray(gate.evidence)) errors.push(id + ": evidence must be an array.");
-    const evidence = Array.isArray(gate.evidence) ? gate.evidence : [], checked = [];
+    const evidence = Array.isArray(gate.evidence) ? gate.evidence : [], checked = []; let existingEvidenceCount = 0;
     for (const item of evidence) {
       if (typeof item !== "string" || !item.trim()) { errors.push(id + ": evidence entries must be non-empty relative paths."); continue; }
       const exists = await evidenceExists(normalizedRoot, item);
       checked.push({ path: item, exists });
+      if (exists) existingEvidenceCount++;
       if (!exists) errors.push(id + ": evidence file is missing or escapes the report root: " + item);
     }
-    if (gate.status === "pass" && evidence.length === 0) errors.push(id + ": a passing gate requires at least one evidence file.");
+    if (gate.status === "pass" && existingEvidenceCount === 0) errors.push(id + ": a passing gate requires at least one existing evidence file.");
+    if (["partial", "fail"].includes(gate.status) && existingEvidenceCount === 0) errors.push(id + ": a partial/failing gate requires at least one existing evidence file.");
     if (["partial", "fail"].includes(gate.status) && (typeof gate.nextAction !== "string" || !gate.nextAction.trim())) errors.push(id + ": partial/fail requires nextAction.");
     if (gate.status === "not-tested" && (typeof gate.reason !== "string" || !gate.reason.trim())) errors.push(id + ": not-tested requires a reason.");
     if (errors.length === before) outcomes.push({ id, status: gate.status, summary: gate.summary, evidence: checked, nextAction: gate.nextAction ?? null, reason: gate.reason ?? null });

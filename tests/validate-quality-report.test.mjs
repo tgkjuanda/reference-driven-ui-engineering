@@ -17,3 +17,43 @@ test("missing required gate prevents pass", async () => { const { root, report }
 test("not-tested remains partial and requires a reason", async () => { const { root, report } = await fixture(); try { report.gates[0] = { id: "visual-evidence", status: "not-tested", summary: "Not run.", evidence: [], reason: "No screenshots were captured." }; const result = await validateQualityReport(report, root); assert.equal(result.status, "partial"); assert.equal(result.summary.notTested, 1); } finally { await rm(root, { recursive: true, force: true }); } });
 test("path traversal and missing evidence fail", async () => { const { root, report } = await fixture(); try { report.gates[0].evidence = ["../outside.json"]; const result = await validateQualityReport(report, root); assert.equal(result.status, "fail"); assert.ok(result.errors.some(item => item.includes("missing or escapes"))); } finally { await rm(root, { recursive: true, force: true }); } });
 test("passing gates require evidence files", async () => { const { root, report } = await fixture(); try { report.gates[0].evidence = []; const result = await validateQualityReport(report, root); assert.equal(result.status, "fail"); assert.ok(result.errors.some(item => item.includes("requires at least one evidence"))); } finally { await rm(root, { recursive: true, force: true }); } });
+
+
+for (const status of ["partial", "fail"]) {
+  test(`${status} gates require at least one existing evidence file`, async () => {
+    const { root, report } = await fixture();
+    try {
+      report.gates[0] = {
+        id: "visual-evidence",
+        status,
+        summary: status + " result with a documented next action.",
+        evidence: [],
+        nextAction: "Capture and review the required evidence."
+      };
+      const result = await validateQualityReport(report, root);
+      assert.equal(result.status, "fail");
+      assert.ok(result.errors.some(item => item.includes("requires at least one existing evidence file")));
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+
+  test(`${status} gates accept existing evidence with a next action`, async () => {
+    const { root, report } = await fixture();
+    try {
+      report.gates[0] = {
+        id: "visual-evidence",
+        status,
+        summary: status + " result supported by evidence.",
+        evidence: ["reports/evidence.json"],
+        nextAction: "Resolve the recorded outstanding issue."
+      };
+      const result = await validateQualityReport(report, root);
+      assert.equal(result.status, status === "partial" ? "partial" : "fail");
+      assert.equal(result.errors.some(item => item.includes("requires at least one existing evidence file")), false);
+      assert.equal(result.summary[status], 1);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+}
