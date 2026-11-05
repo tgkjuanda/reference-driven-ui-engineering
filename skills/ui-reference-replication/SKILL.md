@@ -1,15 +1,23 @@
 ---
 name: ui-reference-replication
-description: Build new interfaces or redesign existing applications using visual references. Supports reference-faithful replication and original reference-inspired creative design; requires direct visual perception and verifies visual, functional, responsive, accessibility, motion, and regression quality.
+description: Builds, recreates, replicates, and redesigns web/app interfaces from screenshots, images, Figma files, frames or links, live website URLs, mockups, wireframes, and prototypes. Use by default for reference-led UI implementation, visual redesign, and comparison—even when the user does not mention this skill. Includes visual analysis, implementation, and evidence-based UI QA.
 license: MIT
 metadata:
   domain: frontend-engineering
   workflow: reference-to-ui
-  version: "3.2.0"
+  version: "3.2.1"
   standard: agent-skills
 ---
 
 # UI Reference Replication Engine
+
+## Default activation for reference-led UI work
+
+Use this Skill as the default workflow whenever the user asks to create, build, implement, recreate, replicate, redesign, restyle, or materially modify a web/app interface and supplies or points to visual reference evidence. Trigger examples include screenshots, UI images, photos of screens, Figma files/frames/links, live website or design URLs, mockups, wireframes, prototypes, and visual design specifications. Also use it when the user asks to compare or visually audit an implementation against such a reference.
+
+The user does not need to mention this Skill or explicitly ask for the reference-replication workflow. Do not wait for a slash command or manual invocation when the task clearly matches.
+
+Do not route backend-only work, unrelated code maintenance, content-only writing, general design discussion, or tasks with no UI implementation/visual audit to this Skill. If another task-specific instruction conflicts, preserve the user's explicit scope and do not expand the work beyond the requested UI task.
 
 ## Mission
 

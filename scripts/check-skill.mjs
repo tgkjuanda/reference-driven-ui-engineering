@@ -11,7 +11,9 @@ async function mustExist(relative) {
   catch { errors.push(`Missing required file: ${relative}`); }
 }
 const skillPath = "skills/ui-reference-replication/SKILL.md";
+const antigravityRulePath = ".agents/rules/ui-reference-replication.md";
 await mustExist(skillPath);
+await mustExist(antigravityRulePath);
 for (const relative of [
   "skills/ui-reference-replication/references/token-efficient-execution.md",
   "skills/ui-reference-replication/references/complete-quality-assurance.md",
@@ -72,6 +74,22 @@ for (const field of ["name: ui-reference-replication", "description:", "license:
   if (!skill.includes(field)) errors.push(`SKILL.md frontmatter/content missing: ${field}`);
 }
 if (skill.includes("compatibility: opencode")) errors.push("Core skill must not be locked to OpenCode.");
+const descriptionMatch = skill.match(/^description:\s*(.+)$/m);
+if (!descriptionMatch) {
+  errors.push("SKILL.md frontmatter description is missing.");
+} else {
+  const description = descriptionMatch[1].toLowerCase();
+  for (const keyword of ["screenshot", "figma", "website urls", "mockups", "wireframes", "prototypes", "by default"]) {
+    if (!description.includes(keyword)) errors.push("SKILL.md description is missing routing keyword: " + keyword);
+  }
+}
+const antigravityRule = await readFile(path.join(root, antigravityRulePath), "utf8");
+if (!antigravityRule.startsWith("---\ntrigger: always_on\n")) {
+  errors.push("Antigravity UI routing rule must use an always_on trigger.");
+}
+for (const required of ["ui-reference-replication", "screenshot", "Figma", "mockup", "wireframe", "without requiring the user to name the Skill"]) {
+  if (!antigravityRule.includes(required)) errors.push("Antigravity UI routing rule missing: " + required);
+}
 for (const required of [
   "references/token-efficient-execution.md",
   "scripts/plan-task.mjs",

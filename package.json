@@ -1,6 +1,6 @@
 {
   "name": "ui-reference-replication",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "private": true,
   "type": "module",
   "description": "Token-efficient UI reference implementation with evidence-backed QA, Figma mapping, benchmarks, and agent capability validation",
