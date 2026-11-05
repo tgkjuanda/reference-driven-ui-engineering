@@ -5,7 +5,7 @@ license: MIT
 metadata:
   domain: frontend-engineering
   workflow: reference-to-ui
-  version: "1.1.0"
+  version: "1.2.0"
   standard: agent-skills
 ---
 
@@ -163,16 +163,124 @@ List:
 
 Prefer supplied/exported assets. Do not approximate a distinctive logo or illustration with generic emoji or unrelated stock imagery. If the exact asset is unavailable, use a close, legally usable substitute and disclose it.
 
+### Phase 3.5 — Quality and design-system specification
+
+Before implementation, create a compact, evidence-backed specification. This is a required work product, not optional commentary.
+
+#### A. Reference and hierarchy map
+
+- Record the reference source, frame/page/node ID when available, viewport, and confidence level for every screen.
+- Map page regions and their intended reading order: primary task, primary action, supporting information, secondary actions, and low-priority metadata.
+- Preserve the reference's information architecture and emphasis. Do not reorder content based on personal preference.
+- Use semantic heading levels that reflect the content hierarchy; visual size alone does not define heading semantics.
+- If the reference has a hierarchy or contrast problem that harms usability, preserve its visual language while proposing the smallest accessible correction and disclose the deviation.
+
+#### B. Design-token contract
+
+Create a single canonical token source for the implementation. Prefer, in order:
+1. Existing project tokens that are demonstrably connected to the target design.
+2. Figma variables/styles exposed through authorized Figma access.
+3. Measured screenshot-derived tokens, clearly labeled as estimates.
+
+Requirements:
+- Define semantic tokens for color roles, typography, spacing, sizing, radii, borders, shadows/elevation, breakpoints, and motion where applicable.
+- Separate primitive/reference values from semantic usage roles (for example, palette-blue-600 versus color-action-primary).
+- Map each extracted token to its implementation name and source evidence.
+- Avoid duplicate values for the same semantic purpose.
+- Do not scatter raw hex values, arbitrary spacing, or repeated style literals across components when a token exists.
+- Keep token names stable and framework-agnostic; map them to CSS custom properties, Tailwind theme entries, or the project's existing token layer.
+- When practical, exchange tokens using the Design Tokens Community Group (DTCG) Format Module 2025.10. Do not claim standards compliance unless the output has been validated against the applicable schema.
+- Preserve mode/theme distinctions (light/dark, brand, density) when they exist in the reference.
+
+Minimum token groups:
+- `color.*`: background, surface, text, muted text, border, primary/action, focus, success, warning, danger, info.
+- `typography.*`: font family, size, weight, line-height, letter spacing.
+- `space.*`: spacing scale and layout gaps.
+- `size.*`: control heights, icon sizes, content widths, sidebar/header dimensions where tokenized.
+- `radius.*`, `border.*`, `shadow.*`, `breakpoint.*`, `motion.*`.
+
+#### C. Component-driven development contract
+
+- Build reusable components around repeated visual and behavioral patterns, not arbitrary abstractions.
+- Maintain a component inventory linking each reference component to its code component, variants, props, and states.
+- Use explicit variants for real differences (size, intent, density, selected, disabled); do not fork nearly identical components without a reason.
+- Components must consume design tokens rather than embedding independent styling values.
+- Keep behavior, accessibility semantics, and visual states inside the shared component contract.
+- Reuse existing project components when they match the reference and are safe to extend.
+- When Storybook or an equivalent component workbench already exists, document important variants and interaction states there. Do not add Storybook solely for a small one-off screen unless requested.
+
+#### D. Accessibility contract
+
+Target WCAG 2.2 Level AA for new or modified web UI where applicable. Treat this as an engineering target, not a compliance claim.
+
+Check:
+- Semantic HTML and accessible names for interactive controls.
+- Full keyboard operation, logical focus order, visible focus, and no keyboard traps.
+- Labels, instructions, required state, and programmatic validation messages for forms.
+- Text and non-text contrast, including hover, focus, disabled, and selected states.
+- Meaningful alternative text; decorative imagery should not create redundant announcements.
+- Dialog focus management, Escape behavior where appropriate, and focus return.
+- Status/error/success announcements for assistive technology where needed.
+- Touch/pointer target sizing and spacing against WCAG 2.2 requirements.
+- Reduced-motion preferences and no essential information conveyed by color alone.
+- Responsive reflow and zoom without loss of content or functionality.
+
+Do not imitate an inaccessible interaction merely because it appears in a reference. Preserve the visual design where possible, correct the barrier, and list the intentional accessibility deviation.
+
+#### E. Responsive behavior contract
+
+- Build a viewport matrix from all available Figma frames or source screenshots.
+- Record which elements reflow, wrap, collapse, become scrollable, reorder, or disappear at each observed width.
+- Prefer fluid layout, CSS grid/flex, min/max constraints, and content-driven breakpoints over fixed desktop coordinates.
+- Use absolute positioning only when the reference requires overlay/art-directed placement, not as the default layout system.
+- Test at every supplied viewport. When none are supplied, test a representative narrow phone, tablet, and desktop width (for example 360px, 768px, and 1440px) and label these as implementation tests rather than source-reference evidence.
+- Prevent unintended horizontal overflow and preserve access to all primary actions on narrow screens.
+
+#### F. Interaction feedback and error contract
+
+Inventory the states for every interactive component:
+- default, hover, focus, active/pressed, selected, disabled;
+- loading/pending, success, empty, validation error, and system/network error where relevant.
+
+Requirements:
+- Provide immediate, perceivable feedback after user actions.
+- Use inline validation near the affected field; explain what is wrong and how to correct it.
+- Prevent errors through sensible constraints, input hints, safe defaults, disabled unavailable actions, and confirmation for destructive/irreversible operations.
+- Preserve user input when validation or network errors occur whenever safe.
+- Provide retry/recovery paths for transient failures and a clear next action for blocking failures.
+- Never show a success message before the operation has actually succeeded.
+- Do not create fake functionality: if the backend is out of scope, make the interaction demonstrable with local state or clearly mark it as a prototype.
+
+#### G. Figma-to-code synchronization contract
+
+When an authorized Figma MCP/API integration is available:
+1. Read the selected page/frame and relevant components, variables, styles, annotations, and Code Connect mappings.
+2. Prefer structured Figma context over visual guessing; use screenshots to verify rendered appearance and details not represented in node data.
+3. Map Figma variables/styles to canonical token names and map Figma component instances to existing code components where Code Connect or a repository mapping exists.
+4. Produce a sync map: Figma file/page/node or variable → token/component name → code file/export.
+5. Detect drift: changed variable values, missing token mappings, unlinked components, component variants absent in code, and visual mismatches.
+6. Keep Figma and code changes scoped to the user's request. Default direction is Figma/reference → code. Write changes back to Figma only when the user explicitly requests it and the connected integration has authorized write access.
+7. Never overwrite Figma components, variables, or code tokens wholesale to "sync" them. Generate a diff, explain conflicts, and preserve unrelated changes.
+8. Record the inspected file/page/frame and revision or timestamp when the tool exposes it.
+
+When Figma MCP/API access is unavailable:
+- use the URL preview, screenshots, or exported assets the user supplies;
+- create the same mapping manually with evidence and confidence;
+- label sync as manual/reference-based, not live or bidirectional.
+
+The Figma MCP server provides structured context and can support design/code workflows, but the agent remains responsible for implementation and validation. Do not describe MCP access as automatic one-click conversion.
+
 ### Phase 4 — Plan before coding
 
 Create a short implementation plan:
-1. App shell and global design tokens.
-2. Shared components.
-3. Page/screen layout.
-4. Content and data.
-5. Interactions and states.
-6. Responsive adaptations.
-7. Visual verification.
+1. Reference evidence ledger, hierarchy map, and uncertainty list.
+2. Canonical design tokens and Figma-to-code mapping plan.
+3. App shell and responsive layout.
+4. Shared component inventory, variants, and state contract.
+5. Page/screen layout, content, and data.
+6. Interaction feedback, error prevention, and recovery behavior.
+7. Accessibility review plan (WCAG 2.2 AA target).
+8. Visual, functional, responsive, and accessibility verification.
 
 Map the plan to actual files and routes. Keep components reusable but do not over-engineer a one-screen prototype.
 
@@ -196,6 +304,12 @@ Map the plan to actual files and routes. Keep components reusable but do not ove
    - responsive sidebar/menu.
 9. Use mock data only when real data/backend is not provided. Keep mock data coherent and label it in code where appropriate.
 10. Avoid adding unrelated sections, gradients, animations, charts, or decoration not present in the reference.
+11. Enforce the design-token contract: components consume the canonical token layer.
+12. Enforce component-driven development: repeated patterns share components and explicit variants.
+13. Preserve visual hierarchy, reading order, and task priority from the reference.
+14. Provide feedback for every meaningful action and define loading, empty, success, validation, and failure states as applicable.
+15. Prevent avoidable user errors and implement understandable recovery paths.
+16. Implement keyboard and assistive-technology behavior as part of each component, not as a late visual patch.
 
 Do not:
 - substitute a generic dashboard template,
@@ -225,6 +339,11 @@ Visual verification is mandatory when browser/screenshot tooling is available.
 7. Repeat until the remaining differences are minor or tooling/reference limitations prevent further progress.
 8. Test other supplied viewports and key interaction states.
 9. Check console errors, failed asset requests, build errors, and responsive overflow.
+10. Run keyboard-only checks on all primary flows and inspect focus visibility/order.
+11. Check accessible names, labels, validation announcements, contrast, and dialog focus behavior.
+12. Test interaction feedback, loading/empty/success/error states, and recovery behavior.
+13. Compare token values against Figma variables or the evidence ledger; report drift.
+14. Check component instances for inconsistent one-off styles or duplicated variants.
 
 If browser screenshot tooling is unavailable:
 - run the available build/type/lint checks,
@@ -280,6 +399,14 @@ Before declaring completion, verify:
 - [ ] No unrelated design elements were introduced.
 - [ ] Visible controls behave appropriately.
 - [ ] No horizontal overflow at tested viewports.
+- [ ] Visual hierarchy and reading order preserve the reference's task priorities.
+- [ ] Components use the canonical design-token layer.
+- [ ] Repeated UI patterns use shared, documented component variants.
+- [ ] Keyboard navigation and visible focus work on primary flows.
+- [ ] Controls have accessible names/labels and meaningful validation feedback.
+- [ ] Contrast, target size, reduced motion, and responsive reflow reviewed against WCAG 2.2 AA criteria where applicable.
+- [ ] Loading, empty, success, error, and recovery states implemented where relevant.
+- [ ] Figma-to-code mapping and detected drift documented, or lack of Figma access disclosed.
 - [ ] App builds/runs without blocking errors.
 - [ ] Screenshot comparison performed or limitation disclosed.
 - [ ] Final report distinguishes verified facts from estimates.
@@ -290,6 +417,21 @@ For the SchoolHub example reference:
 `https://www.figma.com/community/file/1381931496411280342/schoolhub-school-management-admin-dashboard-template`
 
 Treat this URL as a user-provided reference, not as proof that all frames or source assets are accessible. Inspect the actual preview/file first. Only implement screens that can be inspected or that the user explicitly supplies. Do not invent the unseen screens. Confirm the user's rights/license before reusing proprietary exported assets in a distributed product.
+
+
+## Quality gates
+
+A screen is not ready merely because it renders. Before delivery, report these gates separately:
+
+1. **Reference fidelity:** layout, hierarchy, style, assets, and screen scope traceable to the reference.
+2. **Consistency:** tokens and shared components used without unexplained one-off styling.
+3. **Error minimization:** requirements/evidence traceability, type/build checks, and relevant interaction tests.
+4. **Accessibility:** WCAG 2.2 AA review for applicable criteria; list failures and untested criteria.
+5. **Responsive behavior:** all source viewports checked; fallback phone/tablet/desktop widths tested when no source widths exist.
+6. **Feedback and error handling:** user actions have clear states, validation, and recovery paths.
+7. **Figma/code synchronization:** mapping and drift report produced when structured Figma access exists; otherwise manual evidence mapping disclosed.
+
+Use a status for every gate: **Pass**, **Partial**, **Fail**, or **Not tested**. Never roll a partial or untested gate into a global "passed" status.
 
 ## Operating behavior
 
