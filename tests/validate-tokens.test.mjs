@@ -2,36 +2,30 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { validateTokenDocument } from "../skills/ui-reference-replication/scripts/validate-tokens.mjs";
 
-test("accepts inherited DTCG group types and valid values", () => {
+test("accepts DTCG 2025.10 structured values and aliases", () => {
   const result = validateTokenDocument({
-    color: { $type: "color", primary: { $value: "#3157D5" } },
-    spacing: { $type: "dimension", medium: { $value: "16px" } },
+    color: {
+      $type: "color",
+      primary: { $value: { colorSpace: "srgb", components: [0.19, 0.34, 0.83], hex: "#3157D5" } }
+    },
+    spacing: { $type: "dimension", medium: { $value: { value: 16, unit: "px" } } },
     typography: {
+      family: { $type: "fontFamily", $value: ["Inter", "Arial"] },
+      weight: { $type: "fontWeight", $value: 400 },
       body: {
         $type: "typography",
         $value: {
-          fontFamily: ["Inter", "Arial"],
-          fontSize: "14px",
-          fontWeight: 400,
-          lineHeight: "20px"
+          fontFamily: "{typography.family}",
+          fontSize: { value: 14, unit: "px" },
+          fontWeight: "{typography.weight}",
+          lineHeight: 1.4286
         }
       }
     }
   });
   assert.equal(result.valid, true, JSON.stringify(result.errors));
-  assert.equal(result.tokenCount, 3);
-});
-
-test("resolves token aliases within the document", () => {
-  const result = validateTokenDocument({
-    color: {
-      $type: "color",
-      primary: { $value: "#3157D5" },
-      action: { $value: "{color.primary}" }
-    }
-  });
-  assert.equal(result.valid, true, JSON.stringify(result.errors));
-  assert.equal(result.aliasCount, 1);
+  assert.equal(result.tokenCount, 5);
+  assert.equal(result.aliasCount, 2);
 });
 
 test("rejects unresolved aliases", () => {
@@ -42,12 +36,20 @@ test("rejects unresolved aliases", () => {
   assert.ok(result.errors.some(issue => issue.code === "unresolved-alias"));
 });
 
-test("rejects invalid dimension values", () => {
+test("rejects string dimensions from legacy token syntax", () => {
   const result = validateTokenDocument({
-    spacing: { $type: "dimension", medium: { $value: "sixteen" } }
+    spacing: { $type: "dimension", medium: { $value: "16px" } }
   });
   assert.equal(result.valid, false);
   assert.ok(result.errors.some(issue => issue.code === "invalid-dimension"));
+});
+
+test("rejects malformed DTCG color structures", () => {
+  const result = validateTokenDocument({
+    color: { $type: "color", primary: { $value: { colorSpace: "srgb", components: [1, 0] } } }
+  });
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some(issue => issue.code === "invalid-color"));
 });
 
 test("detects circular aliases", () => {
@@ -62,9 +64,13 @@ test("detects circular aliases", () => {
   assert.ok(result.errors.some(issue => issue.code === "circular-alias"));
 });
 
-test("rejects an object that mixes token value and child groups", () => {
+test("rejects token objects that also contain child groups", () => {
   const result = validateTokenDocument({
-    color: { $type: "color", $value: "#fff", child: { $value: "#000" } }
+    color: {
+      $type: "color",
+      $value: { colorSpace: "srgb", components: [1, 1, 1] },
+      child: { $value: { colorSpace: "srgb", components: [0, 0, 0] } }
+    }
   });
   assert.equal(result.valid, false);
   assert.ok(result.errors.some(issue => issue.code === "token-and-group-mixed"));
