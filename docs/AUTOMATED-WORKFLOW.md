@@ -85,6 +85,28 @@ npm run validate:visual-review -- --file artifacts/ui-reference/visual-review.js
 
 Reference-Faithful and Reference-Inspired Creative require different review dimensions. Partial, failed, and not-tested dimensions remain visible and cannot be collapsed into an overall pass. The scorecard is agent-declared; validation checks completeness, not image understanding.
 
+## Responsive, performance, and security audits
+
+Run the responsive viewport matrix:
+
+```bash
+npm run audit:responsive -- --config tests/responsive-audit.json --out artifacts/ui-reference/responsive.json
+```
+
+Run project-specific lab performance budgets:
+
+```bash
+npm run audit:performance -- --config tests/performance-budget.json --out artifacts/ui-reference/performance.json
+```
+
+Run the lightweight source and production dependency review:
+
+```bash
+npm run audit:security -- --root . --out artifacts/ui-reference/security.json
+```
+
+Responsive automation reports horizontal overflow/off-canvas elements, not whether the design is aesthetically or functionally usable. Performance results are lab FCP/LCP/CLS plus DOM/resource/transfer diagnostics, not field Core Web Vitals or INP. Security checks are source-pattern heuristics plus optional `npm audit --omit=dev`, not complete security assurance. Mark unavailable checks Partial/Not Tested and redact sensitive findings.
+
 ## Consumer-project visual QA
 
 After the preflight passes:
