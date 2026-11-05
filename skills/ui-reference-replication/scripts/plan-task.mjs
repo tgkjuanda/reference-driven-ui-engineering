@@ -93,7 +93,7 @@ function createPlan(options) {
   }
   if (options.figma) readBefore.push(`${ROOT}/references/figma-analysis.md`);
   if (options.motion) loadWhenNeeded.push(`${ROOT}/references/motion-design.md`);
-  if (options.accessibility) loadWhenNeeded.push(`${ROOT}/references/accessibility.md`);
+  if (options.accessibility || options.scope === "full") loadWhenNeeded.push(`${ROOT}/references/accessibility.md`);
   if (options.responsive || options.scope === "full") {
     loadWhenNeeded.push(`${ROOT}/references/responsive-and-interactions.md`);
     scripts.push("npm run audit:responsive -- --config <responsive-config.json> --out <responsive-report.json>");
