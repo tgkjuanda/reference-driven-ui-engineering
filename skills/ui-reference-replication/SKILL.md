@@ -1,11 +1,11 @@
 ---
 name: ui-reference-replication
-description: Reconstruct responsive, accessible web interfaces from Figma, website URLs, screenshots, or images. Reverse-engineer design systems, implement the existing project stack, and verify fidelity with automated screenshots, visual diffs, accessibility checks, and design-token validation.
+description: Reconstruct responsive, accessible web interfaces from Figma, website URLs, screenshots, or images. Reverse-engineer design systems, motion, and visual effects; implement the existing project stack; and verify fidelity with automated screenshots, visual diffs, accessibility checks, and design-token validation.
 license: MIT
 metadata:
   domain: frontend-engineering
   workflow: reference-to-ui
-  version: "2.0.0"
+  version: "2.1.0"
   standard: agent-skills
 ---
 
@@ -26,6 +26,7 @@ Read the bundled references as needed:
 - `references/design-system-engineering.md` for tokens, hierarchy, and component-driven implementation.
 - `references/accessibility.md` for WCAG-oriented implementation and audit.
 - `references/responsive-and-interactions.md` for breakpoints, states, feedback, and error recovery.
+- `references/motion-design.md` for motion inventory, animation, visual effects, reduced motion, and motion QA.
 - `references/visual-qa.md` for screenshot capture, comparison, iteration, and reporting.
 - `references/evidence-and-visual-qa.md` for worksheets and checklists.
 - In the source repository, consult `docs/QUALITY-GATES.md`; when installed as a skill, use the bundled references instead.
@@ -40,8 +41,9 @@ Read the bundled references as needed:
 6. **Accessible by construction:** target WCAG 2.2 AA for applicable criteria. Do not reproduce accessibility defects just because they appear in the reference.
 7. **Responsive by evidence:** follow supplied responsive frames first; otherwise document inferred behavior and test representative widths.
 8. **Functional feedback:** interactive controls need perceivable states, validation, and recovery behavior.
-9. **Verify, then claim:** only report tests that actually ran. Do not claim pixel-perfect, WCAG-compliant, or fully tested without evidence.
-10. **Respect rights and access:** use authorized reference assets. Do not bypass authentication, paywalls, or licensing restrictions.
+9. **Intentional motion:** reconstruct supported motion and effects with reusable tokens, a clear purpose, reduced-motion behavior, and performance checks. Do not add decorative motion without evidence or user approval.
+10. **Verify, then claim:** only report tests that actually ran. Do not claim pixel-perfect, WCAG-compliant, or fully tested without evidence.
+11. **Respect rights and access:** use authorized reference assets. Do not bypass authentication, paywalls, or licensing restrictions.
 
 ## Operating workflow
 
@@ -51,8 +53,8 @@ Identify reference type, scope, target screens, available viewport sizes, expect
 
 Inspect all accessible reference evidence before implementation:
 - Figma: selected frames, layer hierarchy, Auto Layout, constraints, variables, styles, component variants, annotations, and Code Connect mappings when available.
-- Website: full page, navigation, relevant interaction states, viewport behavior, and loaded assets.
-- Screenshot/image: source dimensions, page bounds, geometry, hierarchy, colors, typography, and visible states.
+- Website: full page, navigation, relevant interaction states, viewport behavior, loaded assets, and observable motion/effects.
+- Screenshot/image: source dimensions, page bounds, geometry, hierarchy, colors, typography, and visible states. Do not infer timing or easing from a static image.
 
 Create a reference inventory and uncertainty log. When the reference is inaccessible, ask for an authorized export or screenshot rather than guessing.
 
@@ -67,23 +69,26 @@ Create:
 - Layout geometry and responsive behavior map.
 - Typography, color, spacing, radius, border, shadow, sizing, and motion token map.
 - Component inventory with variants and states.
+- Motion inventory: element, purpose, trigger, properties, timing, easing, sequencing, interruption, responsive behavior, and reduced-motion alternative.
+- Visual-effect inventory: gradients, blur, shadows, glow, masks, filters, transparency, illustration, and any advanced rendering.
 - Asset inventory with source and usage rights.
 - Figma-to-code mapping when structured Figma access exists.
 
-Record the source and confidence for every inferred value.
+Record the source and confidence for every inferred value. Mark motion inferred from still images as unknown unless separate evidence exists.
 
 ### 4. Plan and implement
 
 Implement in this order:
-1. Canonical design tokens.
+1. Canonical design and motion tokens.
 2. Application shell and macro layout.
 3. Shared components and variants.
 4. Screen content and assets.
 5. Interaction behavior and feedback states.
-6. Responsive adaptations.
-7. Accessibility semantics and keyboard behavior.
+6. Motion and visual effects, using a consistent motion system.
+7. Responsive adaptations and reduced-motion alternatives.
+8. Accessibility semantics and keyboard behavior.
 
-Follow the existing project's framework and conventions. Do not introduce unrelated visual elements, arbitrary gradients, generic stock imagery, emoji icons, or unrequested redesigns. Do not duplicate components for superficial differences.
+Follow the existing project's framework and conventions. Do not introduce unrelated visual elements, arbitrary gradients, generic stock imagery, emoji icons, or unrequested redesigns. Do not duplicate components for superficial differences. Do not add a motion library unless the existing stack cannot meet the required behavior cleanly.
 
 ### 5. Run the QA toolkit
 
@@ -95,15 +100,15 @@ Scripts live beside this file in `scripts/`. Run them from the user's project ro
 - `python <skill>/scripts/compare-screenshots.py reference.png actual.png --diff artifacts/ui-reference/diff.png`
 - `node <skill>/scripts/accessibility-audit.mjs --url http://localhost:3000`
 
-The browser scripts require Playwright in the project/runtime. Accessibility audit additionally requires axe-core. If dependencies are absent, state the blocker and provide the exact setup command; never silently install packages.
+The browser scripts require Playwright in the project/runtime. Accessibility audit additionally requires axe-core. For motion, inspect key transitions and test the reduced-motion preference; use browser recording/performance tools when needed. If dependencies are absent, state the blocker and provide the exact setup command; never silently install packages.
 
 ### 6. Fix by measured impact
 
-Compare screenshots at identical viewport, route, and UI state. Generate raw diff, heatmap, and overlay where possible. Classify the highest-impact discrepancies, map them to the responsible component or token, change the smallest responsible code surface, re-capture the same state, and retain the change only if it improves fidelity without regression. Fix macro geometry first, then typography, color, component dimensions, assets, and micro-details. Re-run tests after each meaningful fix. Keep a defect log with severity, evidence, correction, and retest result. Read references/visual-qa.md for the full evidence-driven correction loop.
+Compare screenshots at identical viewport, route, and UI state. Generate raw diff, heatmap, and overlay where possible. Classify the highest-impact discrepancies, map them to the responsible component or token, change the smallest responsible code surface, re-capture the same state, and retain the change only if it improves fidelity without regression. Fix macro geometry first, then typography, color, component dimensions, assets, motion, and micro-details. Re-run tests after each meaningful fix. Keep a defect log with severity, evidence, correction, and retest result. Read references/visual-qa.md and references/motion-design.md for their respective evidence-driven correction loops.
 
 ### 7. Delivery report
 
-Report screens covered, files changed, reference limitations, design tokens and components reused, interactions implemented, viewports tested, test commands/results, visual-diff metrics, accessibility findings, and unresolved deviations.
+Report screens covered, files changed, reference limitations, design and motion tokens/components reused, interactions and animations implemented, viewports and motion preferences tested, test commands/results, visual-diff metrics, accessibility findings, performance observations, and unresolved deviations.
 
 ## Required quality gates
 
@@ -117,6 +122,7 @@ Give every gate one status: **Pass**, **Partial**, **Fail**, or **Not tested**.
 6. Feedback, validation, prevention, and recovery.
 7. Build, runtime, and regression checks.
 8. Figma-to-code mapping and drift, or a clear statement that structured Figma access was unavailable.
+9. Motion behavior, visual effects, reduced-motion alternatives, and motion performance.
 
 Do not collapse failed or untested gates into a global pass.
 
