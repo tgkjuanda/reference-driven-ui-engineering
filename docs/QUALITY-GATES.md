@@ -154,6 +154,22 @@ Use `prefers-reduced-motion: reduce` to respect user system preferences. WCAG 2.
 
 **Evidence:** motion inventory, token map, normal/reduced-motion test results, key-state captures or recordings, automatic-motion review, performance observations, fallback and defect log.
 
+## 12. Existing UI redesign and behavior preservation
+
+When redesigning an existing application to match a visual reference:
+
+- Create a current-product baseline before editing: routes, navigation, permissions, forms, validation, API/data contracts, tables, search/filter/sort, dialogs, loading/error/empty/success states, analytics hooks, and critical workflows.
+- Record baseline screenshots, current tests, and known defects.
+- Separate target visual style from target product behavior. The reference controls appearance; the existing application remains the default source of truth for business rules and workflows.
+- Map reference visual patterns to existing components and tokens before implementation.
+- Preserve routes, features, data, permissions, validation, keyboard behavior, APIs, and workflows unless the user explicitly approves a functional change.
+- Apply changes incrementally to shared tokens/components and migrate page families in controlled steps.
+- Do not remove features because they are absent from the reference; do not replace live data with static/demo content.
+- Do not change API payloads, database schemas, authentication, authorization, or business rules during a visual-only redesign.
+- Run both reference-fidelity QA and existing-product regression QA after changes.
+
+**Evidence:** baseline inventory, route/component migration map, baseline vs post-redesign test results, visually inspected before/after screenshots, preserved-contract record, regression/defect log.
+
 ## Delivery scorecard
 
 Use a status per gate:
@@ -172,8 +188,9 @@ Use a status per gate:
 | Component-driven development | Pass / Partial / Fail / Not tested | | |
 | Figma/code sync | Pass / Partial / Fail / Not tested | | |
 | Motion/effects | Pass / Partial / Fail / Not tested | | |
+| Existing UI behavior preservation (redesign mode) | Pass / Partial / Fail / Not tested | | |
 
-If the visual-perception prerequisite fails or is not tested, do not begin implementation and do not report an overall pass.
+If the visual-perception prerequisite fails or is not tested, do not begin implementation and do not report an overall pass. In redesign mode, behavior preservation must be backed by baseline and post-change evidence.
 
 ## Reference standards and implementation guidance
 
