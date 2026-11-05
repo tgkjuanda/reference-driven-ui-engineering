@@ -91,7 +91,10 @@ function createPlan(options) {
       `${ROOT}/references/anti-ai-slop.md`
     );
   }
-  if (options.figma) readBefore.push(`${ROOT}/references/figma-analysis.md`);
+  if (options.figma) {
+    readBefore.push(`${ROOT}/references/figma-analysis.md`, `${ROOT}/references/design-intelligence.md`);
+    scripts.push("node <skill>/scripts/validate-design-map.mjs --file <figma-code-map.json> --root .");
+  }
   if (options.motion) loadWhenNeeded.push(`${ROOT}/references/motion-design.md`);
   if (options.accessibility) loadWhenNeeded.push(`${ROOT}/references/accessibility.md`);
   if (options.responsive) loadWhenNeeded.push(`${ROOT}/references/responsive-and-interactions.md`);
@@ -131,7 +134,7 @@ function createPlan(options) {
   const uniqueOnDemand = [...new Set(loadWhenNeeded)].filter(item => !uniqueReadBefore.includes(item));
 
   return {
-    version: "3.0.0",
+    version: "3.1.0",
     workMode: options.workMode,
     fidelity: options.fidelity,
     scope: options.scope,

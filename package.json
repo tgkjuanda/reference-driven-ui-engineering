@@ -1,9 +1,9 @@
 {
   "name": "ui-reference-replication",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "private": true,
   "type": "module",
-  "description": "Token-efficient visual UI implementation with evidence, regression, responsive, performance, dependency-security, and quality-report gates",
+  "description": "Token-efficient UI reference implementation with auditable QA, Figma-to-code mapping, and benchmark tooling",
   "engines": {
     "node": ">=20"
   },
@@ -19,6 +19,7 @@
     "responsive:audit": "node skills/ui-reference-replication/scripts/run-responsive-audit.mjs",
     "performance:audit": "node skills/ui-reference-replication/scripts/run-performance-audit.mjs",
     "security:audit": "node skills/ui-reference-replication/scripts/run-dependency-audit.mjs",
-    "validate:quality-report": "node skills/ui-reference-replication/scripts/validate-quality-report.mjs"
+    "validate:quality-report": "node skills/ui-reference-replication/scripts/validate-quality-report.mjs",
+    "validate:design-map": "node skills/ui-reference-replication/scripts/validate-design-map.mjs"
   }
 }

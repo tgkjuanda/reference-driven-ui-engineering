@@ -5,7 +5,7 @@ license: MIT
 metadata:
   domain: frontend-engineering
   workflow: reference-to-ui
-  version: "3.0.0"
+  version: "3.1.0"
   standard: agent-skills
 ---
 
@@ -64,6 +64,7 @@ This is a vendor-neutral Agent Skill. Use the host agent's available browser, Fi
 Read the bundled references as needed:
 - `references/token-efficient-execution.md` for task-aware context loading and bounded execution.
 - `references/complete-quality-assurance.md` for responsive, performance, dependency-security, and unified quality-report gates.
+- `references/design-intelligence.md` for scoped Figma variables/components mapping and drift validation.
 - `references/visual-capability-gate.md` for the mandatory vision prerequisite and rejection behavior.
 - `references/creative-reference-mode.md` for original designs inspired by a visual reference.
 - `references/anti-ai-slop.md` for product-specific visual originality, restraint, anti-template checks, and the required de-slop review.
@@ -170,7 +171,8 @@ Scripts live beside this file in `scripts/`. Run them from the user's project ro
 - `node <skill>/scripts/run-responsive-audit.mjs --url http://localhost:3000 --routes /,/dashboard --out artifacts/ui-reference/responsive.json`
 - `node <skill>/scripts/run-performance-audit.mjs --url http://localhost:3000 --budget artifacts/ui-reference/performance-budget.json --out artifacts/ui-reference/performance.json`
 - `node <skill>/scripts/run-dependency-audit.mjs --root . --fail-on high --out artifacts/ui-reference/dependency-audit.json`
-- `node <skill>/scripts/validate-quality-report.mjs --file artifacts/ui-reference/quality-report.json --root .``
+- `node <skill>/scripts/validate-quality-report.mjs --file artifacts/ui-reference/quality-report.json --root .
+- `node <skill>/scripts/validate-design-map.mjs --file artifacts/ui-reference/figma-code-map.json --root .```
 - `node <skill>/scripts/run-functional-regression.mjs --config <regression-config.json> --label baseline --out artifacts/ui-reference/baseline.json`
 - `node <skill>/scripts/compare-regression.mjs --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json`
 - `python <skill>/scripts/compare-screenshots.py reference.png actual.png --diff artifacts/ui-reference/diff.png`
@@ -224,6 +226,10 @@ Report work mode, fidelity mode, creative direction brief and anti-slop review w
 
 Create a report from the quality-report template. Every required gate must be Pass, Partial, Fail, or Not Tested. Pass requires an existing evidence file; Partial/Fail require a next action; Not Tested requires a reason. Validate the report with validate-quality-report.mjs. This checks report structure and referenced files, not the truth of an agent declaration.
 
+### 13. Design intelligence and Figma mapping
+
+When structured Figma access is part of scope, create a scoped Figma-to-code map for selected variables, components, variants, and implementation paths. Validate it against project files. Unmapped records or drift must remain Partial; a missing mapped source or invalid path fails the gate. The validator does not independently connect to Figma or prove visual synchronization.
+
 ## Required quality gates
 
 Give every gate one status: **Pass**, **Partial**, **Fail**, or **Not tested**.
@@ -244,6 +250,7 @@ Give every gate one status: **Pass**, **Partial**, **Fail**, or **Not tested**.
 14. Performance budget review using recorded browser lab metrics and documented limitations.
 15. Dependency advisory audit where the target package manager and lockfile permit it; other security review remains explicitly scoped.
 16. Unified quality report with evidence-backed status for every required gate.
+17. For Figma-scoped tasks, design-intelligence mapping and drift report validated against the project files.
 
 Gate 1 is a hard prerequisite. If it fails, reject and stop; do not mark the rest of the gates as passed or imply the task was completed. In redesign mode, gate 11 must have baseline and post-change evidence. Do not collapse failed or untested gates into a global pass.
 

@@ -15,6 +15,7 @@ await mustExist(skillPath);
 for (const relative of [
   "skills/ui-reference-replication/references/token-efficient-execution.md",
   "skills/ui-reference-replication/references/complete-quality-assurance.md",
+  "skills/ui-reference-replication/references/design-intelligence.md",
   "skills/ui-reference-replication/scripts/plan-task.mjs",
   "skills/ui-reference-replication/scripts/validate-visual-evidence.mjs",
   "skills/ui-reference-replication/scripts/validate-visual-review.mjs",
@@ -25,6 +26,7 @@ for (const relative of [
   "skills/ui-reference-replication/scripts/run-performance-audit.mjs",
   "skills/ui-reference-replication/scripts/run-dependency-audit.mjs",
   "skills/ui-reference-replication/scripts/validate-quality-report.mjs",
+  "skills/ui-reference-replication/scripts/validate-design-map.mjs",
   "skills/ui-reference-replication/templates/functional-regression.example.json",
   "skills/ui-reference-replication/templates/visual-evidence.example.json",
   "skills/ui-reference-replication/templates/performance-budget.example.json",
@@ -162,6 +164,9 @@ const evidenceValidator = await readFile(path.join(root, "skills/ui-reference-re
 if (!evidenceValidator.includes("agent-declared") || !evidenceValidator.includes("createHash")) {
   errors.push("Visual evidence validator must disclose agent-declared review and generate image hashes.");
 }
+
+const designMapValidator = await readFile(path.join(root, "skills/ui-reference-replication/scripts/validate-design-map.mjs"), "utf8");
+for (const required of ["resolveProjectFile", "figmaVariable", "codeComponent", "missingCodeVariants"]) if (!designMapValidator.includes(required)) errors.push("Design map validator missing: " + required);
 
 const tokenFile = "skills/ui-reference-replication/templates/design-tokens.example.json";
 await mustExist(tokenFile);

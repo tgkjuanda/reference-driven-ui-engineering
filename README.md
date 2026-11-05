@@ -19,6 +19,7 @@ It supports both **new UI builds** and **redesigns of existing applications**. C
 - **Creative interpretation:** retain selected design anchors while creating an original and coherent visual direction.
 - **Anti-AI-slop review:** reject generic templates, unjustified trend stacking, filler assets/content, and decorative treatments without a product-specific reason.
 - **Design systems:** establish reusable design tokens, semantic roles, component variants, and consistent patterns.
+- **Design intelligence:** validate scoped Figma variable/component mappings against source files and preserve drift findings as actionable evidence.
 - **Motion and effects:** analyze and implement purposeful transitions, micro-interactions, scroll-linked motion, reduced-motion alternatives, and visual effects.
 - **Quality assurance:** inspect screenshots, compare visual states, audit accessibility, test responsive behavior, and run functional/regression checks where the project environment supports them.
 - **Functional regression:** execute declared Playwright route/interaction checks before and after redesign, then compare reports to identify regressions and pre-existing failures.
@@ -176,6 +177,7 @@ all tests and unresolved gaps.
 | [Complete Quality Assurance](skills/ui-reference-replication/references/complete-quality-assurance.md) | Responsive, performance, dependency-security, and unified evidence-report checks. |
 | [Performance Budget Template](skills/ui-reference-replication/templates/performance-budget.example.json) | Explicit browser lab thresholds for a target application. |
 | [Quality Report Template](skills/ui-reference-replication/templates/quality-report.example.json) | Evidence-backed gate status for task delivery. |
+| [Design Intelligence](skills/ui-reference-replication/references/design-intelligence.md) | Scoped Figma-to-code mapping and drift interpretation. |
 | [Token-Efficient Execution](skills/ui-reference-replication/references/token-efficient-execution.md) | Context routing, reuse, automation, and bounded iteration. |
 | [Visual Evidence Validation](skills/ui-reference-replication/references/evidence-and-visual-qa.md) | Pairing, validating, and auditing screenshot evidence. |
 | [Perceptual Visual Review Template](skills/ui-reference-replication/templates/perceptual-visual-review.example.json) | Structured visual assessment by fidelity mode. |
@@ -208,6 +210,7 @@ npm run responsive:audit -- --url http://localhost:3000 --routes /,/dashboard --
 npm run performance:audit -- --url http://localhost:3000 --budget artifacts/ui-reference/performance-budget.json --out artifacts/ui-reference/performance.json
 npm run security:audit -- --root . --fail-on high --out artifacts/ui-reference/dependency-audit.json
 npm run validate:quality-report -- --file artifacts/ui-reference/quality-report.json --root .
+npm run validate:design-map -- --file artifacts/ui-reference/figma-code-map.json --root .
 ```
 
 Inspect a target project:
@@ -250,6 +253,10 @@ node skills/ui-reference-replication/scripts/accessibility-audit.mjs \
 
 See [QA Toolkit Guide](skills/ui-reference-replication/scripts/README.md) for requirements and options.
 
+## Design intelligence
+
+For Figma-scoped tasks, map selected variables and components to actual code tokens/files, then validate the map with npm run validate:design-map. See [Design Intelligence](skills/ui-reference-replication/references/design-intelligence.md).
+
 ## Complete quality assurance
 
 The unified quality report combines required gates into one Pass / Partial / Fail / Not Tested summary. Start from the quality-report template, attach actual evidence, and validate with npm run validate:quality-report. See [Complete Quality Assurance](skills/ui-reference-replication/references/complete-quality-assurance.md).
@@ -272,7 +279,7 @@ For existing UI redesign, a visually successful result is still incomplete if it
 
 ## Versioning and changelog
 
-Current Skill version: **3.0.0**
+Current Skill version: **3.1.0**
 
 See [CHANGELOG.md](CHANGELOG.md) for release history and notable changes.
 

@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.1.0] - 2026-11-05
+
+### Added
+- Figma-to-code mapping validator for scoped Figma variables, component identifiers, variants, implementation paths, and drift lists.
+- Design Intelligence reference for mapping only task-relevant design data and reusing verified mappings.
+- Unit tests covering valid mappings, drift, missing code references, missing files, and path traversal.
+
+### Changed
+- Figma-scoped task plans now include design mapping validation.
+- Documentation distinguishes file-level mapping validation from live Figma synchronization and visual verification.
+
+
 ## [3.0.0] - 2026-11-05
 
 ### Added
