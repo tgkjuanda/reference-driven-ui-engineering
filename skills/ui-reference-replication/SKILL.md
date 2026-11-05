@@ -5,7 +5,7 @@ license: MIT
 metadata:
   domain: frontend-engineering
   workflow: reference-to-ui
-  version: "2.9.0"
+  version: "3.0.0"
   standard: agent-skills
 ---
 
@@ -75,6 +75,10 @@ Read the bundled references as needed:
 - `references/visual-qa.md` for screenshot capture, comparison, iteration, and reporting.
 - `references/evidence-and-visual-qa.md` for worksheets and checklists.
 - In the source repository, consult `docs/QUALITY-GATES.md`; when installed as a skill, use the bundled references instead.
+
+## Additional QA references
+
+- `references/performance-security.md` for responsive overflow, lab performance budgets, and frontend security checks.
 
 ## Non-negotiable rules
 
@@ -210,7 +214,19 @@ The scorecard is an agent-declared assessment. It structures findings and ties t
 
 For screenshot comparisons used as delivery evidence, maintain a manifest based on `templates/visual-evidence.example.json` and validate it with `scripts/validate-visual-evidence.mjs`. Include matching reference/implementation PNG pairs, route, state, viewport, image hashes, reviewer declaration, and visual findings. A structurally valid manifest is not proof of actual visual perception; never misrepresent the declared review as machine-verified understanding.
 
-### 11. Delivery report
+### 11. Responsive, performance, and security audits
+
+For projects with a runnable browser environment, use explicit route/viewport matrices and project-specific performance budgets:
+
+```bash
+npm run audit:responsive -- --config <responsive-config.json> --out artifacts/ui-reference/responsive.json
+npm run audit:performance -- --config <performance-budget.json> --out artifacts/ui-reference/performance.json
+npm run audit:security -- --root . --out artifacts/ui-reference/security.json
+```
+
+Responsive automation detects horizontal overflow and off-canvas elements; direct visual inspection is still required to assess responsive quality. Performance results are lab measurements of FCP, LCP, CLS, DOM size, resource count, and transfer bytes; they do not represent field Core Web Vitals or INP. Security checks are lightweight source-pattern detection and optional production npm dependency audit; they are not a full SAST, DAST, threat model, or penetration test. Redact secrets and sensitive data from reports. Record Partial or Not Tested when a dependency audit or runtime check cannot run.
+
+### 12. Delivery report
 
 Report work mode, fidelity mode, creative direction brief and anti-slop review when applicable, routes/screens covered, files changed, reference limitations, current behavior preserved, approved functional changes, intentional creative deviations, design and motion tokens/components reused, interactions and animations implemented, viewports and motion preferences tested, screenshot/recording evidence visually inspected, baseline vs post-change test results, visual-diff diagnostics, accessibility findings, performance observations, and unresolved deviations.
 
@@ -230,6 +246,9 @@ Give every gate one status: **Pass**, **Partial**, **Fail**, or **Not tested**.
 10. Motion behavior, visual effects, reduced-motion alternatives, and motion performance.
 11. In redesign mode: preservation of existing routes, features, data/API contracts, permissions, and critical workflows.
 12. In Reference-Inspired Creative mode: preservation of selected design anchors, originality, coherence, and product fit.
+13. Responsive overflow at agreed route/viewport matrix, or an explicit Not Tested status.
+14. Performance budgets for agreed routes, with lab/field limitations stated.
+15. Frontend source/dependency security checks, with the scan scope and limitations stated.
 
 Gate 1 is a hard prerequisite. If it fails, reject and stop; do not mark the rest of the gates as passed or imply the task was completed. In redesign mode, gate 11 must have baseline and post-change evidence. Do not collapse failed or untested gates into a global pass.
 
