@@ -5,7 +5,7 @@ license: MIT
 metadata:
   domain: frontend-engineering
   workflow: reference-to-ui
-  version: "2.4.0"
+  version: "2.5.0"
   standard: agent-skills
 ---
 
@@ -34,7 +34,7 @@ Select a fidelity mode independently from the work mode:
 
 Use Reference-Inspired Creative when the user asks for a creative, similar, inspired, or non-identical result. Use Reference-Faithful when the user asks to recreate, replicate, match, or stay as close as possible to the reference. If intent is ambiguous and materially changes the result, ask one focused question.
 
-For Reference-Inspired Creative, read `references/creative-reference-mode.md` and produce a brief with **Preserve, Reinterpret, Protect, and Avoid** before implementation. Do not use a numeric similarity percentage as the definition of creative quality.
+For Reference-Inspired Creative, read `references/creative-reference-mode.md` and `references/anti-ai-slop.md`. Produce a brief with **Preserve, Reinterpret, Protect, and Avoid**, plus a product-specific design thesis and one or two signature visual devices before implementation. Complete the anti-AI-slop review before delivery. Do not use a numeric similarity percentage as the definition of creative quality.
 
 ## Mandatory visual capability prerequisite
 
@@ -54,6 +54,7 @@ This is a vendor-neutral Agent Skill. Use the host agent's available browser, Fi
 Read the bundled references as needed:
 - `references/visual-capability-gate.md` for the mandatory vision prerequisite and rejection behavior.
 - `references/creative-reference-mode.md` for original designs inspired by a visual reference.
+- `references/anti-ai-slop.md` for product-specific visual originality, restraint, anti-template checks, and the required de-slop review.
 - `references/existing-ui-redesign.md` for controlled visual migration of an existing application.
 - `references/figma-analysis.md` for Figma/URL/image evidence capture and design reverse engineering.
 - `references/design-system-engineering.md` for tokens, hierarchy, and component-driven implementation.
@@ -79,6 +80,7 @@ Read the bundled references as needed:
 11. **Intentional motion:** reconstruct or reinterpret supported motion and effects with reusable tokens, a clear purpose, reduced-motion behavior, and performance checks.
 12. **Verify, then claim:** only report tests that actually ran. Do not claim pixel-perfect, perceptually verified, WCAG-compliant, or fully tested without evidence.
 13. **Respect rights and access:** use authorized reference assets. Do not bypass authentication, paywalls, or licensing restrictions.
+14. **Reject generic AI aesthetics:** in creative mode, do not stack fashionable effects or reuse interchangeable page templates without a product-specific reason. Follow `references/anti-ai-slop.md`; justify major visual decisions by product context, user task, or reference evidence.
 
 ## Operating workflow
 
@@ -119,6 +121,7 @@ Create:
 - Figma-to-code mapping when structured Figma access exists.
 - In redesign mode, a current-product baseline and reference-to-existing-component migration map.
 - In Reference-Inspired Creative mode, a creative direction brief identifying what to preserve, reinterpret, protect, and avoid.
+- In Reference-Inspired Creative mode, an anti-slop review identifying product-specific signature choices and removing generic or unjustified treatments.
 
 Record sources and confidence for inferred values. Static screenshots establish appearance, not animation timing. Inspect live behavior or recordings for motion.
 
@@ -127,7 +130,7 @@ Record sources and confidence for inferred values. Static screenshots establish 
 Implement in this order:
 1. Protect and document existing product contracts when in redesign mode.
 2. Establish the selected fidelity mode and creative direction brief when relevant.
-3. Canonical design and motion tokens.
+3. Canonical design and motion tokens, grounded in the creative thesis where relevant.
 4. Application shell and macro layout.
 5. Shared components and variants.
 6. Screen content and authorized assets.
@@ -138,7 +141,7 @@ Implement in this order:
 
 Follow the existing project's framework and conventions. Do not introduce unrelated visual elements, arbitrary gradients, generic stock imagery, emoji icons, or unrequested redesigns. Do not duplicate components for superficial differences. Do not add a motion library unless the existing stack cannot meet the required behavior cleanly.
 
-In Reference-Inspired Creative mode, optimize for recognizable design anchors, originality, coherence, and product fit—not minimum pixel difference. Do not copy proprietary logos, illustrations, distinctive brand identifiers, or other protected assets without authorization.
+In Reference-Inspired Creative mode, optimize for recognizable design anchors, originality, coherence, and product fit—not minimum pixel difference. Apply the de-slop review: remove interchangeable templates, repetitive card grids, trend stacking, decorative badges, generic filler imagery/copy, and unjustified effects. Every major signature treatment must have a product, user, brand, or reference rationale. Do not copy proprietary logos, illustrations, distinctive brand identifiers, or other protected assets without authorization.
 
 In redesign mode, use small reversible changes, preserve component/data/API contracts, and do not delete or disable existing functionality simply because it is absent from the reference. Any requested functional change must be identified separately and approved.
 
@@ -166,7 +169,7 @@ Map discrepancies to responsible components/tokens, change the smallest responsi
 
 ### 8. Delivery report
 
-Report work mode, fidelity mode, creative direction brief when applicable, routes/screens covered, files changed, reference limitations, current behavior preserved, approved functional changes, intentional creative deviations, design and motion tokens/components reused, interactions and animations implemented, viewports and motion preferences tested, screenshot/recording evidence visually inspected, baseline vs post-change test results, visual-diff diagnostics, accessibility findings, performance observations, and unresolved deviations.
+Report work mode, fidelity mode, creative direction brief and anti-slop review when applicable, routes/screens covered, files changed, reference limitations, current behavior preserved, approved functional changes, intentional creative deviations, design and motion tokens/components reused, interactions and animations implemented, viewports and motion preferences tested, screenshot/recording evidence visually inspected, baseline vs post-change test results, visual-diff diagnostics, accessibility findings, performance observations, and unresolved deviations.
 
 ## Required quality gates
 
