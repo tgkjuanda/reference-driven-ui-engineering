@@ -16,8 +16,10 @@ Actual cost is comparable only when provider/host reports it for both sides with
 
 ```bash
 npm run benchmark:validate -- --file artifacts/ui-reference/benchmark.json --root .
-npm run benchmark:compare -- --baseline artifacts/ui-reference/baseline-benchmark.json --candidate artifacts/ui-reference/candidate-benchmark.json --minimum-runs 3
+npm run benchmark:compare -- --baseline artifacts/ui-reference/baseline-benchmark.json --candidate artifacts/ui-reference/candidate-benchmark.json --minimum-runs 3 --root .
 ```
+
+The `compare` command validates both input reports before calculating savings. Both report paths must be relative to `--root`; evidence paths inside each report are resolved against the same root. Comparison is blocked if either report has schema errors, invalid measured token counts, missing evidence, or evidence paths outside the root. The JSON result includes validation results for both sides.
 
 Savings are withheld unless both sides pass visual review, functional regression, and zero-critical-defect checks. Quality regression blocks token/cost savings claims.
 

@@ -2,58 +2,310 @@
 import { readFile, realpath, stat } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-const SOURCES=["provider-runtime","host-runtime","estimated","unavailable"], STATUSES=["pass","partial","fail","not-tested"];
-async function hasFile(root,rel){if(typeof rel!=="string"||!rel.trim()||path.isAbsolute(rel))return false;const p=path.resolve(root,rel);if(p!==root&&!p.startsWith(root+path.sep))return false;try{const r=await realpath(p);return(r===root||r.startsWith(root+path.sep))&&(await stat(r)).isFile();}catch{return false;}}
-export async function validateBenchmark(d,root=process.cwd()){
- const errors=[],warnings=[],runs=Array.isArray(d&&d.runs)?d.runs:[],ids=new Set(),base=await realpath(root);
- if(!d||d.schemaVersion!=="1.0.0")errors.push("schemaVersion must be 1.0.0.");
- if(!d||typeof d.benchmarkId!=="string"||!d.benchmarkId.trim())errors.push("benchmarkId is required.");
- const s=d&&d.scenario;
- if(!s||!s.id||!s.fixtureId)errors.push("scenario.id and scenario.fixtureId are required.");
- if(!["new-build","existing-redesign","hybrid"].includes(s&&s.workMode))errors.push("scenario.workMode is invalid.");
- if(!["reference-faithful","reference-inspired-creative"].includes(s&&s.fidelity))errors.push("scenario.fidelity is invalid.");
- if(!Array.isArray(d&&d.runs))errors.push("runs must be an array.");
- let valid=0;
- for(const [i,r] of runs.entries()){
-  const tag="runs["+i+"]",before=errors.length;
-  if(!r||typeof r.runId!=="string"||!r.runId.trim()||ids.has(r.runId))errors.push(tag+": runId missing or duplicated.");else ids.add(r.runId);
-  for(const k of ["id","model","runtime","skillVersion"])if(typeof(r&&r.agent&&r.agent[k])!=="string"||!r.agent[k].trim())errors.push(tag+": agent."+k+" required.");
-  if(!r||typeof r.measuredAt!=="string"||Number.isNaN(Date.parse(r.measuredAt)))errors.push(tag+": measuredAt invalid.");
-  const q=r&&r.quality,u=r&&r.usage;
-  if(!q||!STATUSES.includes(q.visualReview)||!STATUSES.includes(q.functionalRegression)||!Number.isInteger(q.criticalDefects)||q.criticalDefects<0)errors.push(tag+": quality statuses and criticalDefects required.");
-  if(!u||!SOURCES.includes(u.source))errors.push(tag+": usage.source invalid.");
-  for(const k of ["inputTokens","outputTokens"])if(u&&u[k]!=null&&(!Number.isSafeInteger(u[k])||u[k]<0))errors.push(tag+": "+k+" must be non-negative integer or null.");
-  if(u&&["provider-runtime","host-runtime"].includes(u.source)&&(!Number.isSafeInteger(u.inputTokens)||!Number.isSafeInteger(u.outputTokens)))errors.push(tag+": measured usage requires numeric inputTokens and outputTokens.");
-  if(u&&u.actualCostUsd!=null&&(!Number.isFinite(u.actualCostUsd)||u.actualCostUsd<0||!["provider-runtime","host-runtime"].includes(u.costSource)))errors.push(tag+": actualCostUsd requires a non-negative value and provider/host costSource.");
-  if(!Array.isArray(r&&r.evidence))errors.push(tag+": evidence must be an array.");
-  if(Array.isArray(r&&r.evidence))for(const f of r.evidence)if(!await hasFile(base,f))errors.push(tag+": evidence missing or outside root: "+f);
-  if(q&&(q.visualReview==="pass"||q.functionalRegression==="pass")&&(!Array.isArray(r.evidence)||!r.evidence.length))errors.push(tag+": passing quality claims require evidence.");
-  if(u&&u.source==="estimated")warnings.push(tag+": estimates are excluded from savings comparisons.");
-  if(!errors.some(e=>e.startsWith(tag)))valid++;
- }
- if(!runs.length&&!errors.length)warnings.push("No runs recorded; no savings claim can be made.");
- return{schemaVersion:"1.0.0",status:errors.length?"fail":runs.length?"pass":"not-tested",benchmarkId:d&&d.benchmarkId||null,runCount:valid,errors,warnings,limitation:"Schema/evidence references are checked; provider usage, runtime identity, benchmark fairness, and agent declarations are not independently verified."};
+
+const SOURCES = ["provider-runtime", "host-runtime", "estimated", "unavailable"];
+const STATUSES = ["pass", "partial", "fail", "not-tested"];
+
+async function hasFile(root, rel) {
+  if (typeof rel !== "string" || !rel.trim() || path.isAbsolute(rel)) return false;
+  const p = path.resolve(root, rel);
+  if (p !== root && !p.startsWith(root + path.sep)) return false;
+  try {
+    const resolved = await realpath(p);
+    return (resolved === root || resolved.startsWith(root + path.sep)) && (await stat(resolved)).isFile();
+  } catch {
+    return false;
+  }
 }
-const median=a=>{const x=[...a].sort((m,n)=>m-n),i=Math.floor(x.length/2);return!x.length?null:x.length%2?x[i]:(x[i-1]+x[i])/2;};
-const qualityPass=r=>r.length>0&&r.every(x=>x.quality&&x.quality.visualReview==="pass"&&x.quality.functionalRegression==="pass"&&x.quality.criticalDefects===0);
-export function compareBenchmarks(a,b,min=3){
- const key=x=>JSON.stringify([x&&x.scenario&&x.scenario.id,x&&x.scenario&&x.scenario.fixtureId,x&&x.scenario&&x.scenario.workMode,x&&x.scenario&&x.scenario.fidelity]);
- if(key(a)!==key(b))return{status:"not-comparable",reason:"Scenario/fixture/work/fidelity differs.",tokenSavingsPercent:null};
- const x=a.runs||[],y=b.runs||[],id=r=>JSON.stringify([r.agent.id,r.agent.model,r.agent.runtime]);
- if(!x.length||!y.length||new Set(x.map(id)).size!==1||new Set(y.map(id)).size!==1||id(x[0])!==id(y[0]))return{status:"not-comparable",reason:"Agent/model/runtime must match.",tokenSavingsPercent:null};
- const qa=qualityPass(x),qb=qualityPass(y);
- if(!qa||!qb)return{status:qa&&!qb?"quality-regression":"quality-not-eligible",quality:{baselinePass:qa,candidatePass:qb},tokenSavingsPercent:null,costSavingsPercent:null};
- if(x.length<min||y.length<min)return{status:"insufficient-samples",minimumRuns:min,counts:{baseline:x.length,candidate:y.length},tokenSavingsPercent:null};
- const src=r=>[...new Set(r.map(z=>z.usage.source))],sx=src(x),sy=src(y);
- if(sx.length!==1||sy.length!==1||sx[0]!==sy[0]||!["provider-runtime","host-runtime"].includes(sx[0]))return{status:"usage-not-measured",usageSources:{baseline:sx,candidate:sy},tokenSavingsPercent:null};
- const tx=median(x.map(z=>z.usage.inputTokens+z.usage.outputTokens)),ty=median(y.map(z=>z.usage.inputTokens+z.usage.outputTokens));
- if(!(tx>0))return{status:"invalid-baseline",tokenSavingsPercent:null};
- const delta=(ty-tx)/tx*100,cx=[...new Set(x.map(z=>z.usage.costSource))],cy=[...new Set(y.map(z=>z.usage.costSource))];
- const costOk=x.every(z=>Number.isFinite(z.usage.actualCostUsd))&&y.every(z=>Number.isFinite(z.usage.actualCostUsd))&&cx.length===1&&cy.length===1&&cx[0]===cy[0]&&["provider-runtime","host-runtime"].includes(cx[0]);
- const costX=costOk?median(x.map(z=>z.usage.actualCostUsd)):null,costY=costOk?median(y.map(z=>z.usage.actualCostUsd)):null;
- return{status:"comparable",sampleCount:{baseline:x.length,candidate:y.length},usageSource:sx[0],quality:{baselinePass:true,candidatePass:true,criticalDefectsBaseline:0,criticalDefectsCandidate:0},tokens:{baselineMedian:tx,candidateMedian:ty,deltaPercent:+delta.toFixed(2),savingsPercent:+(-delta).toFixed(2)},cost:costOk?{source:cx[0],baselineMedianUsd:costX,candidateMedianUsd:costY,savingsPercent:costX>0?+((costX-costY)/costX*100).toFixed(2):null}:null,explanation:"Savings use only measured provider/host usage, identical fixture and agent/model/runtime, repeated runs, and passing visual/functional quality with zero critical defects. Estimates are excluded."};
+
+async function resolveFileWithinRoot(root, relativePath, label) {
+  if (typeof relativePath !== "string" || !relativePath.trim() || path.isAbsolute(relativePath)) {
+    throw new Error(label + " must be a non-empty relative path.");
+  }
+  const candidate = path.resolve(root, relativePath);
+  if (candidate !== root && !candidate.startsWith(root + path.sep)) {
+    throw new Error(label + " escapes --root.");
+  }
+  const resolved = await realpath(candidate);
+  if (resolved !== root && !resolved.startsWith(root + path.sep)) {
+    throw new Error(label + " resolves outside --root.");
+  }
+  return resolved;
 }
-async function main(){const a=process.argv.slice(2),get=n=>{const i=a.indexOf(n);return i<0?null:a[i+1];};if(a.includes("--help")||a.includes("-h")){console.log("benchmark.mjs validate --file <benchmark.json> [--root .] | compare --baseline <base.json> --candidate <next.json> [--minimum-runs 3]");return;}
- if(a[0]==="validate"){const f=get("--file");if(!f||path.isAbsolute(f))throw Error("Required relative --file.");const root=path.resolve(get("--root")||"."),p=path.resolve(root,f);if(p!==root&&!p.startsWith(root+path.sep))throw Error("Path escapes root.");const rr=await realpath(root),rp=await realpath(p);if(rp!==rr&&!rp.startsWith(rr+path.sep))throw Error("Symlink escapes root.");const r=await validateBenchmark(JSON.parse(await readFile(rp,"utf8")),rr);console.log(JSON.stringify(r,null,2));if(r.status!=="pass")process.exitCode=1;return;}
- if(a[0]==="compare"){const p=get("--baseline"),q=get("--candidate"),n=Number(get("--minimum-runs")||3);if(!p||!q||!Number.isInteger(n)||n<1)throw Error("Required baseline/candidate and positive minimum-runs.");const [x,y]=await Promise.all([p,q].map(z=>readFile(path.resolve(z),"utf8").then(JSON.parse)));const r=compareBenchmarks(x,y,n);console.log(JSON.stringify(r,null,2));if(r.status!=="comparable")process.exitCode=1;return;}throw Error("Use validate or compare.");}
-if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href)main().catch(e=>{console.error(e.message);process.exitCode=2;});
+
+async function readJsonWithinRoot(root, relativePath, label) {
+  const file = await resolveFileWithinRoot(root, relativePath, label);
+  return JSON.parse(await readFile(file, "utf8"));
+}
+
+export async function validateBenchmark(d, root = process.cwd()) {
+  const errors = [], warnings = [], runs = Array.isArray(d && d.runs) ? d.runs : [];
+  const ids = new Set(), base = await realpath(root);
+  if (!d || d.schemaVersion !== "1.0.0") errors.push("schemaVersion must be 1.0.0.");
+  if (!d || typeof d.benchmarkId !== "string" || !d.benchmarkId.trim()) errors.push("benchmarkId is required.");
+
+  const scenario = d && d.scenario;
+  if (!scenario || typeof scenario.id !== "string" || !scenario.id.trim() ||
+      typeof scenario.fixtureId !== "string" || !scenario.fixtureId.trim()) {
+    errors.push("scenario.id and scenario.fixtureId are required.");
+  }
+  if (!["new-build", "existing-redesign", "hybrid"].includes(scenario && scenario.workMode)) {
+    errors.push("scenario.workMode is invalid.");
+  }
+  if (!["reference-faithful", "reference-inspired-creative"].includes(scenario && scenario.fidelity)) {
+    errors.push("scenario.fidelity is invalid.");
+  }
+  if (!Array.isArray(d && d.runs)) errors.push("runs must be an array.");
+
+  let valid = 0;
+  for (const [i, run] of runs.entries()) {
+    const tag = "runs[" + i + "]", before = errors.length;
+    if (!run || typeof run.runId !== "string" || !run.runId.trim() || ids.has(run.runId)) {
+      errors.push(tag + ": runId missing or duplicated.");
+    } else {
+      ids.add(run.runId);
+    }
+
+    for (const key of ["id", "model", "runtime", "skillVersion"]) {
+      if (typeof (run && run.agent && run.agent[key]) !== "string" || !run.agent[key].trim()) {
+        errors.push(tag + ": agent." + key + " required.");
+      }
+    }
+    if (!run || typeof run.measuredAt !== "string" || Number.isNaN(Date.parse(run.measuredAt))) {
+      errors.push(tag + ": measuredAt invalid.");
+    }
+
+    const quality = run && run.quality, usage = run && run.usage;
+    if (!quality || !STATUSES.includes(quality.visualReview) ||
+        !STATUSES.includes(quality.functionalRegression) ||
+        !Number.isInteger(quality.criticalDefects) || quality.criticalDefects < 0) {
+      errors.push(tag + ": quality statuses and criticalDefects required.");
+    }
+    if (!usage || !SOURCES.includes(usage.source)) errors.push(tag + ": usage.source invalid.");
+    for (const key of ["inputTokens", "outputTokens"]) {
+      if (usage && usage[key] != null && (!Number.isSafeInteger(usage[key]) || usage[key] < 0)) {
+        errors.push(tag + ": " + key + " must be a non-negative safe integer or null.");
+      }
+    }
+    if (usage && ["provider-runtime", "host-runtime"].includes(usage.source) &&
+        (!Number.isSafeInteger(usage.inputTokens) || usage.inputTokens < 0 ||
+         !Number.isSafeInteger(usage.outputTokens) || usage.outputTokens < 0 ||
+         !Number.isSafeInteger(usage.inputTokens + usage.outputTokens))) {
+      errors.push(tag + ": measured usage requires non-negative safe integer inputTokens/outputTokens and a safe total.");
+    }
+    if (usage && usage.actualCostUsd != null &&
+        (!Number.isFinite(usage.actualCostUsd) || usage.actualCostUsd < 0 ||
+         !["provider-runtime", "host-runtime"].includes(usage.costSource))) {
+      errors.push(tag + ": actualCostUsd requires a non-negative value and provider/host costSource.");
+    }
+    if (!Array.isArray(run && run.evidence)) errors.push(tag + ": evidence must be an array.");
+    if (Array.isArray(run && run.evidence)) {
+      for (const file of run.evidence) {
+        if (!await hasFile(base, file)) errors.push(tag + ": evidence missing or outside root: " + file);
+      }
+    }
+    if (quality && (quality.visualReview === "pass" || quality.functionalRegression === "pass") &&
+        (!Array.isArray(run.evidence) || !run.evidence.length)) {
+      errors.push(tag + ": passing quality claims require evidence.");
+    }
+    if (usage && usage.source === "estimated") warnings.push(tag + ": estimates are excluded from savings comparisons.");
+    if (!errors.slice(before).some(error => error.startsWith(tag))) valid++;
+  }
+
+  if (!runs.length && !errors.length) warnings.push("No runs recorded; no savings claim can be made.");
+  return {
+    schemaVersion: "1.0.0",
+    status: errors.length ? "fail" : runs.length ? "pass" : "not-tested",
+    benchmarkId: d && d.benchmarkId || null,
+    runCount: valid,
+    errors,
+    warnings,
+    limitation: "Schema/evidence references are checked; provider usage, runtime identity, benchmark fairness, and agent declarations are not independently verified."
+  };
+}
+
+const median = values => {
+  const sorted = [...values].sort((a, b) => a - b), i = Math.floor(sorted.length / 2);
+  return !sorted.length ? null : sorted.length % 2 ? sorted[i] : (sorted[i - 1] + sorted[i]) / 2;
+};
+const qualityPass = runs => runs.length > 0 && runs.every(run =>
+  run.quality && run.quality.visualReview === "pass" &&
+  run.quality.functionalRegression === "pass" && run.quality.criticalDefects === 0
+);
+
+export function compareBenchmarks(a, b, minimumRuns = 3) {
+  if (!a || !b || !Array.isArray(a.runs) || !Array.isArray(b.runs)) {
+    return { status: "invalid-report", reason: "Both reports must contain a runs array.", tokenSavingsPercent: null };
+  }
+  const scenarioKey = report => JSON.stringify([
+    report.scenario && report.scenario.id,
+    report.scenario && report.scenario.fixtureId,
+    report.scenario && report.scenario.workMode,
+    report.scenario && report.scenario.fidelity
+  ]);
+  if (scenarioKey(a) !== scenarioKey(b)) {
+    return { status: "not-comparable", reason: "Scenario/fixture/work/fidelity differs.", tokenSavingsPercent: null };
+  }
+
+  const baseline = a.runs, candidate = b.runs;
+  const agentKey = run => JSON.stringify([
+    run && run.agent && run.agent.id,
+    run && run.agent && run.agent.model,
+    run && run.agent && run.agent.runtime
+  ]);
+  if (!baseline.length || !candidate.length ||
+      baseline.some(run => !run || !run.agent) || candidate.some(run => !run || !run.agent) ||
+      new Set(baseline.map(agentKey)).size !== 1 ||
+      new Set(candidate.map(agentKey)).size !== 1 ||
+      agentKey(baseline[0]) !== agentKey(candidate[0])) {
+    return { status: "not-comparable", reason: "Agent/model/runtime must match.", tokenSavingsPercent: null };
+  }
+
+  const baselineQuality = qualityPass(baseline), candidateQuality = qualityPass(candidate);
+  if (!baselineQuality || !candidateQuality) {
+    return {
+      status: baselineQuality && !candidateQuality ? "quality-regression" : "quality-not-eligible",
+      quality: { baselinePass: baselineQuality, candidatePass: candidateQuality },
+      tokenSavingsPercent: null,
+      costSavingsPercent: null
+    };
+  }
+  if (!Number.isInteger(minimumRuns) || minimumRuns < 1) {
+    return { status: "invalid-minimum-runs", reason: "minimumRuns must be a positive integer.", tokenSavingsPercent: null };
+  }
+  if (baseline.length < minimumRuns || candidate.length < minimumRuns) {
+    return {
+      status: "insufficient-samples",
+      minimumRuns,
+      counts: { baseline: baseline.length, candidate: candidate.length },
+      tokenSavingsPercent: null
+    };
+  }
+
+  const sources = runs => [...new Set(runs.map(run => run && run.usage && run.usage.source))];
+  const baselineSources = sources(baseline), candidateSources = sources(candidate);
+  if (baselineSources.length !== 1 || candidateSources.length !== 1 ||
+      baselineSources[0] !== candidateSources[0] ||
+      !["provider-runtime", "host-runtime"].includes(baselineSources[0])) {
+    return {
+      status: "usage-not-measured",
+      usageSources: { baseline: baselineSources, candidate: candidateSources },
+      tokenSavingsPercent: null
+    };
+  }
+
+  const validUsage = runs => runs.every(run => {
+    const usage = run && run.usage;
+    return usage &&
+      Number.isSafeInteger(usage.inputTokens) && usage.inputTokens >= 0 &&
+      Number.isSafeInteger(usage.outputTokens) && usage.outputTokens >= 0 &&
+      Number.isSafeInteger(usage.inputTokens + usage.outputTokens);
+  });
+  if (!validUsage(baseline) || !validUsage(candidate)) {
+    return { status: "invalid-usage", reason: "Measured token counts must be non-negative safe integers with a safe total.", tokenSavingsPercent: null };
+  }
+
+  const baselineTokens = median(baseline.map(run => run.usage.inputTokens + run.usage.outputTokens));
+  const candidateTokens = median(candidate.map(run => run.usage.inputTokens + run.usage.outputTokens));
+  if (!(baselineTokens > 0)) return { status: "invalid-baseline", tokenSavingsPercent: null };
+
+  const baselineCostSources = [...new Set(baseline.map(run => run.usage && run.usage.costSource))];
+  const candidateCostSources = [...new Set(candidate.map(run => run.usage && run.usage.costSource))];
+  const costValid = runs => runs.every(run => run.usage &&
+    Number.isFinite(run.usage.actualCostUsd) && run.usage.actualCostUsd >= 0);
+  const costComparable = costValid(baseline) && costValid(candidate) &&
+    baselineCostSources.length === 1 && candidateCostSources.length === 1 &&
+    baselineCostSources[0] === candidateCostSources[0] &&
+    ["provider-runtime", "host-runtime"].includes(baselineCostSources[0]);
+  const baselineCost = costComparable ? median(baseline.map(run => run.usage.actualCostUsd)) : null;
+  const candidateCost = costComparable ? median(candidate.map(run => run.usage.actualCostUsd)) : null;
+  const delta = (candidateTokens - baselineTokens) / baselineTokens * 100;
+
+  return {
+    status: "comparable",
+    sampleCount: { baseline: baseline.length, candidate: candidate.length },
+    usageSource: baselineSources[0],
+    quality: { baselinePass: true, candidatePass: true, criticalDefectsBaseline: 0, criticalDefectsCandidate: 0 },
+    tokens: {
+      baselineMedian: baselineTokens,
+      candidateMedian: candidateTokens,
+      deltaPercent: +delta.toFixed(2),
+      savingsPercent: +(-delta).toFixed(2)
+    },
+    cost: costComparable ? {
+      source: baselineCostSources[0],
+      baselineMedianUsd: baselineCost,
+      candidateMedianUsd: candidateCost,
+      savingsPercent: baselineCost > 0 ? +((baselineCost - candidateCost) / baselineCost * 100).toFixed(2) : null
+    } : null,
+    explanation: "Savings use only measured provider/host usage, identical fixture and agent/model/runtime, repeated runs, and passing visual/functional quality with zero critical defects. Estimates are excluded."
+  };
+}
+
+async function main() {
+  const args = process.argv.slice(2);
+  const get = name => {
+    const index = args.indexOf(name);
+    return index < 0 ? null : args[index + 1];
+  };
+
+  if (args.includes("--help") || args.includes("-h")) {
+    console.log("benchmark.mjs validate --file <benchmark.json> [--root .] | compare --baseline <base.json> --candidate <next.json> [--root .] [--minimum-runs 3]");
+    return;
+  }
+
+  if (args[0] === "validate") {
+    const file = get("--file");
+    if (!file) throw new Error("Required relative --file.");
+    const root = await realpath(path.resolve(get("--root") || "."));
+    const report = await readJsonWithinRoot(root, file, "--file");
+    const result = await validateBenchmark(report, root);
+    console.log(JSON.stringify(result, null, 2));
+    if (result.status !== "pass") process.exitCode = 1;
+    return;
+  }
+
+  if (args[0] === "compare") {
+    const baselinePath = get("--baseline"), candidatePath = get("--candidate");
+    const minimumRuns = Number(get("--minimum-runs") || 3);
+    if (!baselinePath || !candidatePath || !Number.isInteger(minimumRuns) || minimumRuns < 1) {
+      throw new Error("Required baseline/candidate and positive minimum-runs.");
+    }
+
+    const root = await realpath(path.resolve(get("--root") || "."));
+    const [baseline, candidate] = await Promise.all([
+      readJsonWithinRoot(root, baselinePath, "--baseline"),
+      readJsonWithinRoot(root, candidatePath, "--candidate")
+    ]);
+    const [baselineValidation, candidateValidation] = await Promise.all([
+      validateBenchmark(baseline, root),
+      validateBenchmark(candidate, root)
+    ]);
+    const validation = { baseline: baselineValidation, candidate: candidateValidation };
+
+    if (baselineValidation.status !== "pass" || candidateValidation.status !== "pass") {
+      console.log(JSON.stringify({
+        status: "validation-failed",
+        reason: "Both benchmark reports must pass schema, measured-usage, and evidence validation before comparison.",
+        validation,
+        comparison: null
+      }, null, 2));
+      process.exitCode = 1;
+      return;
+    }
+
+    const comparison = compareBenchmarks(baseline, candidate, minimumRuns);
+    console.log(JSON.stringify({ ...comparison, validation }, null, 2));
+    if (comparison.status !== "comparable") process.exitCode = 1;
+    return;
+  }
+
+  throw new Error("Use validate or compare.");
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+  main().catch(error => {
+    console.error(error.message);
+    process.exitCode = 2;
+  });
+}
