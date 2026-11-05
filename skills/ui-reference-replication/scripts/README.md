@@ -25,7 +25,7 @@ node path/to/ui-reference-replication/skills/ui-reference-replication/scripts/ca
   --viewports 390x844,768x1024,1440x900
 ```
 
-The script waits for network idle where possible, waits for fonts, captures each route/viewport pair, records page errors, and writes a screenshot manifest.
+The script waits for network idle where possible, waits for fonts, captures each route/viewport pair, records page errors, and writes a screenshot manifest. It captures the implementation; obtain the reference screenshot from the source website or authorized Figma export/MCP.
 
 ## Pixel difference diagnostic
 
@@ -35,8 +35,8 @@ Requires Python and Pillow:
 python -m pip install -r requirements-qa.txt
 python skills/ui-reference-replication/scripts/compare-screenshots.py \
   reference.png actual.png \
-  --diff artifacts/ui-reference/diff.png \\
-  --heatmap artifacts/ui-reference/heatmap.png \\
+  --diff artifacts/ui-reference/diff.png \
+  --heatmap artifacts/ui-reference/heatmap.png \
   --overlay artifacts/ui-reference/overlay.png
 ```
 
@@ -55,3 +55,7 @@ node path/to/ui-reference-replication/skills/ui-reference-replication/scripts/ac
 ```
 
 The axe-core scan is automated evidence only. Keyboard, screen reader, focus order, and usability checks still require manual review.
+
+## Token validator scope
+
+The included validator checks a useful subset of DTCG 2025.10 token structure and common value types, including colors, dimensions, durations, font family/weight, typography, curly-brace aliases, unresolved aliases, and circular aliases. It is not a complete DTCG conformance validator; advanced composite types and JSON Pointer property-level references are not fully validated.
