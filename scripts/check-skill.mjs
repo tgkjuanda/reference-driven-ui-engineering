@@ -16,6 +16,8 @@ for (const relative of [
   "skills/ui-reference-replication/references/token-efficient-execution.md",
   "skills/ui-reference-replication/scripts/plan-task.mjs",
   "skills/ui-reference-replication/scripts/validate-visual-evidence.mjs",
+  "skills/ui-reference-replication/scripts/validate-visual-review.mjs",
+  "skills/ui-reference-replication/templates/perceptual-visual-review.example.json",
   "skills/ui-reference-replication/scripts/run-functional-regression.mjs",
   "skills/ui-reference-replication/scripts/compare-regression.mjs",
   "skills/ui-reference-replication/templates/functional-regression.example.json",
@@ -109,6 +111,7 @@ if (versionMatch && !planner.includes(`version: "${versionMatch[1]}"`)) {
 }
 if (!packageJson.scripts?.["plan:task"]) errors.push("package.json must expose the plan:task script.");
 if (!packageJson.scripts?.["regression"] || !packageJson.scripts?.["compare:regression"]) errors.push("package.json must expose regression and compare:regression scripts.");
+if (!packageJson.scripts?.["validate:visual-review"]) errors.push("package.json must expose validate:visual-review script.");
 
 const regressionTemplate = JSON.parse(await readFile(path.join(root, "skills/ui-reference-replication/templates/functional-regression.example.json"), "utf8"));
 if (regressionTemplate.schemaVersion !== "1.0.0" || !Array.isArray(regressionTemplate.checks)) {
@@ -118,6 +121,15 @@ const regressionRunner = await readFile(path.join(root, "skills/ui-reference-rep
 const regressionComparator = await readFile(path.join(root, "skills/ui-reference-replication/scripts/compare-regression.mjs"), "utf8");
 if (!regressionRunner.includes("validateConfig") || !regressionComparator.includes("compareReports")) {
   errors.push("Functional regression runner/comparator is missing its validation exports.");
+}
+
+const visualReviewTemplate = JSON.parse(await readFile(path.join(root, "skills/ui-reference-replication/templates/perceptual-visual-review.example.json"), "utf8"));
+if (visualReviewTemplate.schemaVersion !== "1.0.0" || !Array.isArray(visualReviewTemplate.reviews)) {
+  errors.push("Perceptual visual review template must contain schemaVersion 1.0.0 and a reviews array.");
+}
+const visualReviewValidator = await readFile(path.join(root, "skills/ui-reference-replication/scripts/validate-visual-review.mjs"), "utf8");
+for (const required of ["reference-fidelity", "design-anchors", "product-fit", "originality", "anti-slop", "not-tested"]) {
+  if (!visualReviewValidator.includes(required)) errors.push(`Visual review validator missing required mode/dimension: ${required}`);
 }
 
 const evidenceTemplate = JSON.parse(await readFile(path.join(root, "skills/ui-reference-replication/templates/visual-evidence.example.json"), "utf8"));

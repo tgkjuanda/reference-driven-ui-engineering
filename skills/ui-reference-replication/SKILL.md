@@ -5,7 +5,7 @@ license: MIT
 metadata:
   domain: frontend-engineering
   workflow: reference-to-ui
-  version: "2.8.0"
+  version: "2.9.0"
   standard: agent-skills
 ---
 
@@ -164,6 +164,7 @@ Scripts live beside this file in `scripts/`. Run them from the user's project ro
 - `node <skill>/scripts/validate-tokens.mjs <path-to-token-json>`
 - `node <skill>/scripts/capture-screenshots.mjs --url http://localhost:3000 --routes /,/dashboard --out artifacts/ui-reference`
 - `node <skill>/scripts/validate-visual-evidence.mjs --file artifacts/ui-reference/visual-evidence.json --root .`
+- `node <skill>/scripts/validate-visual-review.mjs --file artifacts/ui-reference/visual-review.json --evidence artifacts/ui-reference/visual-evidence.json --root .`
 - `node <skill>/scripts/run-functional-regression.mjs --config <regression-config.json> --label baseline --out artifacts/ui-reference/baseline.json`
 - `node <skill>/scripts/compare-regression.mjs --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json`
 - `python <skill>/scripts/compare-screenshots.py reference.png actual.png --diff artifacts/ui-reference/diff.png`
@@ -193,11 +194,23 @@ npm run compare:regression -- --baseline artifacts/ui-reference/baseline.json --
 
 The Playwright runner executes only declared route and interaction steps. It does not infer undocumented product behavior. Compare reports to identify regressions, resolved failures, pre-existing failures, missing baseline coverage, and failing new checks. A no-new-regressions result must not be reported as a fully passing test suite when pre-existing failures remain.
 
-### 9. Visual evidence validation
+### 9. Perceptual visual review
+
+For significant visual comparisons, create a scorecard from `templates/perceptual-visual-review.example.json` and validate it against the capture IDs in the visual evidence manifest:
+
+```bash
+npm run validate:visual-review -- --file artifacts/ui-reference/visual-review.json --evidence artifacts/ui-reference/visual-evidence.json --root .
+```
+
+Reference-Faithful reviews require geometry, hierarchy, typography, spacing, color, components, responsive, composition, and reference-fidelity dimensions. Reference-Inspired Creative reviews require the shared dimensions plus design anchors, product fit, originality, and anti-slop. A partial, failed, or untested dimension cannot produce a passing gate. Do not collapse the review into a single numeric score.
+
+The scorecard is an agent-declared assessment. It structures findings and ties them to evidence; it does not prove image perception or independently calculate design quality.
+
+### 10. Visual evidence validation
 
 For screenshot comparisons used as delivery evidence, maintain a manifest based on `templates/visual-evidence.example.json` and validate it with `scripts/validate-visual-evidence.mjs`. Include matching reference/implementation PNG pairs, route, state, viewport, image hashes, reviewer declaration, and visual findings. A structurally valid manifest is not proof of actual visual perception; never misrepresent the declared review as machine-verified understanding.
 
-### 10. Delivery report
+### 11. Delivery report
 
 Report work mode, fidelity mode, creative direction brief and anti-slop review when applicable, routes/screens covered, files changed, reference limitations, current behavior preserved, approved functional changes, intentional creative deviations, design and motion tokens/components reused, interactions and animations implemented, viewports and motion preferences tested, screenshot/recording evidence visually inspected, baseline vs post-change test results, visual-diff diagnostics, accessibility findings, performance observations, and unresolved deviations.
 

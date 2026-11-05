@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0.0",
+  "task": {
+    "id": "redesign-example-001",
+    "fidelity": "reference-faithful"
+  },
+  "reviews": [
+    {
+      "captureId": "dashboard-desktop-default",
+      "route": "/dashboard",
+      "state": "default",
+      "attestation": "agent-declared",
+      "reviewer": "Vision-capable agent/model identifier",
+      "reviewedAt": "2026-11-05T10:00:00.000Z",
+      "summary": "The implementation closely follows the source hierarchy and geometry; the remaining typography deviation is documented.",
+      "dimensions": [
+        { "name": "geometry", "status": "pass", "observation": "The content column and major regions align with the reference." },
+        { "name": "hierarchy", "status": "pass", "observation": "Primary and secondary information priorities are preserved." },
+        { "name": "typography", "status": "partial", "observation": "The heading wraps one line earlier than the reference.", "evidence": "dashboard-desktop-default screenshot, heading region", "action": "Adjust the max-width and verify font metrics." },
+        { "name": "spacing", "status": "pass", "observation": "Section spacing is consistent across the reviewed viewport." },
+        { "name": "color", "status": "pass", "observation": "Surface, text, and action colors match the approved tokens." },
+        { "name": "components", "status": "pass", "observation": "Buttons, fields, and panels use consistent component variants." },
+        { "name": "responsive", "status": "pass", "observation": "The reviewed viewport has no visible horizontal overflow." },
+        { "name": "composition", "status": "pass", "observation": "The page balance and content density match the selected reference." },
+        { "name": "reference-fidelity", "status": "pass", "observation": "The major visual anchors remain faithful to the supplied source." }
+      ]
+    }
+  ]
+}
