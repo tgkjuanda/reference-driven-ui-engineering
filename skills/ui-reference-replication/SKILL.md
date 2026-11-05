@@ -1,11 +1,11 @@
 ---
 name: ui-reference-replication
-description: Reconstruct new interfaces or redesign existing applications from Figma, website URLs, screenshots, or images. Requires direct visual perception of both reference and implementation; preserves existing product behavior during reference-driven visual redesign and verifies fidelity with visual QA.
+description: Build new interfaces or redesign existing applications using visual references. Supports reference-faithful replication and original reference-inspired creative design; requires direct visual perception and verifies visual, functional, responsive, accessibility, motion, and regression quality.
 license: MIT
 metadata:
   domain: frontend-engineering
   workflow: reference-to-ui
-  version: "2.3.0"
+  version: "2.4.0"
   standard: agent-skills
 ---
 
@@ -13,17 +13,28 @@ metadata:
 
 ## Mission
 
-Reconstruct or redesign a working interface from an inspected visual reference. Support both new UI implementation and redesign of an existing product. Preserve existing product behavior by default, match the reference's visual language, and verify the rendered result. A plausible-looking implementation without perceptual comparison is not complete.
+Build or redesign a working interface from visual references. Support close reference reproduction and original creative interpretations inspired by references. Preserve existing product behavior by default in redesign mode. Verify the rendered result; a plausible implementation without perceptual comparison is not complete.
 
 ## Work modes
 
 Select and report one mode before implementation:
 
 1. **New build:** implement a new UI from the supplied reference within the existing project stack.
-2. **Existing UI redesign:** restyle or restructure an existing application to follow the reference's visual theme while preserving its existing routes, features, data, permissions, and workflows by default.
+2. **Existing UI redesign:** restyle or restructure an existing application while preserving existing routes, features, data, permissions, and workflows by default.
 3. **Hybrid:** redesign selected existing screens and build new screens only where explicitly requested.
 
-For existing UI redesign, read `references/existing-ui-redesign.md` before modifying code. Do not silently turn a redesign request into a greenfield rebuild.
+For existing UI redesign, read `references/existing-ui-redesign.md` before modifying code.
+
+## Fidelity modes
+
+Select a fidelity mode independently from the work mode:
+
+1. **Reference-Faithful:** stay close to the reference's composition, hierarchy, visual language, components, and observable interactions.
+2. **Reference-Inspired Creative:** create an original interpretation that preserves selected design anchors from the reference but may reinterpret layout, component composition, exact colors, typography pairing, imagery, visual effects, and animation.
+
+Use Reference-Inspired Creative when the user asks for a creative, similar, inspired, or non-identical result. Use Reference-Faithful when the user asks to recreate, replicate, match, or stay as close as possible to the reference. If intent is ambiguous and materially changes the result, ask one focused question.
+
+For Reference-Inspired Creative, read `references/creative-reference-mode.md` and produce a brief with **Preserve, Reinterpret, Protect, and Avoid** before implementation. Do not use a numeric similarity percentage as the definition of creative quality.
 
 ## Mandatory visual capability prerequisite
 
@@ -31,7 +42,7 @@ For existing UI redesign, read `references/existing-ui-redesign.md` before modif
 
 This Skill requires the current agent to directly perceive:
 - The supplied reference image/screenshot or rendered reference website.
-- Screenshots of the current application and redesigned implementation at matching routes, viewports, and states.
+- Screenshots of the current application and implementation at matching routes, viewports, and states.
 - Motion recordings or captured animation frames when motion is in scope.
 
 If the agent cannot visually inspect both the reference and its own rendered output, **reject the Skill for this task and stop**. Do not fall back to text-only reconstruction, DOM/CSS inspection, Figma metadata, OCR, screenshot paths, or pixel-diff numbers as a substitute for visual perception. State the missing capability and request a vision-capable agent/runtime. Do not modify the project after this prerequisite fails.
@@ -42,6 +53,7 @@ This is a vendor-neutral Agent Skill. Use the host agent's available browser, Fi
 
 Read the bundled references as needed:
 - `references/visual-capability-gate.md` for the mandatory vision prerequisite and rejection behavior.
+- `references/creative-reference-mode.md` for original designs inspired by a visual reference.
 - `references/existing-ui-redesign.md` for controlled visual migration of an existing application.
 - `references/figma-analysis.md` for Figma/URL/image evidence capture and design reverse engineering.
 - `references/design-system-engineering.md` for tokens, hierarchy, and component-driven implementation.
@@ -55,7 +67,7 @@ Read the bundled references as needed:
 ## Non-negotiable rules
 
 1. **Visual perception is mandatory:** inspect both source reference and rendered implementation. If not possible, stop.
-2. **Reference-centered:** the provided reference is the visual source of truth for the appearance in scope. Do not redesign beyond that scope without permission.
+2. **Reference-centered:** respect the user's selected fidelity mode. Do not enforce literal replication when creative interpretation was requested.
 3. **Existing behavior is protected:** in redesign mode, preserve routes, features, data, permissions, APIs, validation, and business workflows unless the user explicitly approves a change.
 4. **Evidence-led:** distinguish inspected facts, measurements, estimates, and unknowns.
 5. **No fabricated access:** never claim to inspect hidden Figma frames, private pages, assets, styles, or visual output that were not accessible.
@@ -64,7 +76,7 @@ Read the bundled references as needed:
 8. **Accessible by construction:** target WCAG 2.2 AA for applicable criteria. Do not reproduce accessibility defects just because they appear in the reference.
 9. **Responsive by evidence:** follow supplied responsive frames first; otherwise document inferred behavior and test representative widths.
 10. **Functional feedback:** interactive controls need perceivable states, validation, and recovery behavior.
-11. **Intentional motion:** reconstruct supported motion and effects with reusable tokens, a clear purpose, reduced-motion behavior, and performance checks.
+11. **Intentional motion:** reconstruct or reinterpret supported motion and effects with reusable tokens, a clear purpose, reduced-motion behavior, and performance checks.
 12. **Verify, then claim:** only report tests that actually ran. Do not claim pixel-perfect, perceptually verified, WCAG-compliant, or fully tested without evidence.
 13. **Respect rights and access:** use authorized reference assets. Do not bypass authentication, paywalls, or licensing restrictions.
 
@@ -76,9 +88,12 @@ Run the mandatory visual capability gate first. Confirm that the model can inspe
 
 ### 2. Intake and mode selection
 
-Identify whether the user requests a new build, existing UI redesign, or hybrid task. Record target routes/screens, reference scope, viewport sizes, expected interactions, and what must remain unchanged.
+Select one work mode and one fidelity mode. Record target routes/screens, reference scope, viewport sizes, expected interactions, and what must remain unchanged.
 
-For an existing UI redesign, complete the baseline and migration workflow in `references/existing-ui-redesign.md` before code changes.
+- If the user requests creative inspiration or a non-identical design, choose Reference-Inspired Creative.
+- If the user requests close replication, choose Reference-Faithful.
+- If the request is ambiguous and the distinction materially affects the output, ask one focused question.
+- In redesign mode, complete the baseline and migration workflow in `references/existing-ui-redesign.md`.
 
 ### 3. Reference and project inspection
 
@@ -103,6 +118,7 @@ Create:
 - Asset inventory with source and usage rights.
 - Figma-to-code mapping when structured Figma access exists.
 - In redesign mode, a current-product baseline and reference-to-existing-component migration map.
+- In Reference-Inspired Creative mode, a creative direction brief identifying what to preserve, reinterpret, protect, and avoid.
 
 Record sources and confidence for inferred values. Static screenshots establish appearance, not animation timing. Inspect live behavior or recordings for motion.
 
@@ -110,16 +126,19 @@ Record sources and confidence for inferred values. Static screenshots establish 
 
 Implement in this order:
 1. Protect and document existing product contracts when in redesign mode.
-2. Canonical design and motion tokens.
-3. Application shell and macro layout.
-4. Shared components and variants.
-5. Screen content and authorized assets.
-6. Interaction behavior and feedback states.
-7. Motion and visual effects, using a consistent motion system.
-8. Responsive adaptations and reduced-motion alternatives.
-9. Accessibility semantics and keyboard behavior.
+2. Establish the selected fidelity mode and creative direction brief when relevant.
+3. Canonical design and motion tokens.
+4. Application shell and macro layout.
+5. Shared components and variants.
+6. Screen content and authorized assets.
+7. Interaction behavior and feedback states.
+8. Motion and visual effects, using a consistent motion system.
+9. Responsive adaptations and reduced-motion alternatives.
+10. Accessibility semantics and keyboard behavior.
 
 Follow the existing project's framework and conventions. Do not introduce unrelated visual elements, arbitrary gradients, generic stock imagery, emoji icons, or unrequested redesigns. Do not duplicate components for superficial differences. Do not add a motion library unless the existing stack cannot meet the required behavior cleanly.
+
+In Reference-Inspired Creative mode, optimize for recognizable design anchors, originality, coherence, and product fit—not minimum pixel difference. Do not copy proprietary logos, illustrations, distinctive brand identifiers, or other protected assets without authorization.
 
 In redesign mode, use small reversible changes, preserve component/data/API contracts, and do not delete or disable existing functionality simply because it is absent from the reference. Any requested functional change must be identified separately and approved.
 
@@ -139,24 +158,22 @@ The browser scripts require Playwright in the project/runtime. Accessibility aud
 
 Compare reference and implementation at identical viewport, route, scroll position, and UI state. Inspect side-by-side screenshots and overlays perceptually; use pixel heatmaps as supporting diagnostics, not as a replacement for visual judgment.
 
-For a new build, classify visual discrepancies and correct the highest-impact issues.
-
-For an existing UI redesign, run both:
-- **Reference fidelity checks:** confirm the redesigned output follows the target style, hierarchy, components, effects, and motion.
-- **Product regression checks:** confirm existing routes, features, data, permissions, APIs, forms, interactions, and workflows still behave as before unless explicitly changed.
+- In Reference-Faithful mode, correct the highest-impact deviations from the source design.
+- In Reference-Inspired Creative mode, compare the output against the creative direction brief. Verify that selected design anchors remain recognizable, the interpretation is original and coherent, and the design fits the target product. A high pixel difference from the source is not automatically a defect.
+- In existing UI redesign mode, also verify existing routes, features, data, permissions, APIs, forms, interactions, and workflows.
 
 Map discrepancies to responsible components/tokens, change the smallest responsible code surface, re-capture, and visually confirm improvement without regression. Keep a defect log with severity, evidence, correction, and retest result.
 
 ### 8. Delivery report
 
-Report work mode, routes/screens covered, files changed, reference limitations, current behavior preserved, approved functional changes, design and motion tokens/components reused, interactions and animations implemented, viewports and motion preferences tested, screenshot/recording evidence visually inspected, baseline vs post-change test results, visual-diff diagnostics, accessibility findings, performance observations, and unresolved deviations.
+Report work mode, fidelity mode, creative direction brief when applicable, routes/screens covered, files changed, reference limitations, current behavior preserved, approved functional changes, intentional creative deviations, design and motion tokens/components reused, interactions and animations implemented, viewports and motion preferences tested, screenshot/recording evidence visually inspected, baseline vs post-change test results, visual-diff diagnostics, accessibility findings, performance observations, and unresolved deviations.
 
 ## Required quality gates
 
 Give every gate one status: **Pass**, **Partial**, **Fail**, or **Not tested**.
 
 1. Mandatory visual perception of both reference and implementation.
-2. Reference fidelity and visual hierarchy.
+2. Reference intent and fidelity-mode alignment.
 3. Design-token integrity and consistency.
 4. Component reuse and state coverage.
 5. Responsive behavior and overflow.
@@ -166,9 +183,10 @@ Give every gate one status: **Pass**, **Partial**, **Fail**, or **Not tested**.
 9. Figma-to-code mapping and drift, or a clear statement that structured Figma access was unavailable.
 10. Motion behavior, visual effects, reduced-motion alternatives, and motion performance.
 11. In redesign mode: preservation of existing routes, features, data/API contracts, permissions, and critical workflows.
+12. In Reference-Inspired Creative mode: preservation of selected design anchors, originality, coherence, and product fit.
 
 Gate 1 is a hard prerequisite. If it fails, reject and stop; do not mark the rest of the gates as passed or imply the task was completed. In redesign mode, gate 11 must have baseline and post-change evidence. Do not collapse failed or untested gates into a global pass.
 
 ## Iteration stop condition
 
-Continue fixing the highest-impact visually verified discrepancy while the expected benefit is meaningful and tools/evidence permit. Stop only when the agreed tolerance is met, remaining issues are documented, or a specific access/tooling limitation blocks further work. Stop and request user approval before any unrequested change to business logic, data contracts, permissions, APIs, or destructive functionality. Never invent a numeric fidelity score from subjective visual inspection.
+Continue fixing the highest-impact visually verified discrepancy while the expected benefit is meaningful and tools/evidence permit. Stop only when the agreed tolerance is met, remaining issues are documented, or a specific access/tooling limitation blocks further work. Stop and request user approval before any unrequested change to business logic, data contracts, permissions, APIs, or destructive functionality. Never invent a numeric similarity/fidelity score from subjective review.
