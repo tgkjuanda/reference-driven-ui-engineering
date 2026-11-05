@@ -87,7 +87,7 @@ const antigravityRule = await readFile(path.join(root, antigravityRulePath), "ut
 if (!antigravityRule.startsWith("---\ntrigger: always_on\n")) {
   errors.push("Antigravity UI routing rule must use an always_on trigger.");
 }
-for (const required of ["ui-reference-replication", "screenshot", "Figma", "mockup", "wireframe", "without requiring the user to name the Skill"]) {
+for (const required of ["ui-reference-replication", "screenshot", "Figma", "mockup", "wireframe", "without requiring the user to mention the Skill"]) {
   if (!antigravityRule.includes(required)) errors.push("Antigravity UI routing rule missing: " + required);
 }
 for (const required of [
