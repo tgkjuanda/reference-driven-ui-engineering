@@ -20,6 +20,11 @@ for (const relative of [
   "skills/ui-reference-replication/templates/perceptual-visual-review.example.json",
   "skills/ui-reference-replication/scripts/run-functional-regression.mjs",
   "skills/ui-reference-replication/scripts/compare-regression.mjs",
+  "skills/ui-reference-replication/scripts/responsive-audit.mjs",
+  "skills/ui-reference-replication/scripts/performance-audit.mjs",
+  "skills/ui-reference-replication/scripts/security-audit.mjs",
+  "skills/ui-reference-replication/templates/responsive-audit.example.json",
+  "skills/ui-reference-replication/templates/performance-budget.example.json",
   "skills/ui-reference-replication/templates/functional-regression.example.json",
   "skills/ui-reference-replication/templates/visual-evidence.example.json",
   "skills/ui-reference-replication/references/visual-capability-gate.md",
@@ -112,6 +117,17 @@ if (versionMatch && !planner.includes(`version: "${versionMatch[1]}"`)) {
 if (!packageJson.scripts?.["plan:task"]) errors.push("package.json must expose the plan:task script.");
 if (!packageJson.scripts?.["regression"] || !packageJson.scripts?.["compare:regression"]) errors.push("package.json must expose regression and compare:regression scripts.");
 if (!packageJson.scripts?.["validate:visual-review"]) errors.push("package.json must expose validate:visual-review script.");
+for (const [name, file] of [["audit:responsive", "responsive-audit.mjs"], ["audit:performance", "performance-audit.mjs"], ["audit:security", "security-audit.mjs"]]) {
+  if (!packageJson.scripts?.[name] || !packageJson.scripts[name].includes(file)) errors.push(`package.json must expose ${name} for ${file}.`);
+}
+const responsiveConfig = JSON.parse(await readFile(path.join(root, "skills/ui-reference-replication/templates/responsive-audit.example.json"), "utf8"));
+if (responsiveConfig.schemaVersion !== "1.0.0" || !Array.isArray(responsiveConfig.routes)) errors.push("Responsive audit template schema is invalid.");
+const performanceConfig = JSON.parse(await readFile(path.join(root, "skills/ui-reference-replication/templates/performance-budget.example.json"), "utf8"));
+if (performanceConfig.schemaVersion !== "1.0.0" || !Array.isArray(performanceConfig.routes)) errors.push("Performance budget template schema is invalid.");
+const responsiveScript = await readFile(path.join(root, "skills/ui-reference-replication/scripts/responsive-audit.mjs"), "utf8");
+const performanceScript = await readFile(path.join(root, "skills/ui-reference-replication/scripts/performance-audit.mjs"), "utf8");
+const securityScript = await readFile(path.join(root, "skills/ui-reference-replication/scripts/security-audit.mjs"), "utf8");
+if (!responsiveScript.includes("evaluateResponsiveSnapshot") || !performanceScript.includes("evaluatePerformanceMetrics") || !securityScript.includes("scanSourceText")) errors.push("QA scripts are missing deterministic testable exports.");
 
 const regressionTemplate = JSON.parse(await readFile(path.join(root, "skills/ui-reference-replication/templates/functional-regression.example.json"), "utf8"));
 if (regressionTemplate.schemaVersion !== "1.0.0" || !Array.isArray(regressionTemplate.checks)) {
