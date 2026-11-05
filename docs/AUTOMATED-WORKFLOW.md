@@ -110,3 +110,48 @@ After the preflight passes:
 - Installing the Skill does not grant browser/Figma/image-perception access.
 - A CI pass for the repository does not mean visual fidelity for a consumer application has passed.
 - A redesign that looks aligned but breaks existing product workflows is not complete.
+
+
+## Responsive audit
+
+Run the route and viewport matrix against the target application:
+
+```bash
+npm run responsive:audit -- --url http://localhost:3000 --routes /,/dashboard --viewports 390x844,768x1024,1440x900 --out artifacts/ui-reference/responsive.json
+```
+
+The script checks document-level horizontal overflow, mobile viewport metadata, navigation failures, and uncaught page errors. It is not a visual-design evaluator.
+
+## Performance budget audit
+
+Copy the performance budget template, adjust it to the target product, and run:
+
+```bash
+npm run performance:audit -- --url http://localhost:3000 --budget artifacts/ui-reference/performance-budget.json --routes /,/dashboard --out artifacts/ui-reference/performance.json
+```
+
+These are browser lab measurements, not field Core Web Vitals. Observed blocking time is a Long Task approximation, and cross-origin transfer sizes can be unavailable.
+
+## Dependency security audit
+
+For npm projects with a committed package-lock.json or npm-shrinkwrap.json:
+
+```bash
+npm run security:audit -- --root . --fail-on high --out artifacts/ui-reference/dependency-audit.json
+```
+
+This summarizes npm dependency advisories. It does not install packages, modify the lockfile, run source-code SAST, inspect secrets, or perform penetration testing.
+
+## Unified quality report
+
+Complete the quality report template and validate the evidence references:
+
+```bash
+npm run validate:quality-report -- --file artifacts/ui-reference/quality-report.json --root .
+```
+
+The report requires task-dependent gates and existing evidence files. Pass/Partial/Fail/Not Tested are retained separately. The validator checks completeness and file references; it does not rerun the underlying tools.
+
+## Token and compute budget
+
+Reuse the same route/viewport matrix, retain baseline reports until relevant code or environment changes, and store full machine output in artifacts. During iteration, run checks targeted to changed surfaces; run all required gates before delivery. Do not skip mandatory checks to reduce token usage.

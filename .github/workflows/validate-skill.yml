@@ -30,6 +30,10 @@ jobs:
           node --check skills/ui-reference-replication/scripts/run-functional-regression.mjs
           node --check skills/ui-reference-replication/scripts/compare-regression.mjs
           node --check skills/ui-reference-replication/scripts/validate-visual-review.mjs
+          node --check skills/ui-reference-replication/scripts/run-responsive-audit.mjs
+          node --check skills/ui-reference-replication/scripts/run-performance-audit.mjs
+          node --check skills/ui-reference-replication/scripts/run-dependency-audit.mjs
+          node --check skills/ui-reference-replication/scripts/validate-quality-report.mjs
           node --check skills/ui-reference-replication/scripts/inspect-project.mjs
           node --check skills/ui-reference-replication/scripts/validate-tokens.mjs
           node --check skills/ui-reference-replication/scripts/capture-screenshots.mjs

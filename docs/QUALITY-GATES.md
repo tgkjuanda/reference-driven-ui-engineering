@@ -307,3 +307,17 @@ For existing UI redesign and hybrid projects with a runnable browser environment
 - The scorecard must refer to capture IDs in the validated visual evidence manifest.
 
 **Evidence:** validated visual-review report plus the original reference and implementation screenshots. Review declarations are agent-reported and do not independently prove perception.
+
+
+## 20. Complete quality assurance and aggregate report
+
+- Require a task-specific quality report covering visual evidence, perceptual review, functional regression, responsive behavior, accessibility, performance, dependency security, and design-system consistency.
+- Add existing-behavior preservation for Existing UI Redesign/Hybrid; add creative originality for Reference-Inspired Creative; add motion when motion is in scope.
+- A passing gate must reference at least one existing evidence file inside the report root.
+- Partial/Fail gates require a next action. Not Tested gates require a specific reason.
+- A missing gate, missing evidence file, path traversal, or invalid status blocks a global pass.
+- Responsive automation checks document horizontal overflow, mobile viewport metadata, navigation, and uncaught page errors; it does not replace perceptual review.
+- Performance budgets use browser lab observations and must disclose unavailable metrics, cross-origin transfer-size limits, and the Long Task approximation.
+- npm audit is dependency-advisory coverage only, not a complete security assessment.
+
+**Evidence:** the validated quality report and linked original reports/screenshots. The aggregate validator checks report structure and evidence-file existence; it does not independently execute the checks or prove agent declarations.

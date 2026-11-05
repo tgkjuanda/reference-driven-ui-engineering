@@ -109,3 +109,44 @@ npm run validate:visual-review -- --file artifacts/ui-reference/visual-review.js
 ```
 
 The validator checks required review dimensions for the selected fidelity mode and verifies each review references a capture ID, route, and state from the visual evidence manifest. It reports Pass, Partial, or Fail without calculating a single visual score. This is a structural validation of an agent-declared review, not proof of actual visual perception.
+
+
+## Responsive audit
+
+Requires Playwright and Chromium in the consumer project:
+
+```bash
+npm run responsive:audit -- --url http://localhost:3000 --routes /,/dashboard --viewports 390x844,768x1024,1440x900 --out artifacts/ui-reference/responsive.json
+```
+
+Checks document horizontal overflow, mobile viewport metadata, navigation failures, and uncaught page errors. The check does not identify every clipped element or replace screenshot-based visual inspection.
+
+## Performance budget audit
+
+Copy the performance budget template and set project-specific limits:
+
+```bash
+npm run performance:audit -- --url http://localhost:3000 --budget artifacts/ui-reference/performance-budget.json --routes /,/dashboard --out artifacts/ui-reference/performance.json
+```
+
+Metrics include TTFB, FCP, LCP, CLS, observed Long Task blocking time, and transfer sizes. The runner uses Playwright browser lab observations; it does not provide field Core Web Vitals. Long Task blocking time is an approximation, not Lighthouse TBT. Missing cross-origin transfer sizes remain untested.
+
+## Dependency security audit
+
+Requires an npm lockfile in the target project:
+
+```bash
+npm run security:audit -- --root . --fail-on high --out artifacts/ui-reference/dependency-audit.json
+```
+
+This summarizes npm dependency advisories and never modifies dependencies. It is not SAST, secret scanning, infrastructure testing, or penetration testing.
+
+## Unified quality report
+
+Start from the quality report example. Update task modes, statuses, reasons, next actions, and evidence paths:
+
+```bash
+npm run validate:quality-report -- --file artifacts/ui-reference/quality-report.json --root .
+```
+
+The validator requires task-specific gates and checks that cited evidence files exist under the report root. It does not execute the reported tests or prove agent-declared visual perception.
