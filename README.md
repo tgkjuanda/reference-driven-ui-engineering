@@ -31,12 +31,11 @@ npx skills add tgkjuanda/ui-reference-replication \
 
 ### Install globally
 
-Add `--global` (or `-g`) to either command to install for the selected agents at user scope:
+Add `--global` (or `-g`) to install for the selected agents at user scope. For Antigravity IDE, use its documented global directory `~/.gemini/config/skills/ui-reference-replication/`; the CLI's Antigravity global target may differ by product/version, so project scope is the safer cross-agent choice:
 
 ```bash
 npx skills add tgkjuanda/ui-reference-replication \
   --skill ui-reference-replication \
-  --agent antigravity \
   --agent claude-code \
   --agent opencode \
   --global \
