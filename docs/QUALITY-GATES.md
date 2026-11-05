@@ -47,8 +47,10 @@ Review:
 - Status messages for asynchronous success/failure.
 - Target size/spacing and pointer operation.
 - Reflow, zoom, reduced motion, and information not conveyed by color alone.
+- Automatically moving content against applicable pause/stop/hide requirements.
+- Flashing content against applicable WCAG limits.
 
-**Evidence:** manual keyboard test, accessibility-tool results if available, contrast review, list of failed/untested criteria.
+**Evidence:** manual keyboard test, accessibility-tool results if available, contrast review, motion-preference checks, list of failed/untested criteria.
 
 ## 5. Feedback and error prevention/recovery
 
@@ -73,6 +75,7 @@ Prevent avoidable errors with input constraints, helper text, safe defaults, cle
 - If source widths are not supplied, test representative narrow-phone, tablet, and desktop widths and label them as implementation checks, not source evidence.
 - Ensure no unintended horizontal scrolling, clipped content, inaccessible primary actions, or unusable controls.
 - Prefer fluid layout and content-driven breakpoints over arbitrary fixed coordinates.
+- Verify that motion, hover-only affordances, and large visual effects remain usable on touch and narrow viewports.
 
 **Evidence:** viewport matrix and screenshots for each tested width.
 
@@ -120,6 +123,25 @@ Without Figma API/MCP access, create a manual evidence map and label synchroniza
 
 **Evidence:** Figma-to-code map and drift report, or explicit access limitation.
 
+## 11. Motion behavior and visual effects
+
+Treat motion and effects as part of the design system, not optional decoration.
+
+Review:
+- Motion purpose and trigger for every meaningful animation.
+- Duration, delay, easing, distance, sequence, interruption, and exit behavior.
+- Consistent reusable motion tokens.
+- Hover, focus, pressed, loading, success, error, and navigation transitions.
+- Scroll-linked, ambient, and automatically moving content.
+- Gradients, blur/backdrop blur, shadows, glow, filters, masks, clipping, transparency, SVG, and 3D effects.
+- Reduced-motion alternatives that preserve meaning and functionality.
+- Focus stability, text readability, contrast, and pointer/touch usability during motion.
+- Rendering cost, layout/paint work, jank, and fallbacks for expensive effects.
+
+Use `prefers-reduced-motion: reduce` to respect user system preferences. WCAG 2.2 SC 2.3.3 Animation from Interactions is Level AAA, not AA; this project nevertheless adopts reduced-motion support for non-essential interaction-triggered movement as an explicit quality policy. Automatically moving content and flashing content must also be reviewed against applicable WCAG 2.2 AA criteria, including SC 2.2.2 and SC 2.3.1 where applicable.
+
+**Evidence:** motion inventory, token map, normal/reduced-motion test results, key-state captures or recordings, automatic-motion review, performance observations, fallback and defect log.
+
 ## Delivery scorecard
 
 Use a status per gate:
@@ -136,6 +158,7 @@ Use a status per gate:
 | Design tokens | Pass / Partial / Fail / Not tested | | |
 | Component-driven development | Pass / Partial / Fail / Not tested | | |
 | Figma/code sync | Pass / Partial / Fail / Not tested | | |
+| Motion/effects | Pass / Partial / Fail / Not tested | | |
 
 Do not hide a failed or untested gate behind an overall "complete" status.
 
@@ -143,6 +166,9 @@ Do not hide a failed or untested gate behind an overall "complete" status.
 ## Reference standards and implementation guidance
 
 - [WCAG 2.2 — W3C Recommendation](https://www.w3.org/TR/WCAG22/): use as the accessibility target and test applicable success criteria.
+- [Understanding Animation from Interactions — W3C](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions): Level AAA guidance on disabling non-essential interaction-triggered motion.
+- [prefers-reduced-motion — MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion): platform preference for reducing non-essential motion.
+- [High-performance CSS animations — web.dev](https://web.dev/articles/animations-guide): rendering-pipeline guidance for animation performance.
 - [Figma MCP Server documentation](https://developers.figma.com/docs/figma-mcp-server/): structured design context, variables, components, and design-to-code workflow.
 - [Figma file-structure guidance](https://developers.figma.com/docs/figma-mcp-server/structure-figma-file/): component naming, variables, Auto Layout, annotations, and Code Connect.
 - [Design Tokens Community Group — 2025.10](https://www.designtokens.org/tr/2025.10/): portable token format reference.
@@ -159,4 +185,4 @@ These sources guide the workflow; the skill must still inspect the actual projec
 - `scripts/accessibility-audit.mjs`: runs axe-core against a target URL. It does not replace manual accessibility testing.
 - `npm test` and `npm run check`: test the repository's validator and skill structure.
 
-A screenshot comparison still requires an authorized reference screenshot. Figma MCP may supply a source screenshot when connected; a screenshot capture of the local app alone cannot establish reference fidelity.
+Motion inventory, recording, reduced-motion behavior, and performance profiling remain consumer-project runtime checks; the current repository CI does not test a user's rendered animations. A screenshot comparison still requires an authorized reference screenshot. Figma MCP may supply a source screenshot when connected; a screenshot capture of the local app alone cannot establish reference fidelity.
