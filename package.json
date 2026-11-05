@@ -3,7 +3,7 @@
   "version": "2.5.0",
   "private": true,
   "type": "module",
-  "description": "Vision-required UI reconstruction, existing-interface redesign, and creative reference-inspired design skill with motion and visual QA",
+  "description": "Vision-required UI reconstruction and redesign skill with creative originality and anti-AI-slop quality checks",
   "engines": { "node": ">=20" },
   "scripts": {
     "test": "node --test tests/*.test.mjs",
