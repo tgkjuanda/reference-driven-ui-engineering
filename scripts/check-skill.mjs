@@ -14,6 +14,7 @@ const skillPath = "skills/ui-reference-replication/SKILL.md";
 await mustExist(skillPath);
 for (const relative of [
   "skills/ui-reference-replication/references/visual-capability-gate.md",
+  "skills/ui-reference-replication/references/existing-ui-redesign.md",
   "skills/ui-reference-replication/references/figma-analysis.md",
   "skills/ui-reference-replication/references/design-system-engineering.md",
   "skills/ui-reference-replication/references/accessibility.md",
@@ -32,18 +33,20 @@ const skill = await readFile(path.join(root, skillPath), "utf8");
 const lines = skill.split(/\r?\n/);
 if (!skill.startsWith("---\n")) errors.push("SKILL.md must start with YAML frontmatter.");
 if (lines.length > 500) errors.push(`SKILL.md has ${lines.length} lines; keep it below 500 lines.`);
-for (const field of ["name: ui-reference-replication", "description:", "license: MIT", "version: \"2.2.0\""]) {
+for (const field of ["name: ui-reference-replication", "description:", "license: MIT", "version: \"2.3.0\""]) {
   if (!skill.includes(field)) errors.push(`SKILL.md frontmatter/content missing: ${field}`);
 }
 if (skill.includes("compatibility: opencode")) errors.push("Core skill must not be locked to OpenCode.");
 for (const required of [
   "references/visual-capability-gate.md",
+  "references/existing-ui-redesign.md",
   "references/accessibility.md",
   "references/motion-design.md",
   "If the agent cannot visually inspect both the reference and its own rendered output, **reject the Skill for this task and stop**.",
-  "Mandatory visual perception"
+  "Existing UI redesign",
+  "preserve routes, features, data, permissions, APIs, and business workflows"
 ]) {
-  if (!skill.includes(required)) errors.push(`Core skill missing mandatory visual capability rule: ${required}`);
+  if (!skill.includes(required)) errors.push(`Core skill missing required rule: ${required}`);
 }
 if (!skill.includes("validate-tokens.mjs")) errors.push("Core skill does not advertise token validation.");
 if (!skill.includes("capture-screenshots.mjs")) errors.push("Core skill does not advertise screenshot capture.");
@@ -51,6 +54,11 @@ if (!skill.includes("capture-screenshots.mjs")) errors.push("Core skill does not
 const gateDoc = await readFile(path.join(root, "skills/ui-reference-replication/references/visual-capability-gate.md"), "utf8");
 if (!gateDoc.includes("Mandatory rejection behavior") || !gateDoc.includes("Do not begin a text-only approximation")) {
   errors.push("Visual capability gate is missing mandatory rejection instructions.");
+}
+
+const redesign = await readFile(path.join(root, "skills/ui-reference-replication/references/existing-ui-redesign.md"), "utf8");
+for (const required of ["Establish the existing-product baseline", "Regression and visual verification", "preserve", "business rules"]) {
+  if (!redesign.includes(required)) errors.push(`Existing UI redesign reference missing: ${required}`);
 }
 
 const tokenFile = "skills/ui-reference-replication/templates/design-tokens.example.json";
