@@ -35,12 +35,12 @@ function validateValue(type, value, token, errors, warnings) {
       }
       break;
     case "dimension":
-      if (!(typeof value === "string" && (/^-?(?:\\d+|\\d*\\.\\d+)(?:px|rem|em|%|vh|vw|vmin|vmax|ch|ex|pt|pc|cm|mm|in)$/i.test(value.trim()) || value.trim() === "0"))) {
+      if (!(typeof value === "string" && (/^-?(?:\d+|\d*\.\d+)(?:px|rem|em|%|vh|vw|vmin|vmax|ch|ex|pt|pc|cm|mm|in)$/i.test(value.trim()) || value.trim() === "0"))) {
         addIssue(errors, "invalid-dimension", "Dimension must be a number with a supported unit (or unitless zero).", token);
       }
       break;
     case "duration":
-      if (!(typeof value === "string" && /^\\d+(?:\\.\\d+)?(?:ms|s)$/.test(value.trim()))) {
+      if (!(typeof value === "string" && /^\d+(?:\.\d+)?(?:ms|s)$/.test(value.trim()))) {
         addIssue(errors, "invalid-duration", "Duration must use ms or s units.", token);
       }
       break;
