@@ -16,7 +16,7 @@ SCRIPT = Path(__file__).resolve().parents[1] / "skills" / "ui-reference-replicat
 class ScreenshotComparisonTests(unittest.TestCase):
     def run_compare(self, reference, actual, diff, *args):
         return subprocess.run(
-            [sys.executable, str(SCRIPT), str(reference), str(actual), "--diff", str(diff), *args],
+            [sys.executable, str(SCRIPT), str(reference), str(actual), "--diff", str(diff), "--heatmap", str(Path(diff).with_name("heatmap.png")), *args],
             check=False, capture_output=True, text=True
         )
 
