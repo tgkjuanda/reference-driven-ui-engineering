@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.2.1] - 2026-11-06
+
+### Added
+- Expanded Skill discovery description to cover screenshot, Figma, website URL, mockup, wireframe, prototype, and reference-led UI implementation prompts.
+- Antigravity always_on routing rule that directs matching UI-reference tasks to the Skill without requiring explicit invocation.
+- Automated checks for discovery metadata and the persistent Antigravity routing rule.
+
+### Changed
+- Reference-led UI implementation and visual comparison are explicitly designated as the default Skill workflow.
+- Documentation explains workspace/global installation of the Antigravity rule and distinguishes Skill discovery from persistent rule routing.
+
 ## [3.2.0] - 2026-11-05
 
 ### Added

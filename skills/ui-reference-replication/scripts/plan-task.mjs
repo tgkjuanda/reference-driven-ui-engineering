@@ -148,7 +148,7 @@ function createPlan(options) {
   const uniqueOnDemand = [...new Set(loadWhenNeeded)].filter(item => !uniqueReadBefore.includes(item));
 
   return {
-    version: "3.2.0",
+    version: "3.2.1",
     workMode: options.workMode,
     fidelity: options.fidelity,
     scope: options.scope,

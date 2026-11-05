@@ -71,6 +71,32 @@ The review also rejects interchangeable hero/card-grid templates, repetitive car
 
 Read [Anti-AI-Slop and Design Originality](skills/ui-reference-replication/references/anti-ai-slop.md) and [Creative Reference Mode](skills/ui-reference-replication/references/creative-reference-mode.md).
 
+## Default workflow activation
+
+The repository includes an Antigravity workspace rule at .agents/rules/ui-reference-replication.md. It uses Antigravity's always_on rule mode to route reference-led web/app UI implementation and visual-QA requests to this Skill by default—even when the user does not explicitly name the Skill.
+
+The rule and the Skill are separate files:
+
+- Install the Skill into Antigravity's workspace .agents/skills/ui-reference-replication/ or global ~/.gemini/config/skills/ui-reference-replication/ location.
+- For automatic routing in one application workspace, copy .agents/rules/ui-reference-replication.md into that workspace's .agents/rules/ directory.
+- For automatic routing across all Antigravity workspaces on the machine, copy it to ~/.gemini/config/rules/ui-reference-replication.md.
+
+Example (run from this repository):
+
+```bash
+mkdir -p /path/to/your-app/.agents/rules
+cp .agents/rules/ui-reference-replication.md /path/to/your-app/.agents/rules/
+```
+
+Global Antigravity rule:
+
+```bash
+mkdir -p ~/.gemini/config/rules
+cp .agents/rules/ui-reference-replication.md ~/.gemini/config/rules/
+```
+
+Installing the Skill through a Skills installer does not necessarily install this separate Antigravity rule. Other Agent Skills-compatible agents can still discover the Skill from its expanded description, but their automatic selection remains agent-controlled unless they provide their own persistent routing mechanism. No routing configuration can override a missing Skill installation or missing visual-perception/browser/terminal capabilities.
+
 ## Token-efficient task planning
 
 The bundled planner selects the minimum task-relevant references and suggested checks. It is dependency-free:
@@ -291,7 +317,7 @@ Benchmark at least three runs with the same fixture and agent/model/runtime. Onl
 
 ## Versioning and changelog
 
-Current Skill version: **3.2.0**
+Current Skill version: **3.2.1**
 
 See [CHANGELOG.md](CHANGELOG.md) for release history and notable changes.
 
