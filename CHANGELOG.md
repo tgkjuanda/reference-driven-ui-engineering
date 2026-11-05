@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.0.0] - 2026-11-05
+
+### Added
+- Responsive route/viewport overflow audit with intentional-overflow exclusions.
+- Configurable lab performance audit for FCP, LCP, CLS, DOM nodes, resource count, and transfer bytes.
+- Lightweight frontend source-pattern and production npm dependency security audit, with redacted potential-secret findings.
+- Example responsive viewport and performance-budget configurations.
+- Unit tests for audit configuration, metric evaluation, overflow detection, secret redaction, and dependency severity mapping.
+
+### Changed
+- Task planner includes responsive, performance, security, and accessibility checks in full QA scope.
+- Core Skill, quality gates, workflow, README, and QA reference now document cross-cutting audits and their explicit limitations.
+- No claim of field Core Web Vitals, full security certification, or consumer-app QA is made from these helper scripts.
+
+
 ## [2.9.0] - 2026-11-05
 
 ### Added
