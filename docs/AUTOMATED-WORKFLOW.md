@@ -75,6 +75,16 @@ npm run compare:regression -- --baseline artifacts/ui-reference/baseline.json --
 
 The runner requires Playwright in the target project and executes declared route checks and safe browser actions only. The comparator distinguishes regressions from pre-existing failures and missing checks. No-new-regressions is not a claim that every test passes.
 
+## Perceptual visual review scorecard
+
+After direct inspection of the reference and implementation, create a review manifest from `skills/ui-reference-replication/templates/perceptual-visual-review.example.json` and validate it against the visual evidence capture IDs:
+
+```bash
+npm run validate:visual-review -- --file artifacts/ui-reference/visual-review.json --evidence artifacts/ui-reference/visual-evidence.json --root .
+```
+
+Reference-Faithful and Reference-Inspired Creative require different review dimensions. Partial, failed, and not-tested dimensions remain visible and cannot be collapsed into an overall pass. The scorecard is agent-declared; validation checks completeness, not image understanding.
+
 ## Consumer-project visual QA
 
 After the preflight passes:
