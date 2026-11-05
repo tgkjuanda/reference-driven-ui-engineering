@@ -99,7 +99,7 @@ The browser scripts require Playwright in the project/runtime. Accessibility aud
 
 ### 6. Fix by measured impact
 
-Compare screenshots at identical viewport, route, and UI state. Fix macro geometry first, then typography, color, component dimensions, assets, and micro-details. Re-run the relevant tests after each meaningful fix. Keep a short defect log with severity, evidence, correction, and retest result.
+Compare screenshots at identical viewport, route, and UI state. Generate raw diff, heatmap, and overlay where possible. Classify the highest-impact discrepancies, map them to the responsible component or token, change the smallest responsible code surface, re-capture the same state, and retain the change only if it improves fidelity without regression. Fix macro geometry first, then typography, color, component dimensions, assets, and micro-details. Re-run tests after each meaningful fix. Keep a defect log with severity, evidence, correction, and retest result. Read references/visual-qa.md for the full evidence-driven correction loop.
 
 ### 7. Delivery report
 
