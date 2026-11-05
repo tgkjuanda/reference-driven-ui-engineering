@@ -83,3 +83,18 @@ npm run validate:visual-evidence -- --file artifacts/ui-reference/visual-evidenc
 ```
 
 The dependency-free validator checks relative paths, file existence, PNG headers, matching image dimensions, duplicate capture IDs, review completeness, and SHA-256 hashes. It rejects path traversal outside the evidence root. A passing report confirms manifest integrity and a declared review record—not actual visual perception or design correctness.
+
+
+## Functional regression runner
+
+Requires Playwright in the target project and a project-specific config derived from `skills/ui-reference-replication/templates/functional-regression.example.json`.
+
+```bash
+npm run regression -- --config tests/ui-regression.json --label baseline --out artifacts/ui-reference/baseline.json
+npm run regression -- --config tests/ui-regression.json --label post-redesign --out artifacts/ui-reference/post-redesign.json
+npm run compare:regression -- --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json --out artifacts/ui-reference/regression-comparison.json
+```
+
+Supported actions include click, fill, select-option, check, uncheck, press, and visibility/text/enabled/URL assertions. The config is explicit; the runner does not infer business behavior. Use sanitized test accounts and data.
+
+The comparator identifies new regressions, missing baseline checks, failing new checks, resolved failures, and pre-existing failures. Its `no-new-regressions-with-existing-failures` status is not a fully passing suite.
