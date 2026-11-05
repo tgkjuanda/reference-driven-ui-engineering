@@ -10,7 +10,7 @@ function getArg(name, fallback) {
 }
 function parseViewports(value) {
   return value.split(",").map(item => {
-    const match = item.trim().match(/^(\\d+)x(\\d+)$/);
+    const match = item.trim().match(/^(\d+)x(\d+)$/);
     if (!match) throw new Error(`Invalid viewport "${item}". Use WIDTHxHEIGHT.`);
     return { width: Number(match[1]), height: Number(match[2]) };
   });
