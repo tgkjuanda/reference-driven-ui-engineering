@@ -21,6 +21,7 @@ It supports both **new UI builds** and **redesigns of existing applications**. C
 - **Design systems:** establish reusable design tokens, semantic roles, component variants, and consistent patterns.
 - **Motion and effects:** analyze and implement purposeful transitions, micro-interactions, scroll-linked motion, reduced-motion alternatives, and visual effects.
 - **Quality assurance:** inspect screenshots, compare visual states, audit accessibility, test responsive behavior, and run functional/regression checks where the project environment supports them.
+- **Functional regression:** execute declared Playwright route/interaction checks before and after redesign, then compare reports to identify regressions and pre-existing failures.
 
 ## Choose two modes
 
@@ -169,6 +170,7 @@ all tests and unresolved gaps.
 | [Quality Gates](docs/QUALITY-GATES.md) | Acceptance criteria and delivery scorecard. |
 | [Token-Efficient Execution](skills/ui-reference-replication/references/token-efficient-execution.md) | Context routing, reuse, automation, and bounded iteration. |
 | [Visual Evidence Validation](skills/ui-reference-replication/references/evidence-and-visual-qa.md) | Pairing, validating, and auditing screenshot evidence. |
+| [Functional Regression Example](skills/ui-reference-replication/templates/functional-regression.example.json) | Explicit browser test scenario format for project workflows. |
 | [Automated Workflow](docs/AUTOMATED-WORKFLOW.md) | Repository CI and consumer-project QA process. |
 | [Agent Compatibility](docs/AGENT-COMPATIBILITY.md) | Agent installation paths and compatibility notes. |
 | [Visual Capability Gate](skills/ui-reference-replication/references/visual-capability-gate.md) | Mandatory visual-perception prerequisite and rejection behavior. |
@@ -189,6 +191,9 @@ npm test
 npm run check
 npm run validate:tokens
 npm run validate:visual-evidence -- --file artifacts/ui-reference/visual-evidence.json --root .
+npm run regression -- --config tests/ui-regression.json --label baseline --out artifacts/ui-reference/baseline.json
+npm run regression -- --config tests/ui-regression.json --label post-redesign --out artifacts/ui-reference/post-redesign.json
+npm run compare:regression -- --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json
 ```
 
 Inspect a target project:
@@ -249,7 +254,7 @@ For existing UI redesign, a visually successful result is still incomplete if it
 
 ## Versioning and changelog
 
-Current Skill version: **2.7.0**
+Current Skill version: **2.8.0**
 
 See [CHANGELOG.md](CHANGELOG.md) for release history and notable changes.
 
