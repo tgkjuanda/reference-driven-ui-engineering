@@ -307,3 +307,32 @@ For existing UI redesign and hybrid projects with a runnable browser environment
 - The scorecard must refer to capture IDs in the validated visual evidence manifest.
 
 **Evidence:** validated visual-review report plus the original reference and implementation screenshots. Review declarations are agent-reported and do not independently prove perception.
+
+
+## 20. Responsive overflow matrix
+
+- Run responsive checks on the agreed critical routes and mobile/tablet/desktop widths.
+- Verify document/body horizontal overflow and visible elements outside the viewport.
+- Review intentional scroll regions and overflow exclusions; keep exclusions narrow and documented.
+- Automated overflow checks do not establish visual suitability, readability, or usable touch targets.
+
+**Evidence:** responsive audit report and directly inspected screenshots for the same route/viewport pairs.
+
+## 21. Performance budgets
+
+- Define project-specific budgets for FCP, LCP, CLS, DOM nodes, resource count, and transfer bytes where measurable.
+- Run lab measurements on representative routes and a consistent environment.
+- Report unmeasurable values as Partial/Not Measurable, not Pass.
+- Clearly distinguish lab diagnostics from field Core Web Vitals; this helper does not measure INP or RUM.
+
+**Evidence:** performance report, config, route, environment, and limitations.
+
+## 22. Frontend security review
+
+- Run source-pattern scanning on selected frontend source file types.
+- Run production dependency audit when a compatible lockfile and registry access exist.
+- Review dynamic HTML/script execution findings manually.
+- Keep secrets redacted in output and sanitize reports before sharing.
+- A clean result is not proof of security; this helper is not full SAST/DAST or a penetration test.
+
+**Evidence:** security report, scanned file count, dependency audit status, and explicitly stated exclusions/limitations.
