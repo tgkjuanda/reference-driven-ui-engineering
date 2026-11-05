@@ -17,6 +17,7 @@ for (const relative of [
   "skills/ui-reference-replication/references/design-system-engineering.md",
   "skills/ui-reference-replication/references/accessibility.md",
   "skills/ui-reference-replication/references/responsive-and-interactions.md",
+  "skills/ui-reference-replication/references/motion-design.md",
   "skills/ui-reference-replication/references/visual-qa.md",
   "skills/ui-reference-replication/references/evidence-and-visual-qa.md",
   "skills/ui-reference-replication/scripts/inspect-project.mjs",
@@ -30,11 +31,12 @@ const skill = await readFile(path.join(root, skillPath), "utf8");
 const lines = skill.split(/\r?\n/);
 if (!skill.startsWith("---\n")) errors.push("SKILL.md must start with YAML frontmatter.");
 if (lines.length > 500) errors.push(`SKILL.md has ${lines.length} lines; keep it below 500 lines.`);
-for (const field of ["name: ui-reference-replication", "description:", "license: MIT", "version: \"2.0.0\""]) {
+for (const field of ["name: ui-reference-replication", "description:", "license: MIT", "version: \"2.1.0\""]) {
   if (!skill.includes(field)) errors.push(`SKILL.md frontmatter/content missing: ${field}`);
 }
 if (skill.includes("compatibility: opencode")) errors.push("Core skill must not be locked to OpenCode.");
 if (!skill.includes("references/accessibility.md")) errors.push("Core skill does not advertise the accessibility reference.");
+if (!skill.includes("references/motion-design.md")) errors.push("Core skill does not advertise the motion design reference.");
 if (!skill.includes("validate-tokens.mjs")) errors.push("Core skill does not advertise token validation.");
 if (!skill.includes("capture-screenshots.mjs")) errors.push("Core skill does not advertise screenshot capture.");
 
