@@ -100,7 +100,7 @@ function createPlan(options) {
   }
   if (options.performance || options.scope === "full") scripts.push("npm run audit:performance -- --config <performance-config.json> --out <performance-report.json>");
   if (options.security || options.scope === "full" || options.scope === "audit") {
-    readBefore.push(`${ROOT}/references/performance-security.md`);
+    loadWhenNeeded.push(`${ROOT}/references/performance-security.md`);
     scripts.push("npm run audit:security -- --root . --out <security-report.json>");
   }
 
