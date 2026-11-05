@@ -25,6 +25,14 @@ A screenshot file being present, a path being readable as text, DOM/CSS inspecti
 
 **If the agent cannot inspect both reference and output visuals, reject the Skill for the task and stop before modifying the consumer project.** Do not silently downgrade to a text-only reconstruction.
 
+## Select the workflow mode
+
+- **New build:** inspect the reference, inspect the target project stack, implement the new interface, and verify visual and functional quality.
+- **Existing UI redesign:** read `references/existing-ui-redesign.md`; inventory current routes/features/contracts, capture baseline screenshots and run baseline tests, map the reference style to existing components, migrate incrementally, then run both visual-fidelity and behavior-regression checks.
+- **Hybrid:** identify which existing routes/components are being redesigned and which new screens are being created. Keep their evidence and test scopes distinct.
+
+For existing UI redesign, the reference determines the desired visual language; the current application remains the default source of truth for its business behavior. Any functional or data-contract change requires explicit user approval.
+
 ## Consumer-project visual QA
 
 After the preflight passes:
@@ -35,9 +43,10 @@ After the preflight passes:
 4. Inspect reference and implementation side by side, with overlays and heatmaps as supporting evidence.
 5. Compare visual hierarchy, geometry, typography, colors, components, assets, and motion perceptually.
 6. Test interactions, responsive behavior, reduced-motion behavior, keyboard access, and error recovery.
-7. Run axe-core, performance, build, type, lint, functional, and regression checks where configured.
-8. Correct verified issues, recapture the exact states, and visually confirm improvements.
-9. Report test evidence, unresolved differences, and anything not tested.
+7. In redesign mode, compare baseline and post-redesign behavior for navigation, forms, data views, permissions, and critical workflows.
+8. Run axe-core, performance, build, type, lint, functional, and regression checks where configured.
+9. Correct verified issues, recapture the exact states, and visually confirm improvements.
+10. Report test evidence, preserved functionality, unresolved differences, and anything not tested.
 
 ## Limits
 
@@ -46,3 +55,4 @@ After the preflight passes:
 - The token validator checks a supported subset, not full DTCG conformance.
 - Installing the Skill does not grant browser/Figma/image-perception access.
 - A CI pass for the repository does not mean visual fidelity for a consumer application has passed.
+- A redesign that passes visual comparison but breaks existing product workflows is not complete.
