@@ -99,6 +99,7 @@ function createPlan(options) {
     scripts.push("node <skill>/scripts/capture-screenshots.mjs --url <local-url> --routes <routes>");
     scripts.push("python <skill>/scripts/compare-screenshots.py <reference.png> <actual.png>");
     scripts.push("node <skill>/scripts/validate-visual-evidence.mjs --file <visual-evidence.json> --root .");
+    scripts.push("node <skill>/scripts/validate-visual-review.mjs --file <visual-review.json> --evidence <visual-evidence.json> --root .");
   }
   if (options.accessibility) {
     scripts.push("node <skill>/scripts/accessibility-audit.mjs --url <local-url>");
@@ -114,7 +115,7 @@ function createPlan(options) {
   const uniqueOnDemand = [...new Set(loadWhenNeeded)].filter(item => !uniqueReadBefore.includes(item));
 
   return {
-    version: "2.8.0",
+    version: "2.9.0",
     workMode: options.workMode,
     fidelity: options.fidelity,
     scope: options.scope,
