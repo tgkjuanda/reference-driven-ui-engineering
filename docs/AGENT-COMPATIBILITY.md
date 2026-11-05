@@ -1,28 +1,27 @@
-# Agent compatibility
+# Agent compatibility and installation paths
 
-The repository uses the open Agent Skills convention: a skill is a folder containing `SKILL.md` with YAML frontmatter and optional supporting files.
+This repository uses the vendor-neutral Agent Skills folder convention: each skill is a directory with a `SKILL.md` and optional references/scripts. The Vercel Skills CLI maps it to the selected agent's discovery path.
 
-## Verified filesystem conventions
+## Selected agents
 
-| Agent | Workspace/project location | Global location |
-|---|---|---|
-| Antigravity IDE | `.agents/skills/<skill>/` | `~/.gemini/config/skills/<skill>/` |
-| Antigravity CLI | `.agents/skills/<skill>/` | `~/.gemini/antigravity-cli/skills/<skill>/` |
-| Claude Code | `.claude/skills/<skill>/` | `~/.claude/skills/<skill>/` |
-| OpenCode | `.opencode/skills/<skill>/` | `~/.config/opencode/skills/<skill>/` |
-| Shared Agent Skills | `.agents/skills/<skill>/` | `~/.agents/skills/<skill>/` |
+| Agent | CLI identifier | Project directory | Global directory |
+|---|---|---|---|
+| Antigravity IDE | `antigravity` | `.agents/skills/` | `~/.gemini/antigravity/skills/` |
+| Antigravity CLI | `antigravity-cli` | `.agents/skills/` | `~/.gemini/antigravity-cli/skills/` |
+| Claude Code | `claude-code` | `.claude/skills/` | `~/.claude/skills/` |
+| OpenCode | `opencode` | `.opencode/skills/` | `~/.config/opencode/skills/` |
+| Codex | `codex` | `.agents/skills/` | `~/.agents/skills/` |
+| Cursor | `cursor` | `.agents/skills/` | `~/.agents/skills/` |
 
-OpenCode also discovers the shared `.agents/skills/` and Claude-compatible skill directories. Antigravity IDE recognizes `.agents/skills/` for workspace scope. The Vercel Skills CLI maps a selected agent to its own install destination.
+The Skills CLI supports additional agents. Check its live agent list because support and installation paths can change.
 
-## Install
-
-Recommended interactive flow:
+## Install interactively
 
 ```bash
 npx skills add tgkjuanda/ui-reference-replication
 ```
 
-Explicit multi-agent project installation:
+## Install to selected agents
 
 ```bash
 npx skills add tgkjuanda/ui-reference-replication \
@@ -33,8 +32,24 @@ npx skills add tgkjuanda/ui-reference-replication \
   --yes
 ```
 
-The CLI also supports many other agents. Use its interactive agent picker for the current supported list instead of assuming every tool that reads Markdown has identical skill discovery behavior.
+## Install globally
 
-## Scope note
+Use `--global` or `-g` for the selected CLI-supported destinations:
 
-Project scope is the best common denominator for sharing with Antigravity IDE, Claude Code, and OpenCode. Global directories are product-specific and should be managed by the CLI or the respective agent's official instructions.
+```bash
+npx skills add tgkjuanda/ui-reference-replication \
+  --skill ui-reference-replication \
+  --agent antigravity \
+  --agent claude-code \
+  --agent opencode \
+  --global \
+  --yes
+```
+
+## Shared directory behavior
+
+Some agents, including OpenCode, can discover shared `.agents/skills/` directories. However, use the Skills CLI agent selector rather than manually assuming that every agent shares identical discovery behavior.
+
+## Important limitations
+
+Installation only copies the Skill files. It does not automatically configure or authorize Figma MCP, browser automation, Playwright, axe-core, project terminal permissions, or external credentials. Those are runtime capabilities and must be configured separately.
