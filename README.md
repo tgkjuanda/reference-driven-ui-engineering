@@ -1,39 +1,76 @@
 # UI Reference Replication Engine
 
-[![skills.sh](https://skills.sh/b/tgkjuanda/ui-reference-replication)](https://skills.sh/tgkjuanda/ui-reference-replication)
 [![Validate Agent Skill](https://github.com/tgkjuanda/ui-reference-replication/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/tgkjuanda/ui-reference-replication/actions/workflows/validate-skill.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**Build or redesign UI from references — faithfully or with original creative interpretation.**
+**Rebuild or redesign interfaces from visual references—faithfully or with an original creative direction.**
 
-A cross-agent Agent Skill for vision-capable coding agents. It supports new UI builds and redesigns of existing applications using Figma, live websites, and screenshots. Choose between close reference replication and an original design inspired by the reference. Creative mode includes an anti-AI-slop review to prevent generic templates, trend stacking, filler imagery, and unjustified effects.
+UI Reference Replication is a vendor-neutral Agent Skill for vision-capable coding agents. It helps agents inspect Figma designs, live websites, and screenshots; understand the visual system; implement the interface in an existing codebase; and verify the rendered result.
 
-**Visual perception is mandatory.** The agent must inspect both the source reference and its own rendered screenshots/recordings. Agents that cannot perceive those visuals must reject the task; text-only analysis, DOM/CSS inspection, Figma metadata, OCR, and pixel-diff numbers are not substitutes for visual review.
+It supports both **new UI builds** and **redesigns of existing applications**. Creative work includes a required anti-AI-slop review so the result is specific to the product rather than an interchangeable collection of trendy effects.
 
-## Work modes
+> **Visual perception is a hard requirement.** The agent must be able to inspect both the source reference and its own rendered screenshots. If it cannot see and assess both, it must reject the task before changing the project. Text-only analysis, DOM/CSS inspection, Figma metadata, OCR, or pixel-diff numbers are not substitutes for visual review.
 
-- **New build:** implement a new interface from the supplied visual reference.
-- **Existing UI redesign:** transform the visual style/theme of an existing app while preserving existing routes, features, data, permissions, APIs, validation, and workflows by default.
-- **Hybrid:** redesign selected existing screens and add new screens only where requested.
+## Capabilities
 
-## Fidelity modes
+- **Reference analysis:** inspect visual hierarchy, layout, typography, color, spacing, components, assets, responsive behavior, interactions, and observable motion.
+- **New UI implementation:** build reference-led interfaces using the target project's existing framework and conventions.
+- **Existing UI redesign:** restyle an application while preserving its routes, features, data, permissions, APIs, validation, and workflows by default.
+- **Creative interpretation:** retain selected design anchors while creating an original and coherent visual direction.
+- **Anti-AI-slop review:** reject generic templates, unjustified trend stacking, filler assets/content, and decorative treatments without a product-specific reason.
+- **Design systems:** establish reusable design tokens, semantic roles, component variants, and consistent patterns.
+- **Motion and effects:** analyze and implement purposeful transitions, micro-interactions, scroll-linked motion, reduced-motion alternatives, and visual effects.
+- **Quality assurance:** inspect screenshots, compare visual states, audit accessibility, test responsive behavior, and run functional/regression checks where the project environment supports them.
 
-- **Reference-Faithful:** stay close to the reference composition, hierarchy, visual language, components, and interactions.
-- **Reference-Inspired Creative:** preserve selected design anchors but create an original interpretation. Layout, component composition, exact colors, typography pairing, imagery, effects, and animation may be reinterpreted.
+## Choose two modes
 
-Work mode and fidelity mode are independent. For example, an existing dashboard can be redesigned in Reference-Inspired Creative mode without changing its business logic.
+Work mode and fidelity mode are independent. Select one from each group before implementation.
 
-Read [Creative Reference Mode](skills/ui-reference-replication/references/creative-reference-mode.md), [Anti-AI-Slop](skills/ui-reference-replication/references/anti-ai-slop.md), and [Existing UI Redesign](skills/ui-reference-replication/references/existing-ui-redesign.md).
+### Work mode
 
-## Install
+| Mode | Use it for |
+|---|---|
+| **New Build** | Create a new interface from a visual reference. |
+| **Existing UI Redesign** | Transform the visual design of an application that already exists. |
+| **Hybrid** | Redesign selected screens and create new screens in the same project. |
 
-Requires Node.js 22.20+ for the current Vercel Skills CLI and a vision-capable agent/runtime.
+### Fidelity mode
+
+| Mode | Design behavior |
+|---|---|
+| **Reference-Faithful** | Stay close to the reference's composition, hierarchy, visual language, and observable interaction patterns. |
+| **Reference-Inspired Creative** | Preserve selected design qualities, but reinterpret layout, component composition, palette, typography, imagery, effects, and motion to create an original design. |
+
+Examples:
+- `New Build + Reference-Faithful`: reproduce a supplied product page as closely as the evidence allows.
+- `Existing UI Redesign + Reference-Inspired Creative`: give an existing dashboard a new visual identity inspired by a reference, without changing its business logic.
+- `Hybrid + Reference-Inspired Creative`: redesign the current application shell and create new screens in the same design language.
+
+## Creative design without AI slop
+
+Creative freedom does not mean adding every fashionable effect. In Reference-Inspired Creative mode, the agent must:
+
+1. Understand the actual product, users, tasks, content, and brand constraints.
+2. Write a product-specific design thesis and choose one or two distinctive visual devices.
+3. Define what to **Preserve**, **Reinterpret**, **Protect**, and **Avoid**.
+4. Build a consistent system for composition, typography, color, surfaces, assets, components, and motion.
+5. Complete the de-slop review before delivery.
+
+The anti-slop guide treats gradients, glassmorphism, neon, blur, 3D, rounded cards, pill controls, and parallax as optional techniques—not defaults. They are allowed when the reference, product, identity, or interaction justifies them.
+
+The review also rejects interchangeable hero/card-grid templates, repetitive card layouts, decorative badges, generic filler imagery, fabricated metrics/testimonials/logos, and inconsistent mixes of visual styles.
+
+Read [Anti-AI-Slop and Design Originality](skills/ui-reference-replication/references/anti-ai-slop.md) and [Creative Reference Mode](skills/ui-reference-replication/references/creative-reference-mode.md).
+
+## Installation
+
+Install from the repository with the [Vercel Skills CLI](https://github.com/vercel-labs/skills):
 
 ```bash
 npx skills add tgkjuanda/ui-reference-replication
 ```
 
-Install explicitly to supported agent destinations:
+To target selected agents explicitly:
 
 ```bash
 npx skills add tgkjuanda/ui-reference-replication \
@@ -44,101 +81,165 @@ npx skills add tgkjuanda/ui-reference-replication \
   --yes
 ```
 
-Agent platform support does not guarantee image perception. The model and current runtime must inspect both reference and generated output images. Installation copies the Skill; it does not grant Figma, browser, terminal, or image/video capabilities.
+Use the CLI's interactive agent selector for other supported destinations. Check the CLI's current documentation for supported agent identifiers and runtime requirements.
 
-## Use it
+**Important:** an agent platform being installable does not guarantee that the selected model/runtime has visual perception. Confirm that the actual session can inspect the reference image and the screenshots it produces. Installing this Skill does not grant Figma access, browser control, terminal permissions, or image/video perception.
 
-In a vision-capable coding agent:
+## Quick start
+
+In a vision-capable coding agent, invoke the Skill and provide a reference URL or attach the reference images.
+
+### Example: creative redesign of an existing application
 
 ```text
 @ui-reference-replication
 
-MODE: EXISTING UI REDESIGN
-FIDELITY: REFERENCE-INSPIRED CREATIVE
+WORK MODE: EXISTING UI REDESIGN
+FIDELITY MODE: REFERENCE-INSPIRED CREATIVE
 
-Redesign the current application inspired by this visual reference:
+Redesign the current application using this reference as visual
+inspiration:
 https://example.com/reference
 
-Preserve the reference's bold editorial mood, warm color character,
-expressive typography, and layered visual treatment.
-Create an original layout and component system; do not copy it
-pixel-for-pixel.
+Preserve the reference's editorial mood, warm color character,
+expressive typography, and layered visual treatment. Create an
+original composition and component system; do not copy it exactly.
 
-Preserve current routes, features, data, permissions, APIs,
-validation, and business workflows. Only change functionality
+Preserve all existing routes, features, data, permissions, APIs,
+validation, and business workflows. Change functionality only
 when I explicitly approve it.
 
-First inspect the reference and current app visually. Capture
-baseline screenshots and run existing tests. Build a creative
-direction brief, implement the redesign, visually review the
-result, rerun regression tests, and report remaining gaps.
+First confirm that you can visually inspect both the reference
+and screenshots of the current application. Capture baseline
+screenshots and run existing tests. Create a creative direction
+brief, implement the redesign, inspect the rendered result, run
+the anti-AI-slop review, and repeat regression tests.
+
+Report visual evidence, test results, preserved behavior, and
+remaining deviations. Do not claim completion when a required
+check was not performed.
 ```
 
-## What it does
+### Example: faithful new build
 
-- **Reference intelligence:** inspect Figma frames, website layouts, screenshots, typography, assets, and component structure.
-- **Existing UI redesign:** migrate an existing product's visual theme and components while protecting its current behavior and data/API contracts.
-- **Creative design:** retain selected visual DNA while producing an original and coherent interpretation, with a mandatory anti-AI-slop review for product specificity, visual restraint, authentic assets, and deliberate composition.
-- **Design system:** map semantic design tokens, visual hierarchy, reusable components, and variants.
-- **Motion design:** inspect and reconstruct or reinterpret micro-interactions, transitions, scroll-linked motion, animation timing/easing, and reduced-motion alternatives.
-- **Visual effects:** reproduce or creatively reinterpret gradients, blur, shadows, glow, masks, transparency, and advanced visual treatments with fallbacks.
-- **Frontend implementation:** work within the existing React, Next.js, Vue, or other project stack.
-- **Responsive and functional QA:** test interactions, responsive behavior, accessibility, reduced motion, and recovery states.
-- **Visual QA:** inspect screenshots and recordings perceptually, supported by overlays, heatmaps, and pixel-diff diagnostics.
-- **Regression QA:** compare pre-redesign and post-redesign routes, forms, tables, permissions, and critical workflows.
+```text
+@ui-reference-replication
+
+WORK MODE: NEW BUILD
+FIDELITY MODE: REFERENCE-FAITHFUL
+
+Build the requested interface from the supplied reference.
+Inspect the reference visually before coding. Preserve its
+visual hierarchy, composition, typography, color language,
+components, and observable interactions as closely as possible.
+
+Use the current project's framework and conventions. Capture
+the implementation at matching viewports and states, inspect
+both images visually, correct verified differences, and report
+all tests and unresolved gaps.
+```
+
+## How the workflow works
+
+1. **Visual preflight:** confirm the agent can perceive the source reference and its own rendered output. Reject the task if it cannot.
+2. **Reference and project inspection:** analyze the reference, current codebase, design system, routes, states, and available tests.
+3. **Direction and mapping:** select work/fidelity modes, extract design anchors, and map reference patterns to existing components. Creative mode adds a design thesis and anti-slop brief.
+4. **Implementation:** build or migrate tokens, layouts, components, responsive behavior, interactions, motion, and effects.
+5. **Visual correction:** capture matching states, inspect screenshots perceptually, use diff/heatmap as supporting diagnostics, and correct visible defects.
+6. **Functional and regression QA:** verify primary workflows, accessibility, responsive behavior, reduced motion, and existing product contracts in redesign mode.
+7. **Delivery report:** list evidence, changed files, tests actually run, deviations, and anything not tested.
+
+## Documentation
+
+| Document | Purpose |
+|---|---|
+| [Quality Gates](docs/QUALITY-GATES.md) | Acceptance criteria and delivery scorecard. |
+| [Automated Workflow](docs/AUTOMATED-WORKFLOW.md) | Repository CI and consumer-project QA process. |
+| [Agent Compatibility](docs/AGENT-COMPATIBILITY.md) | Agent installation paths and compatibility notes. |
+| [Visual Capability Gate](skills/ui-reference-replication/references/visual-capability-gate.md) | Mandatory visual-perception prerequisite and rejection behavior. |
+| [Existing UI Redesign](skills/ui-reference-replication/references/existing-ui-redesign.md) | Baseline, controlled migration, and behavior preservation. |
+| [Creative Reference Mode](skills/ui-reference-replication/references/creative-reference-mode.md) | Preserve, reinterpret, protect, and avoid design decisions. |
+| [Anti-AI-Slop](skills/ui-reference-replication/references/anti-ai-slop.md) | Product-specific design originality and de-slop checklist. |
+| [Motion Design](skills/ui-reference-replication/references/motion-design.md) | Animation, visual effects, reduced motion, and motion QA. |
+| [Figma Analysis](skills/ui-reference-replication/references/figma-analysis.md) | Figma inspection, MCP context, and design-to-code mapping. |
+| [Accessibility](skills/ui-reference-replication/references/accessibility.md) | Accessibility implementation and review. |
+| [Design System Engineering](skills/ui-reference-replication/references/design-system-engineering.md) | Tokens, components, and visual consistency. |
 
 ## QA toolkit
+
+Run repository validation from the repository root:
 
 ```bash
 npm test
 npm run check
 npm run validate:tokens
+```
+
+Inspect a target project:
+
+```bash
 node skills/ui-reference-replication/scripts/inspect-project.mjs --root .
 ```
 
-See [QA Toolkit Guide](skills/ui-reference-replication/scripts/README.md), [Visual Capability Gate](skills/ui-reference-replication/references/visual-capability-gate.md), [Creative Reference Mode](skills/ui-reference-replication/references/creative-reference-mode.md), [Anti-AI-Slop](skills/ui-reference-replication/references/anti-ai-slop.md), [Existing UI Redesign](skills/ui-reference-replication/references/existing-ui-redesign.md), [Motion Design](skills/ui-reference-replication/references/motion-design.md), and [Figma MCP Integration](skills/ui-reference-replication/references/figma-analysis.md).
+Capture local implementation screenshots:
 
-## Runtime requirements and limitations
+```bash
+node skills/ui-reference-replication/scripts/capture-screenshots.mjs \
+  --url http://localhost:3000 \
+  --routes /,/dashboard \
+  --out artifacts/ui-reference
+```
 
-The Skill does not provide browser/Figma/image perception by itself.
+Compare an authorized reference screenshot with the implementation:
 
-- Screenshot capture: Playwright and Chromium in the target project/runtime.
-- Visual inspection: a model/runtime that can directly perceive both reference and implementation images.
-- Motion verification: ability to inspect relevant animation recordings or captured frames, plus browser interaction/performance tools.
-- Accessibility scan: Playwright and axe-core.
-- Pixel diff: Python and Pillow.
-- Structured Figma analysis: an authorized Figma MCP/API connection.
-- Code Connect: configured Figma-to-code mappings in the relevant project.
+```bash
+python skills/ui-reference-replication/scripts/compare-screenshots.py \
+  reference.png actual.png \
+  --diff artifacts/ui-reference/diff.png
+```
 
-Screenshot capture and pixel metrics are supporting evidence, not perceptual judgment. If the agent cannot visually inspect the reference and the rendered implementation, the Skill must reject the task. In creative mode, visual QA evaluates the selected design anchors, originality, coherence, and product fit rather than minimum pixel difference. The anti-AI-slop gate rejects generic template output, unmotivated trend effects, and fabricated product content. In redesign mode, the Skill also requires existing-product baseline and post-redesign regression evidence.
+Run an automated accessibility scan:
 
-## Quality standards
+```bash
+node skills/ui-reference-replication/scripts/accessibility-audit.mjs \
+  --url http://localhost:3000
+```
 
-- Reference-centered, component-driven, token-based implementation.
-- Explicit work mode (new build, redesign, hybrid) and fidelity mode (reference-faithful, reference-inspired creative).
-- Existing UI redesign preserves product behavior by default; functional changes require explicit approval.
-- Direct perceptual inspection of source and implementation is a hard prerequisite.
-- WCAG 2.2 AA as a target for applicable criteria — not a certification claim.
-- Reduced-motion support for non-essential interactions as an additional project quality policy.
-- DTCG Format Module 2025.10 as a portable token interchange target — the validator is partial.
-- Per-gate status: Pass, Partial, Fail, or Not tested.
+See [QA Toolkit Guide](skills/ui-reference-replication/scripts/README.md) for requirements and options.
 
-## Documentation
+## Runtime requirements and honest limitations
 
-- [Quality Gates](docs/QUALITY-GATES.md)
-- [Agent Compatibility](docs/AGENT-COMPATIBILITY.md)
-- [Automated Workflow](docs/AUTOMATED-WORKFLOW.md)
-- [Launch Kit and Promotion Plan](docs/LAUNCH-KIT.md)
-- [Creative Reference Mode](skills/ui-reference-replication/references/creative-reference-mode.md)
-- [Existing UI Redesign](skills/ui-reference-replication/references/existing-ui-redesign.md)
-- [Visual Capability Gate](skills/ui-reference-replication/references/visual-capability-gate.md)
-- [Motion Design](skills/ui-reference-replication/references/motion-design.md)
-- [Reference Analysis](skills/ui-reference-replication/references/figma-analysis.md)
+This repository provides instructions and helper scripts; it does not provide the runtime capabilities itself.
+
+- **Visual inspection:** the model/session must directly perceive reference and implementation images.
+- **Browser screenshots:** Playwright and a configured browser (the bundled capture script uses Chromium).
+- **Motion verification:** browser interaction/recording or sampled animation frames that the agent can actually inspect.
+- **Accessibility scan:** Playwright and axe-core; automated findings do not replace manual review.
+- **Pixel comparison:** Python and Pillow; pixel metrics are diagnostics, not a perceptual quality score.
+- **Figma inspection:** an authorized Figma MCP/API connection when structured design data is needed.
+- **Project execution:** appropriate local project permissions, dependencies, credentials, and services.
+
+The bundled token validator supports a subset of DTCG token structures; it is not a complete conformance validator. A repository CI pass validates the Skill and helper scripts, not the visual quality of every application built with it. The Skill must report blocked or untested checks rather than imply that they passed.
+
+For existing UI redesign, a visually successful result is still incomplete if it breaks the product's existing features or workflows. For creative mode, a large pixel difference from the reference is not automatically a defect; the result is evaluated against the creative direction brief, product fit, and design quality.
+
+## Versioning and changelog
+
+Current Skill version: **2.5.0**
+
+See [CHANGELOG.md](CHANGELOG.md) for release history and notable changes.
 
 ## Contributing
 
-Bug reports, agent compatibility results, reproducible before/after screenshots, regression reports, creative direction briefs, motion recordings, and improvements to the QA scripts are welcome. See [Issues](https://github.com/tgkjuanda/ui-reference-replication/issues).
+Issues and pull requests are welcome. Useful contributions include:
+- Reproducible visual before/after evidence.
+- Agent/runtime compatibility results.
+- Motion recordings and reduced-motion test cases.
+- Regression reports from real redesign projects.
+- Improvements to QA scripts and documentation.
+
+Open an issue: [github.com/tgkjuanda/ui-reference-replication/issues](https://github.com/tgkjuanda/ui-reference-replication/issues)
 
 ## License
 
-MIT for this repository's instructions and scripts. This license does not grant rights to third-party reference designs, fonts, images, icons, logos, or other assets.
+This repository's instructions and scripts are licensed under [MIT](LICENSE). The license does not grant rights to third-party designs, fonts, images, icons, logos, or other assets referenced during implementation.
