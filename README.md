@@ -1,32 +1,16 @@
-# UI Reference Replication
+# UI Reference Replication Engine
 
-[![skills.sh](https://skills.sh/b/tgkjuanda/ui-reference-replication)](https://skills.sh/tgkjuanda/ui-reference-replication)
+A cross-agent Agent Skill for turning Figma files, live websites, screenshots, and image references into responsive, accessible, maintainable frontend implementations — then verifying and improving the result with automated QA.
 
-A cross-agent **Agent Skill** for recreating web UI from Figma files, website URLs, screenshots, and image references. It reverse-engineers layout and design tokens, implements the interface in the existing frontend stack, and requires visual QA instead of claiming fidelity without evidence.
+## Install
 
-## Install with skills.sh CLI
-
-Requires Node.js **22.20 or later** for the current Vercel Skills CLI.
-
-### Interactive install
-
-Run this inside the target project:
+Requires Node.js 22.20+ for the current Vercel Skills CLI.
 
 ```bash
 npx skills add tgkjuanda/ui-reference-replication
 ```
 
-The CLI downloads the repository skill, lets you choose agents, and installs it in their project-level skill directories.
-
-### Automatic install to all supported agents
-
-This repository contains one skill, so `--all` installs that skill to all agents supported by the CLI without interactive selection:
-
-```bash
-npx skills add tgkjuanda/ui-reference-replication --all
-```
-
-### Install to Antigravity, Claude Code, and OpenCode together
+Install to Antigravity, Claude Code, and OpenCode:
 
 ```bash
 npx skills add tgkjuanda/ui-reference-replication \
@@ -37,79 +21,76 @@ npx skills add tgkjuanda/ui-reference-replication \
   --yes
 ```
 
-### Install globally
+Use the CLI's interactive picker for other supported agents. Project scope is recommended for team repositories. Add `--global` when you want user-level installation and the selected agent supports that destination.
 
-Add `--global` (or `-g`) to install for the selected agents at user scope. For Antigravity IDE, use its documented global directory `~/.gemini/config/skills/ui-reference-replication/`; the CLI's Antigravity global target may differ by product/version, so project scope is the safer cross-agent choice:
+## Use
 
-```bash
-npx skills add tgkjuanda/ui-reference-replication \
-  --skill ui-reference-replication \
-  --agent claude-code \
-  --agent opencode \
-  --global \
-  --yes
-```
-
-Project-scope installation is recommended when the same skill should be available to a team or workspace. For other agents supported by the CLI, use the interactive command and select them in the agent picker.
-
-## Supported agent locations
-
-| Agent | Project skill directory | Notes |
-|---|---|---|
-| Google Antigravity IDE | `.agents/skills/ui-reference-replication/` | Workspace skills; Antigravity also supports a global skills directory. |
-| Google Antigravity CLI | `.agents/skills/ui-reference-replication/` | Workspace skill path. Global path differs from the IDE. |
-| Claude Code | `.claude/skills/ui-reference-replication/` | Native project skill location. |
-| OpenCode | `.opencode/skills/ui-reference-replication/` | Native project location; OpenCode also discovers shared `.agents/skills/` and Claude-compatible locations. |
-| Codex and other agents | Agent-specific | Use the Skills CLI agent picker; it writes to the selected agent's supported path. |
-
-The core skill content is vendor-neutral. The Skills CLI handles agent-specific placement; it does not translate or rewrite the instructions for each model.
-
-## What the skill does
-
-- Inspects the reference and existing repository before coding.
-- Extracts layout geometry, typography, colors, spacing, components, and assets.
-- Preserves the existing project framework and conventions.
-- Implements visible interactions and responsive behavior.
-- Captures and compares screenshots when browser tooling exists.
-- Reports verified facts, estimates, deviations, and access limitations honestly.
-
-## Manual installation
-
-If you do not use the Skills CLI, copy:
+In a coding agent, invoke the skill and provide a reference:
 
 ```text
-skills/ui-reference-replication/
+@ui-reference-replication
+
+Rebuild this reference in the current project:
+https://www.figma.com/design/...
+
+Inspect the Figma frame and project before coding. Preserve the existing stack.
+Extract tokens and components, implement responsive states, run visual and
+accessibility checks, fix verified defects, and report all remaining gaps.
 ```
 
-to the target agent's skill directory shown above. The installed directory must contain `SKILL.md` and its `references/` folder.
+Screenshots/images can be attached instead of a URL.
 
-## Update or remove
+## Engine capabilities
+
+- Figma/website/screenshot evidence inspection.
+- Design hierarchy, layout, typography, asset, and token extraction.
+- Component-driven implementation in the existing project stack.
+- Interaction feedback and error-state modeling.
+- Responsive implementation and viewport testing.
+- Playwright screenshot capture.
+- Pixel-difference diagnostic and heatmap image.
+- axe-core automated accessibility scanning.
+- DTCG-oriented design token structural validation.
+- GitHub Actions checks for the Skill repository.
+
+## QA toolkit
+
+Run dependency-free repository checks:
 
 ```bash
-npx skills check
-npx skills update ui-reference-replication
-npx skills remove ui-reference-replication
+npm test
+npm run check
+npm run validate:tokens
+node skills/ui-reference-replication/scripts/inspect-project.mjs --root .
 ```
 
-Use the same scope flags (for example `-g`) when managing a global installation.
+See [QA Toolkit Guide](skills/ui-reference-replication/scripts/README.md) for screenshot and accessibility commands.
 
-## Quality framework
+## Runtime dependencies
 
-The skill includes a required quality scorecard for reference fidelity, consistency, error minimization, accessibility, responsive behavior, interaction feedback/error recovery, visual hierarchy, design tokens, component-driven development, and Figma-to-code synchronization.
+The Skill does not provide browser/Figma access by itself.
 
-See:
-- [UI/UX Quality Gates](docs/QUALITY-GATES.md)
+- Screenshot capture: Playwright in the target project/runtime.
+- Accessibility scan: Playwright and axe-core.
+- Pixel diff: Python and Pillow.
+- Figma structured analysis: an authorized Figma MCP/API connection.
+- Code Connect: configured Figma-to-code mappings in the relevant repository.
+
+Use only available, authorized tools. If a capability is missing, the Agent must disclose it and continue with the strongest available evidence rather than claim the check passed.
+
+## Quality standards
+
+- Reference-centered and consistency-driven UI implementation.
+- WCAG 2.2 AA as a target for applicable criteria; not a certification claim.
+- DTCG Format Module 2025.10 as a portable token exchange target; not a W3C Recommendation.
+- Per-gate statuses: Pass, Partial, Fail, Not tested.
+
+Read:
+- [Quality Gates](docs/QUALITY-GATES.md)
 - [Agent Compatibility](docs/AGENT-COMPATIBILITY.md)
-- [Evidence and Visual QA](skills/ui-reference-replication/references/evidence-and-visual-qa.md)
-- [Design token example](skills/ui-reference-replication/templates/design-tokens.example.json)
-- [Figma-to-code map example](skills/ui-reference-replication/templates/figma-code-map.example.json)
+- [Automated Workflow](docs/AUTOMATED-WORKFLOW.md)
+- [Reference Analysis](skills/ui-reference-replication/references/figma-analysis.md)
 
-## Runtime requirements and limitations
+## License
 
-The skill contains the workflow; it does **not** itself grant browser automation, Figma API access, screenshot capture, terminal permissions, credentials, or image-diff tools. These depend on the host agent and installed tools. The skill checks availability and discloses when visual verification is blocked.
-
-Figma URLs may expose only a public preview. Do not invent hidden frames or assets; request authorized exports or screenshots when required.
-
-## License and source assets
-
-The instructions in this repository are licensed under MIT. This does not grant rights to third-party Figma templates, logos, images, fonts, or other assets. Confirm the source design's license before redistributing those assets.
+MIT for this repository's instructions and scripts. This license does not grant rights to third-party reference designs, fonts, images, icons, logos, or other assets.
