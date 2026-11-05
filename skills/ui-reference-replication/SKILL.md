@@ -59,7 +59,7 @@ Read only the references under **Read before implementation**. Load conditional 
 
 ## Portability
 
-This is a vendor-neutral Agent Skill. Use the host agent's available browser, Figma, filesystem, terminal, and testing tools. Detect actual capabilities; never assume a tool exists or invent a tool call. The Skill does not grant credentials, browser access, Figma permissions, write access, or image/video perception.
+This is a vendor-neutral Agent Skill. Use the host agent's available browser, Figma, filesystem, terminal, and testing tools. Detect actual capabilities; never assume a tool exists or invent a tool call. The Skill does not grant credentials, browser access, Figma permissions, write access, or image/video perception. Run bundled utilities directly with `node <skill>/scripts/<script>.mjs` (or `python <skill>/scripts/<script>.py`) from the target project root; the `npm run` aliases in the source repository's `package.json` are repository conveniences and are not installed into consumer projects.
 
 Read the bundled references as needed:
 - `references/token-efficient-execution.md` for task-aware context loading and bounded execution.
@@ -201,9 +201,9 @@ Map discrepancies to responsible components/tokens, change the smallest responsi
 For existing UI redesign and hybrid work, define explicit functional checks from the application's real routes and workflows using `templates/functional-regression.example.json`. Run the same checks before and after implementation, saving separate baseline and post-redesign reports:
 
 ```bash
-npm run regression -- --config tests/ui-regression.json --label baseline --out artifacts/ui-reference/baseline.json
-npm run regression -- --config tests/ui-regression.json --label post-redesign --out artifacts/ui-reference/post-redesign.json
-npm run compare:regression -- --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json --out artifacts/ui-reference/regression-comparison.json
+node <skill>/scripts/run-functional-regression.mjs --config tests/ui-regression.json --label baseline --out artifacts/ui-reference/baseline.json
+node <skill>/scripts/run-functional-regression.mjs --config tests/ui-regression.json --label post-redesign --out artifacts/ui-reference/post-redesign.json
+node <skill>/scripts/compare-regression.mjs --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json --out artifacts/ui-reference/regression-comparison.json
 ```
 
 The Playwright runner executes only declared route and interaction steps. It does not infer undocumented product behavior. Compare reports to identify regressions, resolved failures, pre-existing failures, missing baseline coverage, and failing new checks. A no-new-regressions result must not be reported as a fully passing test suite when pre-existing failures remain.
@@ -213,7 +213,7 @@ The Playwright runner executes only declared route and interaction steps. It doe
 For significant visual comparisons, create a scorecard from `templates/perceptual-visual-review.example.json` and validate it against the capture IDs in the visual evidence manifest:
 
 ```bash
-npm run validate:visual-review -- --file artifacts/ui-reference/visual-review.json --evidence artifacts/ui-reference/visual-evidence.json --root .
+node <skill>/scripts/validate-visual-review.mjs --file artifacts/ui-reference/visual-review.json --evidence artifacts/ui-reference/visual-evidence.json --root .
 ```
 
 Reference-Faithful reviews require geometry, hierarchy, typography, spacing, color, components, responsive, composition, and reference-fidelity dimensions. Reference-Inspired Creative reviews require the shared dimensions plus design anchors, product fit, originality, and anti-slop. A partial, failed, or untested dimension cannot produce a passing gate. Do not collapse the review into a single numeric score.

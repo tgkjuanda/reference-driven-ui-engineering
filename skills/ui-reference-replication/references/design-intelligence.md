@@ -14,7 +14,7 @@ Make the Figma-to-code relationship inspectable and repeatable. A map records wh
 6. Validate the map against the actual project files:
 
 ```bash
-npm run validate:design-map -- --file artifacts/ui-reference/figma-code-map.json --root .
+node <skill>/scripts/validate-design-map.mjs --file artifacts/ui-reference/figma-code-map.json --root .
 ```
 
 ## Interpretation

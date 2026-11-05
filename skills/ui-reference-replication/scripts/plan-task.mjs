@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 
-const ROOT = "skills/ui-reference-replication";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const SKILL_DIRECTORY = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const ROOT = path.relative(process.cwd(), SKILL_DIRECTORY).split(path.sep).join("/") || ".";
+const nodeScript = (name, args = "") => `node ${JSON.stringify(path.posix.join(ROOT, "scripts", name))}${args ? ` ${args}` : ""}`;
+const pythonScript = (name, args = "") => `python ${JSON.stringify(path.posix.join(ROOT, "scripts", name))}${args ? ` ${args}` : ""}`;
 
 const choices = {
   workMode: ["new-build", "existing-redesign", "hybrid"],
@@ -96,45 +102,45 @@ function createPlan(options) {
     );
   }
   if (options.benchmark || options.agentCompatibility) readBefore.push(`${ROOT}/references/benchmark-protocol.md`);
-  if (options.benchmark) scripts.push("npm run benchmark:validate -- --file <benchmark.json> --root .");
-  if (options.benchmark) scripts.push("npm run benchmark:compare -- --baseline <baseline-benchmark.json> --candidate <candidate-benchmark.json> --minimum-runs 3");
-  if (options.agentCompatibility) scripts.push("npm run compatibility:validate -- --file <agent-compatibility.json> --root .");
+  if (options.benchmark) scripts.push(nodeScript("benchmark.mjs", "validate --file <benchmark.json> --root ."));
+  if (options.benchmark) scripts.push(nodeScript("benchmark.mjs", "compare --baseline <baseline-benchmark.json> --candidate <candidate-benchmark.json> --minimum-runs 3 --root ."));
+  if (options.agentCompatibility) scripts.push(nodeScript("validate-agent-compatibility.mjs", "--file <agent-compatibility.json> --root ."));
   if (options.figma) {
     readBefore.push(`${ROOT}/references/figma-analysis.md`, `${ROOT}/references/design-intelligence.md`);
-    scripts.push("node <skill>/scripts/validate-design-map.mjs --file <figma-code-map.json> --root .");
+    scripts.push(nodeScript("validate-design-map.mjs", "--file <figma-code-map.json> --root ."));
   }
   if (options.motion) loadWhenNeeded.push(`${ROOT}/references/motion-design.md`);
   if (options.accessibility) loadWhenNeeded.push(`${ROOT}/references/accessibility.md`);
   if (options.responsive) loadWhenNeeded.push(`${ROOT}/references/responsive-and-interactions.md`);
 
   if (options.scope === "full" || options.scope === "audit") {
-    scripts.push("node <skill>/scripts/inspect-project.mjs --root .");
+    scripts.push(nodeScript("inspect-project.mjs", "--root ."));
   }
   if (options.scope === "full" || options.scope === "visual") {
-    scripts.push("node <skill>/scripts/capture-screenshots.mjs --url <local-url> --routes <routes>");
-    scripts.push("python <skill>/scripts/compare-screenshots.py <reference.png> <actual.png>");
-    scripts.push("node <skill>/scripts/validate-visual-evidence.mjs --file <visual-evidence.json> --root .");
-    scripts.push("node <skill>/scripts/validate-visual-review.mjs --file <visual-review.json> --evidence <visual-evidence.json> --root .");
+    scripts.push(nodeScript("capture-screenshots.mjs", "--url <local-url> --routes <routes>"));
+    scripts.push(pythonScript("compare-screenshots.py", "<reference.png> <actual.png>"));
+    scripts.push(nodeScript("validate-visual-evidence.mjs", "--file <visual-evidence.json> --root ."));
+    scripts.push(nodeScript("validate-visual-review.mjs", "--file <visual-review.json> --evidence <visual-evidence.json> --root ."));
   }
   if (options.accessibility || options.scope === "full") {
-    scripts.push("node <skill>/scripts/accessibility-audit.mjs --url <local-url>");
+    scripts.push(nodeScript("accessibility-audit.mjs", "--url <local-url>"));
   }
   if (options.responsive || options.scope === "full") {
-    scripts.push("node <skill>/scripts/run-responsive-audit.mjs --url <local-url> --routes <routes> --out artifacts/ui-reference/responsive.json");
+    scripts.push(nodeScript("run-responsive-audit.mjs", "--url <local-url> --routes <routes> --out artifacts/ui-reference/responsive.json"));
   }
   if (options.performance || options.scope === "full") {
-    scripts.push("node <skill>/scripts/run-performance-audit.mjs --url <local-url> --budget <performance-budget.json> --routes <routes> --out artifacts/ui-reference/performance.json");
+    scripts.push(nodeScript("run-performance-audit.mjs", "--url <local-url> --budget <performance-budget.json> --routes <routes> --out artifacts/ui-reference/performance.json"));
   }
   if (options.security || options.scope === "full" || options.scope === "audit") {
-    scripts.push("node <skill>/scripts/run-dependency-audit.mjs --root . --fail-on high --out artifacts/ui-reference/dependency-audit.json");
+    scripts.push(nodeScript("run-dependency-audit.mjs", "--root . --fail-on high --out artifacts/ui-reference/dependency-audit.json"));
   }
   if (options.scope === "full" || options.scope === "audit") {
-    scripts.push("node <skill>/scripts/validate-quality-report.mjs --file artifacts/ui-reference/quality-report.json --root .");
+    scripts.push(nodeScript("validate-quality-report.mjs", "--file artifacts/ui-reference/quality-report.json --root ."));
   }
   if (options.scope === "full" || options.scope === "functional") {
-    scripts.push("npm run regression -- --config <regression-config.json> --label baseline --out <baseline-report.json>");
-    scripts.push("npm run regression -- --config <regression-config.json> --label post-redesign --out <post-report.json>");
-    scripts.push("npm run compare:regression -- --baseline <baseline-report.json> --actual <post-report.json>");
+    scripts.push(nodeScript("run-functional-regression.mjs", "--config <regression-config.json> --label baseline --out <baseline-report.json>"));
+    scripts.push(nodeScript("run-functional-regression.mjs", "--config <regression-config.json> --label post-redesign --out <post-report.json>"));
+    scripts.push(nodeScript("compare-regression.mjs", "--baseline <baseline-report.json> --actual <post-report.json>"));
     scripts.push("Run the target-project build, unit, interaction, and regression tests.");
   }
 

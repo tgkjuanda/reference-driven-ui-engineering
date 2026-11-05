@@ -158,9 +158,9 @@ Stop before implementation if the visual-capability gate fails. Stop and request
 Where the application has a testable local runtime, define real route and interaction checks in `templates/functional-regression.example.json`. Run identical checks against the baseline before edits and the redesigned application after edits:
 
 ```bash
-npm run regression -- --config tests/ui-regression.json --label baseline --out artifacts/ui-reference/baseline.json
-npm run regression -- --config tests/ui-regression.json --label post-redesign --out artifacts/ui-reference/post-redesign.json
-npm run compare:regression -- --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json --out artifacts/ui-reference/regression-comparison.json
+node <skill>/scripts/run-functional-regression.mjs --config tests/ui-regression.json --label baseline --out artifacts/ui-reference/baseline.json
+node <skill>/scripts/run-functional-regression.mjs --config tests/ui-regression.json --label post-redesign --out artifacts/ui-reference/post-redesign.json
+node <skill>/scripts/compare-regression.mjs --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json --out artifacts/ui-reference/regression-comparison.json
 ```
 
 The runner supports explicit browser actions and assertions; it never invents product workflows. Keep checks deterministic and use stable selectors such as `data-testid` where appropriate. Review any environment-dependent failures manually.
