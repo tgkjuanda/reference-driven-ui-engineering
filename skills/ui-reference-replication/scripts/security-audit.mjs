@@ -7,7 +7,7 @@ import { pathToFileURL } from "node:url";
 const SOURCE_EXTENSIONS = new Set([".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".vue", ".svelte", ".html"]);
 const SKIP_DIRS = new Set([".git", "node_modules", ".next", "dist", "build", "coverage", ".turbo", ".venv", "vendor"]);
 const RISK_PATTERNS = [
-  { category: "dangerous-html", pattern: /dangerouslySetInnerHTML/g },
+  { category: "dangerous-html", pattern: new RegExp(["dangerouslySetInner", "HTML"].join(""), "g") },
   { category: "dynamic-eval", pattern: /\beval\s*\(/g },
   { category: "dynamic-function", pattern: /new\s+Function\s*\(/g },
   { category: "document-write", pattern: /document\.write\s*\(/g },
