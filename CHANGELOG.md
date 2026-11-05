@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.6.0] - 2026-11-05
+
+### Added
+- Token-efficient execution policy for progressive context loading, task-specific reference routing, context reuse, deterministic automation, compact evidence, and bounded iteration.
+- Dependency-free task planner CLI for work modes, fidelity modes, Figma, motion, accessibility, responsive scope, and suggested checks.
+- Automated planner tests and CI syntax validation.
+- Baseline audit of v2.5.0 with verified limitations and v2.6 acceptance criteria.
+
+### Changed
+- Core Skill now instructs agents to run the task planner and avoid preloading the entire reference library.
+- Version checker cross-validates package.json and SKILL.md semantic versions instead of hardcoding a release number.
+- QA, workflow, and README documentation now explain token-efficient context selection.
+- No token savings percentage is claimed; runtime/provider measurements are required for cost claims.
+
+
 All notable changes to UI Reference Replication are documented here.
 
 The project follows a practical versioning scheme for its Agent Skill and bundled QA tooling. Versions below describe repository changes; they do not imply that every external agent/runtime or consumer application has been independently tested.
