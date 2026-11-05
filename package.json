@@ -1,9 +1,9 @@
 {
   "name": "ui-reference-replication",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "private": true,
   "type": "module",
-  "description": "Cross-agent UI reference replication skill with motion design and automated QA guidance",
+  "description": "Vision-required cross-agent UI reference reconstruction skill with motion design and visual QA",
   "engines": { "node": ">=20" },
   "scripts": {
     "test": "node --test tests/*.test.mjs",
