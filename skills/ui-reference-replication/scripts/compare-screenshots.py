@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 try:
-    from PIL import Image, ImageChops, ImageStat
+    from PIL import Image, ImageChops, ImageStat, ImageOps
 except ImportError:
     print("Pillow is required. Install it with: python -m pip install -r requirements-qa.txt", file=sys.stderr)
     raise SystemExit(2)
@@ -16,7 +16,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("reference", help="Reference screenshot path")
     parser.add_argument("actual", help="Implementation screenshot path")
-    parser.add_argument("--diff", default="artifacts/ui-reference/diff.png", help="Output difference image")
+    parser.add_argument("--diff", default="artifacts/ui-reference/diff.png", help="Output raw difference image")
+    parser.add_argument("--heatmap", default="artifacts/ui-reference/heatmap.png", help="Output colorized difference heatmap")
+    parser.add_argument("--overlay", default=None, help="Optional 50/50 reference and actual overlay path")
     parser.add_argument("--pixel-threshold", type=int, default=16, help="Grayscale difference threshold (0-255)")
     parser.add_argument("--max-changed-pixel-ratio", type=float, default=None, help="Optional pass threshold, e.g. 0.01 for 1%%")
     args = parser.parse_args()
@@ -52,9 +54,19 @@ def main() -> int:
     changed_ratio = changed_pixels / total_pixels if total_pixels else 0.0
     channel_means = ImageStat.Stat(difference).mean
     normalized_mae = sum(channel_means) / (3 * 255)
+
     diff_path = Path(args.diff)
+    heatmap_path = Path(args.heatmap)
     diff_path.parent.mkdir(parents=True, exist_ok=True)
+    heatmap_path.parent.mkdir(parents=True, exist_ok=True)
     difference.save(diff_path)
+    heatmap = ImageOps.colorize(grayscale, black="#151515", white="#ff2020")
+    heatmap.save(heatmap_path)
+    overlay_path = None
+    if args.overlay:
+        overlay_path = Path(args.overlay)
+        overlay_path.parent.mkdir(parents=True, exist_ok=True)
+        Image.blend(reference, actual, 0.5).save(overlay_path)
 
     status = "measured"
     if args.max_changed_pixel_ratio is not None:
@@ -70,7 +82,9 @@ def main() -> int:
         "changed_pixel_ratio": round(changed_ratio, 6),
         "changed_pixel_percent": round(changed_ratio * 100, 4),
         "normalized_mean_absolute_error": round(normalized_mae, 6),
-        "diff_image": str(diff_path)
+        "raw_diff_image": str(diff_path),
+        "heatmap_image": str(heatmap_path),
+        "overlay_image": str(overlay_path) if overlay_path else None
     }
     print(json.dumps(report, indent=2))
     if status == "fail":
