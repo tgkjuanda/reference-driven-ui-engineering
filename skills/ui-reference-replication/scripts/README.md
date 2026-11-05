@@ -109,3 +109,32 @@ npm run validate:visual-review -- --file artifacts/ui-reference/visual-review.js
 ```
 
 The validator checks required review dimensions for the selected fidelity mode and verifies each review references a capture ID, route, and state from the visual evidence manifest. It reports Pass, Partial, or Fail without calculating a single visual score. This is a structural validation of an agent-declared review, not proof of actual visual perception.
+
+
+## Responsive audit
+
+Use the viewport matrix in `skills/ui-reference-replication/templates/responsive-audit.example.json`:
+
+```bash
+npm run audit:responsive -- --config tests/responsive-audit.json --out artifacts/ui-reference/responsive.json
+```
+
+Checks horizontal overflow and visible off-canvas elements for each declared route/viewport. Intentional overflow can be marked with `data-qa-allow-overflow` or `data-qa-scroll-container`; document those exceptions.
+
+## Performance audit
+
+Use the route budget file in `skills/ui-reference-replication/templates/performance-budget.example.json`:
+
+```bash
+npm run audit:performance -- --config tests/performance-budget.json --out artifacts/ui-reference/performance.json
+```
+
+Reports lab FCP/LCP/CLS, DOM node count, resource count, and approximate transferred bytes. These are lab diagnostics, not field Core Web Vitals or INP.
+
+## Security audit
+
+```bash
+npm run audit:security -- --root . --out artifacts/ui-reference/security.json
+```
+
+Scans selected frontend source files for potentially risky dynamic HTML/script APIs and selected secret formats. If `package-lock.json` exists, attempts a production npm dependency audit. Finding values are redacted. This is a lightweight review, not full SAST/DAST or a penetration test.
