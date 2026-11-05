@@ -1,0 +1,47 @@
+{
+  "color": {
+    "$type": "color",
+    "background": { "$value": "#F7F8FA" },
+    "surface": { "$value": "#FFFFFF" },
+    "text": { "$value": "#172033" },
+    "text-muted": { "$value": "#667085" },
+    "border": { "$value": "#E4E7EC" },
+    "action-primary": { "$value": "#3157D5" },
+    "focus-ring": { "$value": "#2563EB" },
+    "success": { "$value": "#16845B" },
+    "warning": { "$value": "#B66A12" },
+    "danger": { "$value": "#C43232" }
+  },
+  "space": {
+    "$type": "dimension",
+    "1": { "$value": "4px" },
+    "2": { "$value": "8px" },
+    "3": { "$value": "12px" },
+    "4": { "$value": "16px" },
+    "6": { "$value": "24px" },
+    "8": { "$value": "32px" }
+  },
+  "radius": {
+    "$type": "dimension",
+    "small": { "$value": "4px" },
+    "medium": { "$value": "8px" },
+    "large": { "$value": "12px" },
+    "pill": { "$value": "999px" }
+  },
+  "typography": {
+    "font-family": {
+      "$type": "fontFamily",
+      "$value": ["Inter", "Arial", "sans-serif"]
+    },
+    "body": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": ["Inter", "Arial", "sans-serif"],
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "letterSpacing": "0px",
+        "lineHeight": "20px"
+      }
+    }
+  }
+}
