@@ -34,7 +34,7 @@ Work modes:
 
 Fidelity modes:
 - **Reference-Faithful:** stay close to source composition, hierarchy, components, and visual language.
-- **Reference-Inspired Creative:** read `references/creative-reference-mode.md`; identify Preserve, Reinterpret, Protect, and Avoid; produce an original interpretation and evaluate against that creative direction brief rather than minimum pixel difference.
+- **Reference-Inspired Creative:** read `references/creative-reference-mode.md` and `references/anti-ai-slop.md`; identify Preserve, Reinterpret, Protect, and Avoid; write a product-specific design thesis; select one or two signature visual devices; reject generic template structures and unjustified trend stacking; evaluate against the creative direction brief rather than minimum pixel difference.
 
 Work mode and fidelity mode are independent. For existing UI redesign, the reference determines visual direction while the current application remains the source of truth for business behavior unless the user approves functional changes.
 
@@ -47,7 +47,7 @@ After the preflight passes:
 3. Obtain the source visuals from the website or authorized Figma screenshot/export.
 4. Inspect reference and implementation side by side, with overlays and heatmaps as supporting evidence.
 5. In Reference-Faithful mode, compare visual hierarchy, geometry, typography, colors, components, assets, and motion against the source.
-6. In Reference-Inspired Creative mode, review retained design anchors, originality, coherence, product fit, and consistency against the creative brief. A high pixel difference from the source is not automatically a defect.
+6. In Reference-Inspired Creative mode, review retained design anchors, originality, coherence, product fit, and consistency against the creative brief. Run the anti-AI-slop review for interchangeable templates, repetitive card grids, unjustified effects, generic assets/copy, fabricated product claims, and missing product-specific visual rationale. A high pixel difference from the source is not automatically a defect.
 7. Test interactions, responsive behavior, reduced-motion behavior, keyboard access, and error recovery.
 8. In redesign mode, compare baseline and post-redesign behavior for navigation, forms, data views, permissions, and critical workflows.
 9. Run axe-core, performance, build, type, lint, functional, and regression checks where configured.
