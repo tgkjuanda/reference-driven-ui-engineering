@@ -4,11 +4,11 @@
 [![Validate Agent Skill](https://github.com/tgkjuanda/ui-reference-replication/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/tgkjuanda/ui-reference-replication/actions/workflows/validate-skill.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**Rebuild UI from references, then verify the result.**
+**Rebuild UI from references, then verify the result — including motion.**
 
-A cross-agent Agent Skill that helps turn Figma files, live websites, and screenshots into responsive, accessible frontend implementations — then checks the result with visual-diff and accessibility tooling when configured.
+A cross-agent Agent Skill that helps turn Figma files, live websites, and screenshots into responsive, accessible frontend implementations. It reverse-engineers design systems, interactions, animation, and visual effects, then supports visual-diff and accessibility QA when configured.
 
-The core idea: **a UI that looks plausible is not necessarily a UI that matches the reference.** This Skill makes the coding agent inspect the design and existing project first, extract its design system, implement in the current stack, and report what was actually verified.
+The core idea: **a UI that looks plausible is not necessarily a UI that matches the reference.** This Skill makes the coding agent inspect the design and existing project first, extract its design and motion systems, implement in the current stack, and report what was actually verified.
 
 ## Install
 
@@ -42,21 +42,23 @@ Rebuild this reference in the current project:
 https://www.figma.com/design/...
 
 Inspect the reference and this codebase before coding.
-Preserve the existing stack. Extract tokens and components.
-Implement responsive and interaction states. Capture screenshots,
-compare them with the reference, fix verified differences, and
-report test results and remaining gaps.
+Preserve the existing stack. Extract design and motion tokens.
+Recreate responsive layouts, interactions, animation, and effects.
+Capture screenshots, compare them with the reference, test reduced
+motion, fix verified differences, and report remaining gaps.
 ```
 
 ## What it does
 
 - **Reference intelligence:** inspect Figma frames, website layouts, screenshots, typography, assets, and component structure.
-- **Design system:** map semantic design tokens, visual hierarchy, and reusable variants.
+- **Design system:** map semantic design tokens, visual hierarchy, reusable components, and variants.
+- **Motion design:** inspect and reconstruct micro-interactions, transitions, scroll-linked motion, animation timing/easing, and reduced-motion alternatives.
+- **Visual effects:** reproduce reference-backed gradients, blur, shadows, glow, masks, transparency, and advanced visual treatments with fallbacks.
 - **Frontend implementation:** work within the existing React, Next.js, Vue, or other project stack.
 - **Interaction quality:** define loading, empty, success, disabled, validation, and error-recovery states.
-- **Responsive QA:** capture representative or source-supplied viewport sizes.
+- **Responsive QA:** capture representative or source-supplied viewport sizes and review motion on touch/narrow layouts.
 - **Visual QA:** capture Playwright screenshots and generate raw diff, heatmap, and overlay artifacts.
-- **Accessibility QA:** run axe-core checks when configured; manual keyboard and assistive-technology checks remain necessary.
+- **Accessibility QA:** run axe-core checks when configured; manual keyboard, reduced-motion, and assistive-technology checks remain necessary.
 - **Engineering checks:** validate a supported subset of DTCG token values and run repository regression tests.
 
 ## QA toolkit
@@ -70,7 +72,7 @@ npm run validate:tokens
 node skills/ui-reference-replication/scripts/inspect-project.mjs --root .
 ```
 
-See [QA Toolkit Guide](skills/ui-reference-replication/scripts/README.md) for browser and accessibility setup, and [Figma MCP Integration](skills/ui-reference-replication/references/figma-analysis.md) for structured design extraction.
+See [QA Toolkit Guide](skills/ui-reference-replication/scripts/README.md), [Motion Design](skills/ui-reference-replication/references/motion-design.md), and [Figma MCP Integration](skills/ui-reference-replication/references/figma-analysis.md).
 
 ## Runtime requirements and limitations
 
@@ -81,13 +83,15 @@ The Skill does not provide browser/Figma access by itself.
 - Pixel diff: Python and Pillow.
 - Structured Figma analysis: an authorized Figma MCP/API connection.
 - Code Connect: configured Figma-to-code mappings in the relevant project.
+- Motion verification: browser interaction/recording and performance tools in the consumer project.
 
-Pixel differences are diagnostic, not a complete perceptual-quality score. axe-core is not a full WCAG conformance audit. The token validator checks a useful subset, not every DTCG composite type or reference form. If a capability is missing, the agent must disclose it rather than claim the check passed.
+Pixel differences are diagnostic, not a complete perceptual-quality score. axe-core is not a full WCAG conformance audit. Motion inventory, animation behavior, and performance still require runtime testing; repository CI does not prove the quality of a consumer app's motion. The token validator checks a useful subset, not every DTCG composite type or reference form. If a capability is missing, the agent must disclose it rather than claim the check passed.
 
 ## Quality standards
 
-- Reference-centered, component-driven, and token-based implementation.
+- Reference-centered, component-driven, token-based implementation.
 - WCAG 2.2 AA as a target for applicable criteria — not a certification claim.
+- Reduced-motion support for non-essential interactions as an additional project quality policy; WCAG 2.2 SC 2.3.3 itself is Level AAA.
 - DTCG Format Module 2025.10 as a portable token interchange target — the validator is partial.
 - Per-gate status: Pass, Partial, Fail, or Not tested.
 
@@ -97,11 +101,12 @@ Pixel differences are diagnostic, not a complete perceptual-quality score. axe-c
 - [Agent Compatibility](docs/AGENT-COMPATIBILITY.md)
 - [Automated Workflow](docs/AUTOMATED-WORKFLOW.md)
 - [Launch Kit and Promotion Plan](docs/LAUNCH-KIT.md)
+- [Motion Design](skills/ui-reference-replication/references/motion-design.md)
 - [Reference Analysis](skills/ui-reference-replication/references/figma-analysis.md)
 
 ## Contributing
 
-Bug reports, agent compatibility results, reproducible before/after screenshots, and improvements to the QA scripts are welcome. See [Issues](https://github.com/tgkjuanda/ui-reference-replication/issues).
+Bug reports, agent compatibility results, reproducible before/after screenshots, motion recordings, and improvements to the QA scripts are welcome. See [Issues](https://github.com/tgkjuanda/ui-reference-replication/issues).
 
 ## License
 
