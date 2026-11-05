@@ -5,13 +5,26 @@
 GitHub Actions runs on pushes to `main`, pull requests, and manual dispatch.
 
 The workflow checks:
-- JavaScript syntax for repository scripts.
+- JavaScript syntax for repository scripts, including the task planner.
 - Node unit tests for DTCG-oriented token validation.
-- Skill structure, progressive-disclosure file limit, required references, mandatory visual-capability wording, and example token validation.
+- Skill structure, version consistency, progressive-disclosure file limit, required references, mandatory visual-capability wording, task-planner routes, and example token validation.
 - Python screenshot-diff tests including exact-match, mismatch-threshold, and size mismatch cases.
 - Python syntax and Pillow setup.
 
 These checks validate the repository and its tooling; they do not establish that a consumer UI looks or behaves correctly.
+
+## Token-efficient task planning
+
+Before loading task-specific references, run the bundled planner with the selected work mode and fidelity mode:
+
+```bash
+node skills/ui-reference-replication/scripts/plan-task.mjs \\
+  --work-mode existing-redesign \\
+  --fidelity reference-inspired-creative \\
+  --motion --accessibility --responsive
+```
+
+Read only the references routed under **Read before implementation**. Load conditional references only when their subject enters scope. Reuse verified findings, avoid repeating unchanged scans, and return concise summaries with paths and relevant error excerpts. Do not claim token or cost savings unless the host runtime exposes reliable measurements. Mandatory verification cannot be skipped to reduce context.
 
 ## Mandatory consumer-project visual preflight
 
