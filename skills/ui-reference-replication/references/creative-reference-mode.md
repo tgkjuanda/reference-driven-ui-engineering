@@ -131,3 +131,18 @@ Include:
 ## Stop conditions
 
 Stop before implementation if visual perception is unavailable. Request user approval before changing protected product behavior or brand constraints. If a reference is too incomplete to establish the intended visual anchors, ask one focused clarification rather than inventing a style direction.
+
+
+## 7. Mandatory anti-AI-slop review
+
+Read `references/anti-ai-slop.md` before selecting visual treatments or implementing the creative direction.
+
+Creative freedom is not permission to assemble a generic trend stack. The design must be specific to the actual product, audience, content, and user tasks.
+
+Before implementation, add a one-sentence design thesis that identifies the product-specific visual point of view and one or two signature devices. Do not use a style label such as "premium SaaS", "futuristic", or "modern dashboard" as the entire thesis.
+
+Treat gradients, glassmorphism, glow, blur, neon, rounded cards, pill controls, oversized hero typography, abstract 3D shapes, and scroll effects as optional techniques—not defaults. Use them only when they support the reference, product identity, hierarchy, or interaction. Do not ban them categorically; justify them.
+
+Avoid interchangeable templates, repetitive card grids, decorative badges, generic stock imagery, emoji icons, filler copy, and fabricated metrics/testimonials/logos. Use genuine or clearly labeled illustrative content and authorized assets.
+
+Before delivery, complete the de-slop review in `anti-ai-slop.md`. If the design could be transplanted unchanged into unrelated products, relies on trend stacking, or contains major elements with no product/user rationale, revise it.
