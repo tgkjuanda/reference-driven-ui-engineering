@@ -22,9 +22,18 @@ jobs:
           python-version: "3.12"
       - name: Install Python QA dependency
         run: python -m pip install -r requirements-qa.txt
-      - name: Run unit tests
+      - name: Check JavaScript syntax
+        run: |
+          node --check scripts/check-skill.mjs
+          node --check skills/ui-reference-replication/scripts/inspect-project.mjs
+          node --check skills/ui-reference-replication/scripts/validate-tokens.mjs
+          node --check skills/ui-reference-replication/scripts/capture-screenshots.mjs
+          node --check skills/ui-reference-replication/scripts/accessibility-audit.mjs
+      - name: Run Node unit tests
         run: npm test
       - name: Validate skill structure and token sample
         run: npm run check
-      - name: Validate Python syntax
+      - name: Run screenshot comparison tests
+        run: python -m unittest tests/test_compare_screenshots.py
+      - name: Check Python syntax
         run: python -m py_compile skills/ui-reference-replication/scripts/compare-screenshots.py
