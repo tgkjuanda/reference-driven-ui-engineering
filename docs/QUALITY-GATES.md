@@ -198,6 +198,17 @@ Judge whether the selected anchors remain recognizable, the implementation is or
 
 **Evidence:** creative direction brief, visually inspected implementation, rationale for intentional deviations, product-fit and regression findings.
 
+## 15. Design originality and anti-AI-slop (Reference-Inspired Creative mode)
+
+- Begin from actual product tasks, audience, content, density, trust requirements, and brand identity—not a generic trend label.
+- Define a product-specific design thesis and one or two distinctive visual devices.
+- Reject interchangeable hero/card-grid templates, repetitive rounded-card sections, decorative badges, filler imagery/copy, fabricated metrics/testimonials/logos, and unmotivated icon/asset choices.
+- Do not default to purple/blue gradients, aurora, glow, glassmorphism, neon, blur, 3D shapes, parallax, or scroll effects. These techniques are allowed only when justified by the reference, brand, product, or interaction.
+- Preserve deliberate hierarchy, typography, composition, useful information density, and consistency across routes.
+- Complete the de-slop review: product specificity, composition, purpose, restraint, typography, authenticity, consistency, product fit, accessibility, and regression.
+
+**Evidence:** design thesis, visual rationale for signature elements, visually inspected result, de-slop review, removed/revised generic elements, authentic asset/content record.
+
 ## Delivery scorecard
 
 Use a status per gate:
@@ -219,6 +230,7 @@ Use a status per gate:
 | Motion/effects | Pass / Partial / Fail / Not tested | | |
 | Existing UI behavior preservation (redesign mode) | Pass / Partial / Fail / Not tested | | |
 | Creative anchors/originality/product fit (creative mode) | Pass / Partial / Fail / Not tested | | |
+| Anti-AI-slop / product-specific originality (creative mode) | Pass / Partial / Fail / Not tested | | |
 
 If the visual-perception prerequisite fails or is not tested, do not begin implementation and do not report an overall pass. In redesign mode, behavior preservation must be backed by baseline and post-change evidence. In creative mode, evaluate against the design brief, not minimum pixel difference.
 
