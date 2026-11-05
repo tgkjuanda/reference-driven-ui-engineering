@@ -28,7 +28,7 @@ Read the bundled references as needed:
 - `references/responsive-and-interactions.md` for breakpoints, states, feedback, and error recovery.
 - `references/visual-qa.md` for screenshot capture, comparison, iteration, and reporting.
 - `references/evidence-and-visual-qa.md` for worksheets and checklists.
-- `../.. /docs/QUALITY-GATES.md` is repository documentation; when installed as a skill, use the bundled references instead.
+- In the source repository, consult `docs/QUALITY-GATES.md`; when installed as a skill, use the bundled references instead.
 
 ## Non-negotiable rules
 
