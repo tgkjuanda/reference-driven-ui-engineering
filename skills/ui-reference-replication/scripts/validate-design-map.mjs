@@ -73,7 +73,9 @@ export async function validateDesignMap(document, root = process.cwd()) {
   const driftCounts = Object.fromEntries(DRIFT_FIELDS.map(field => [field, Array.isArray(document.drift[field]) ? document.drift[field].length : 0]));
   const partialMappings = [...checked.tokens, ...checked.components].filter(item => item.status !== "mapped" || (item.codeTokenFound === false) || (item.codeComponentFound === false)).length;
   const hasDrift = Object.values(driftCounts).some(count => count > 0);
-  const status = errors.length ? "fail" : partialMappings || hasDrift ? "partial" : "pass";
+  const declaredMappings = document.tokens.length + document.components.length;
+  if (declaredMappings === 0) warnings.push("No scoped token or component mappings were supplied; mapping completeness has not been tested.");
+  const status = errors.length ? "fail" : declaredMappings === 0 ? "not-tested" : partialMappings || hasDrift ? "partial" : "pass";
   return {
     schemaVersion: "1.0.0", status, errors, warnings, reference: { fileKey: reference.fileKey, pageId: reference.pageId, frameId: reference.frameId, revision: reference.revision },
     summary: { tokenMappings: checked.tokens.length, componentMappings: checked.components.length, partialMappings, drift: driftCounts },

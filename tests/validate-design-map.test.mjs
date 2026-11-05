@@ -43,3 +43,32 @@ test("code path traversal is rejected", async () => {
   try { map.tokens[0].codeLocation = "../outside.json"; const result = await validateDesignMap(map, root); assert.equal(result.status, "fail"); assert.ok(result.errors.some(item => item.includes("escapes"))); }
   finally { await rm(root, { recursive: true, force: true }); }
 });
+
+
+test("empty Figma map is not-tested rather than pass", async () => {
+  const { root, map } = await fixture();
+  try {
+    map.tokens = [];
+    map.components = [];
+    const result = await validateDesignMap(map, root);
+    assert.equal(result.status, "not-tested");
+    assert.equal(result.summary.tokenMappings, 0);
+    assert.equal(result.summary.componentMappings, 0);
+    assert.ok(result.warnings.some(item => item.includes("No scoped token or component mappings")));
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("one scoped mapping is sufficient for a scoped map to be evaluated", async () => {
+  const { root, map } = await fixture();
+  try {
+    map.tokens = [];
+    const result = await validateDesignMap(map, root);
+    assert.equal(result.status, "pass");
+    assert.equal(result.summary.tokenMappings, 0);
+    assert.equal(result.summary.componentMappings, 1);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});

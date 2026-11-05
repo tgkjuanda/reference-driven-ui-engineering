@@ -19,7 +19,8 @@ npm run validate:design-map -- --file artifacts/ui-reference/figma-code-map.json
 
 ## Interpretation
 
-- Pass means every declared mapped token/component reference exists in the referenced code files and the declared drift lists are empty.
+- Pass means at least one in-scope token or component mapping was evaluated, every declared mapped reference exists in the referenced code files, and the declared drift lists are empty.
+- Not Tested means both mapping arrays are empty. Empty arrays are not evidence that the design system is fully mapped.
 - Partial means mappings or drift items remain unresolved.
 - Fail means the mapping is malformed, a declared mapped item cannot be found, a code path is missing, or a path escapes the project root.
 - Unmapped and partial entries are retained as findings; do not convert them to mapped to improve the status.
