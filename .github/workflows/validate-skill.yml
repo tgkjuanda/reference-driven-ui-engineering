@@ -17,7 +17,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Python QA dependency
+        run: python -m pip install -r requirements-qa.txt
       - name: Run unit tests
         run: npm test
       - name: Validate skill structure and token sample
         run: npm run check
+      - name: Validate Python syntax
+        run: python -m py_compile skills/ui-reference-replication/scripts/compare-screenshots.py
