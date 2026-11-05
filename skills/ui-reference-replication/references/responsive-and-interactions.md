@@ -24,6 +24,8 @@ Every meaningful user action must produce perceivable feedback. Define applicabl
 - Validation error.
 - Network/system error.
 
+Every interactive state must remain clear without relying only on motion, color, or sound. Focus and selected states must be perceivable when animation is disabled.
+
 ## Error prevention and recovery
 
 - Use clear labels and action descriptions.
@@ -34,3 +36,15 @@ Every meaningful user action must produce perceivable feedback. Define applicabl
 - Offer retry or recovery steps for transient failures.
 - Never announce success before the operation succeeds.
 - Do not create decorative controls that appear functional but do nothing.
+
+## Motion and effects
+
+Use `references/motion-design.md` for the complete motion workflow. At minimum:
+- Give each meaningful animation a communication or feedback purpose.
+- Reuse motion duration, easing, distance, and stagger tokens.
+- Match the reference; do not add parallax, looping motion, blur, glow, or 3D effects without evidence or approval.
+- Test initial, active, completed, dismissed, and interrupted states.
+- Honor `prefers-reduced-motion: reduce` and define a clear static or low-motion alternative.
+- Check that visual effects do not obscure content, focus, controls, or text contrast.
+- Profile expensive filters, large blur surfaces, and scroll-linked motion on representative devices.
+- Check for layout shifts, accidental pointer interception, and controls moving away from the user's focus.
