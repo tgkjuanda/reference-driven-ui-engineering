@@ -44,3 +44,20 @@ For each discrepancy:
 - Retest result.
 
 Do not invent an overall similarity percentage from subjective review. If computing pixel-difference metrics, label the metric and threshold precisely.
+
+
+## Agent-driven correction loop
+
+The comparison script does not modify application code. The Agent performs the correction loop using the evidence it produces:
+
+1. Capture the actual screenshot with the same route, viewport, and state as the reference.
+2. Generate raw diff, heatmap, and optional overlay.
+3. Inspect the highest-impact regions and map them to components or tokens.
+4. Create a defect record: element, expected, actual, source evidence, severity, and likely code owner.
+5. Change the smallest responsible component or token. Avoid global CSS patches that merely hide symptoms.
+6. Re-capture the exact route, viewport, and state; compare again.
+7. Keep the change only if it improves the intended mismatch without causing regressions elsewhere.
+8. Run build/type/test and accessibility checks after meaningful changes.
+9. Repeat until the user-agreed tolerance is reached, remaining differences are low impact, or a documented tool/reference limit blocks further work.
+
+Never optimize only for changed-pixel ratio. Antialiasing and font rendering can create pixel differences while geometry and semantics are correct. Combine metrics with visual review, accessibility checks, and functional tests.
