@@ -5,7 +5,16 @@ import { validateReview } from "../skills/ui-reference-replication/scripts/valid
 const evidence = {
   schemaVersion: "1.0.0",
   task: { id: "task-1" },
-  captures: [{ id: "capture-1", route: "/dashboard", state: "default" }]
+  captures: [{
+    id: "capture-1",
+    route: "/dashboard",
+    state: "default",
+    visualReview: {
+      status: "reviewed",
+      inspectedReference: true,
+      inspectedImplementation: true
+    }
+  }]
 };
 
 function dimensions(names, status = "pass") {
