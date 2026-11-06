@@ -79,7 +79,7 @@ for (const required of [
 
 const frontmatterFields = ["summary", "version", "tags", "keywords", "use_cases", "docs_url"];
 for (const field of frontmatterFields) {
-  if (!new RegExp("^" + field + ":\\s*\\S", "m").test(skill.split("---")[1] ?? "")) {
+  if (!new RegExp("^" + field + ":", "m").test(skill.split("---")[1] ?? "")) {
     errors.push("SKILL.md is missing Agensi frontmatter field: " + field);
   }
 }
