@@ -6,12 +6,13 @@ const root = new URL("../", import.meta.url);
 const skillPath = new URL("../skills/ui-reference-replication/SKILL.md", import.meta.url);
 const readmePath = new URL("../README.md", import.meta.url);
 
-test("Community Edition exposes Reference-Faithful as its only fidelity target", async () => {
+test("Community Edition operates only in Reference-Faithful mode", async () => {
   const skill = await readFile(skillPath, "utf8");
   const readme = await readFile(readmePath, "utf8");
-  assert.match(skill, /Reference-Faithful/);
-  assert.match(readme, /Reference-Faithful/);
-  assert.doesNotMatch(skill, /Reference-Inspired Creative|creative-reference-mode|anti-ai-slop/i);
+  assert.match(skill, /Community Edition has one fidelity target: \*\*Reference-Faithful\*\*/);
+  assert.match(readme, /One fidelity target: Reference-Faithful/);
+  assert.doesNotMatch(skill, /##\s+Fidelity modes|choose Reference-Inspired Creative|Use Reference-Inspired Creative/i);
+  assert.doesNotMatch(skill, /references\/creative-reference-mode\.md|references\/anti-ai-slop\.md/);
 });
 
 test("README distinguishes Community and Premium editions without exposing private checkout/source", async () => {
