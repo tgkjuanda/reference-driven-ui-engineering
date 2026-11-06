@@ -12,7 +12,7 @@ function isInside(root, candidate) {
   const relative = path.relative(root, candidate);
   return relative === "" || (!relative.startsWith(".." + path.sep) && relative !== ".." && !path.isAbsolute(relative));
 }
-export export async function resolveWithinProject(root, requested, label = "path") {
+export async function resolveWithinProject(root, requested, label = "path") {
   const base = await realpath(root);
   const candidate = path.resolve(base, requested);
   if (!isInside(base, candidate)) throw new Error(label + " must stay inside the project directory.");
