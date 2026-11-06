@@ -1,4 +1,4 @@
-name: Validate Agent Skill
+name: Validate Community Agent Skill
 
 on:
   push:
@@ -20,29 +20,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install Python QA dependency
+      - name: Install screenshot QA dependency
         run: python -m pip install -r requirements-qa.txt
       - name: Check JavaScript syntax
         run: |
           node --check scripts/check-skill.mjs
-          node --check skills/ui-reference-replication/scripts/plan-task.mjs
-          node --check skills/ui-reference-replication/scripts/validate-visual-evidence.mjs
-          node --check skills/ui-reference-replication/scripts/run-functional-regression.mjs
-          node --check skills/ui-reference-replication/scripts/compare-regression.mjs
-          node --check skills/ui-reference-replication/scripts/validate-visual-review.mjs
-          node --check skills/ui-reference-replication/scripts/run-responsive-audit.mjs
-          node --check skills/ui-reference-replication/scripts/run-performance-audit.mjs
-          node --check skills/ui-reference-replication/scripts/run-dependency-audit.mjs
-          node --check skills/ui-reference-replication/scripts/validate-quality-report.mjs
-          node --check skills/ui-reference-replication/scripts/benchmark.mjs
-          node --check skills/ui-reference-replication/scripts/validate-agent-compatibility.mjs
           node --check skills/ui-reference-replication/scripts/inspect-project.mjs
           node --check skills/ui-reference-replication/scripts/validate-tokens.mjs
           node --check skills/ui-reference-replication/scripts/capture-screenshots.mjs
           node --check skills/ui-reference-replication/scripts/accessibility-audit.mjs
       - name: Run Node unit tests
         run: npm test
-      - name: Validate skill structure and token sample
+      - name: Validate Community Skill structure
         run: npm run check
       - name: Run screenshot comparison tests
         run: python -m unittest tests/test_compare_screenshots.py
