@@ -10,23 +10,12 @@ const ALLOWED_EXTENSIONS = new Set([".md", ".mjs", ".py", ".json"]);
 const MAX_FILES = 200;
 const MAX_UNCOMPRESSED_BYTES = 6_000_000;
 const DOS_TIME = 0;
-const DOS_DATE = 0x0021; // 1980-01-01, for reproducible archives.
+const DOS_DATE = 0x0021;
 
-const BLOCKED_PROMOTION_TERMS = [
-  "Premium Edition",
-  "Reference-Inspired Creative"
-];
+const BLOCKED_PROMOTION_TERMS = ["Premium Edition", "Reference-Inspired Creative"];
 const BLOCKED_CHECKOUT_DOMAINS = [
-  "gumroad.com",
-  "whop.com",
-  "lemonsqueezy.com",
-  "payhip.com",
-  "ko-fi.com",
-  "patreon.com",
-  "paypal.me",
-  "buymeacoffee.com",
-  "buy.stripe.com",
-  "checkout.stripe.com"
+  "gumroad.com", "whop.com", "lemonsqueezy.com", "payhip.com", "ko-fi.com",
+  "patreon.com", "paypal.me", "buymeacoffee.com", "buy.stripe.com", "checkout.stripe.com"
 ];
 
 function crc32(buffer) {
@@ -116,26 +105,26 @@ function buildZip(entries) {
 }
 
 function parseFrontmatter(skillText) {
-  if (!skillText.startsWith("---\\n")) {
+  if (!skillText.startsWith("---\n")) {
     throw new Error("SKILL.md must begin with YAML frontmatter.");
   }
-  const end = skillText.indexOf("\\n---", 4);
+  const end = skillText.indexOf("\n---", 4);
   if (end < 0) throw new Error("SKILL.md YAML frontmatter is not closed.");
-  return skillText.slice(4, end).split("\\n");
+  return skillText.slice(4, end).split("\n");
 }
 
 function rootValue(lines, key) {
-  const line = lines.find(item => !/^\\s/.test(item) && item.startsWith(key + ":"));
+  const line = lines.find(item => !/^\s/.test(item) && item.startsWith(key + ":"));
   return line ? line.slice(key.length + 1).trim().replace(/^["']|["']$/g, "") : "";
 }
 
 function listValues(lines, key) {
-  const index = lines.findIndex(item => !/^\\s/.test(item) && item.startsWith(key + ":"));
+  const index = lines.findIndex(item => !/^\s/.test(item) && item.startsWith(key + ":"));
   if (index < 0) return [];
   const values = [];
   for (const line of lines.slice(index + 1)) {
-    if (line && !/^\\s/.test(line)) break;
-    const match = line.match(/^\\s+-\\s+(.+)$/);
+    if (line && !/^\s/.test(line)) break;
+    const match = line.match(/^\s+-\s+(.+)$/);
     if (match) values.push(match[1].trim().replace(/^["']|["']$/g, ""));
   }
   return values;
@@ -165,13 +154,11 @@ function validateFrontmatter(skillText) {
   }
   if (description.length > 1024) throw new Error("Skill description exceeds 1,024 characters.");
   if (summary.length > 300) throw new Error("Agensi summary exceeds 300 characters.");
-  if (!/^\\d+\\.\\d+\\.\\d+$/.test(version)) {
-    throw new Error("Skill version must use semantic versioning.");
-  }
+  if (!/^\d+\.\d+\.\d+$/.test(version)) throw new Error("Skill version must use semantic versioning.");
   if (tags.length > 10) throw new Error("Agensi supports up to 10 tags.");
   if (keywords.length > 10) throw new Error("Agensi supports up to 10 keywords.");
   if (useCases.length > 8) throw new Error("Agensi supports up to 8 use cases.");
-  if (!/^https:\\/\\//i.test(docsUrl)) throw new Error("docs_url must be an HTTPS URL.");
+  if (!/^https:\/\//i.test(docsUrl)) throw new Error("docs_url must be an HTTPS URL.");
 
   return { name, version, tags, keywords, useCases };
 }
@@ -209,7 +196,7 @@ async function main() {
     throw new Error("Agensi package must contain exactly one SKILL.md, located at the archive root.");
   }
 
-  const payload = entries.map(entry => entry.text).join("\\n");
+  const payload = entries.map(entry => entry.text).join("\n");
   for (const term of BLOCKED_PROMOTION_TERMS) {
     if (payload.toLowerCase().includes(term.toLowerCase())) {
       throw new Error("Marketplace Skill payload contains out-of-scope promotion text: " + term);

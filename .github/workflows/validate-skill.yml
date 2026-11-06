@@ -28,7 +28,9 @@ jobs:
           python -m unittest tests/test_agensi_package.py
       - name: Read package version
         id: package
-        run: echo "version=$(node -p \"require('./package.json').version\")" >> "$GITHUB_OUTPUT"
+        run: |
+          VERSION=$(node -p 'require("./package.json").version')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
       - name: Upload Agensi package artifact
         uses: actions/upload-artifact@v7
         with:

@@ -55,18 +55,20 @@ class AgensiPackageTests(unittest.TestCase):
                         name,
                     )
 
-                payload = "\\n".join(archive.read(name).decode("utf-8") for name in names)
+                payload = "\n".join(archive.read(name).decode("utf-8") for name in names)
                 self.assertNotRegex(payload, r"Premium Edition|Reference-Inspired Creative|Agensi[.]io")
                 for domain in BLOCKED_DOMAINS:
                     self.assertNotIn(domain, payload.lower())
 
                 skill = archive.read("SKILL.md").decode("utf-8")
-                self.assertTrue(skill.startswith("---\\n"))
+                self.assertTrue(skill.startswith("---\n"))
                 frontmatter = skill.split("---", 2)[1]
                 for field in ["name:", "description:", "summary:", "version:", "tags:", "keywords:", "use_cases:", "docs_url:"]:
                     self.assertIn(field, frontmatter)
-                self.assertLessEqual(len(next(line for line in frontmatter.splitlines() if line.startswith("description:")).split(":", 1)[1].strip()), 1024)
-                self.assertLessEqual(len(next(line for line in frontmatter.splitlines() if line.startswith("summary:")).split(":", 1)[1].strip().strip('"')), 300)
+                description_line = next(line for line in frontmatter.splitlines() if line.startswith("description:"))
+                summary_line = next(line for line in frontmatter.splitlines() if line.startswith("summary:"))
+                self.assertLessEqual(len(description_line.split(":", 1)[1].strip()), 1024)
+                self.assertLessEqual(len(summary_line.split(":", 1)[1].strip().strip('"')), 300)
 
 
 if __name__ == "__main__":
