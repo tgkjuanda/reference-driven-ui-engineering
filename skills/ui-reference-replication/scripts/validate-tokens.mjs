@@ -25,10 +25,21 @@ export async function resolveWithinProject(root, requested, label = "token file"
   if (relative.startsWith(".." + path.sep) || relative === ".." || path.isAbsolute(relative)) {
     throw new Error(label + " must stay inside the current project directory.");
   }
-  const actual = await realpath(candidate);
-  const resolvedRelative = path.relative(base, actual);
-  if (resolvedRelative.startsWith(".." + path.sep) || resolvedRelative === ".." || path.isAbsolute(resolvedRelative)) {
-    throw new Error(label + " resolves through a symlink outside the current project directory.");
+  let probe = candidate;
+  while (true) {
+    try {
+      const actual = await realpath(probe);
+      const resolvedRelative = path.relative(base, actual);
+      if (resolvedRelative.startsWith(".." + path.sep) || resolvedRelative === ".." || path.isAbsolute(resolvedRelative)) {
+        throw new Error(label + " resolves through a symlink outside the current project directory.");
+      }
+      break;
+    } catch (error) {
+      if (error.code !== "ENOENT" && error.code !== "ENOTDIR") throw error;
+      const parent = path.dirname(probe);
+      if (parent === probe) throw error;
+      probe = parent;
+    }
   }
   return candidate;
 }
