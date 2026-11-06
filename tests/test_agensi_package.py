@@ -45,7 +45,7 @@ class AgensiPackageTests(unittest.TestCase):
                 self.assertTrue(skill.startswith("---\n"))
                 for field in ["name:", "description:", "summary:", "version:", "tags:", "keywords:", "use_cases:", "docs_url:"]:
                     self.assertIn(field, skill.split("---", 2)[1])
-                self.assertNotRegex(skill, r"Premium Edition|Reference-Inspired Creative|Agensi\\.io")
+                self.assertNotRegex(skill, r"Premium Edition|Reference-Inspired Creative|Agensi[.]io")
 
 
 if __name__ == "__main__":

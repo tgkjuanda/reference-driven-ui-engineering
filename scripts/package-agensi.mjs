@@ -104,20 +104,41 @@ async function main() {
 
   const skillPath = path.join(SKILL_ROOT, "SKILL.md");
   const skillText = await readFile(skillPath, "utf8");
-  if (!skillText.startsWith("---\n") || !/^name:\\s*\\S+/m.test(skillText) ||
-      !/^description:\\s*\\S+/m.test(skillText)) {
-    throw new Error("The Skill must start with YAML frontmatter containing name and description.");
+  if (!skillText.startsWith("---\n")) {
+    throw new Error("SKILL.md must begin with YAML frontmatter.");
   }
-  const version = skillText.match(/^version:\\s*"([^"]+)"$/m)?.[1];
+  const frontmatterEnd = skillText.indexOf("\n---", 4);
+  if (frontmatterEnd < 0) throw new Error("SKILL.md YAML frontmatter is not closed.");
+  const frontmatterLines = skillText.slice(4, frontmatterEnd).split("\n");
+  const rootValue = key => {
+    const line = frontmatterLines.find(item => !item.startsWith(" ") && item.startsWith(key + ":"));
+    return line ? line.slice(key.length + 1).trim().replace(/^"|"$/g, "") : "";
+  };
+  const hasField = key => frontmatterLines.some(line => line.trim().startsWith(key + ":"));
+
+  if (!rootValue("name") || !rootValue("description")) {
+    throw new Error("The Skill frontmatter must contain name and description.");
+  }
+  const version = rootValue("version");
   if (!version) throw new Error("Agensi frontmatter version is missing.");
-  const metadataKeys = ["summary", "version", "tags", "keywords", "use_cases", "docs_url"];
-  for (const key of metadataKeys) {
-    if (!new RegExp("^" + key + ":\\s*\\S", "m").test(skillText.split("---")[1] ?? "")) {
-      throw new Error("Agensi frontmatter field is missing: " + key);
-    }
+  for (const key of ["summary", "version", "tags", "keywords", "use_cases", "docs_url"]) {
+    if (!hasField(key)) throw new Error("Agensi frontmatter field is missing: " + key);
   }
-  if (/Premium Edition|Reference-Inspired Creative|https?:\\/\\/(?:gumroad|whop|lemonsqueezy|payhip|ko-fi|patreon)\\./i.test(skillText)) {
-    throw new Error("The marketplace Skill payload must not include Premium promotion or external paid-checkout links.");
+
+  const blockedTerms = [
+    "Premium Edition",
+    "Reference-Inspired Creative",
+    "gumroad.com",
+    "whop.com",
+    "lemonsqueezy.com",
+    "payhip.com",
+    "ko-fi.com",
+    "patreon.com"
+  ];
+  for (const term of blockedTerms) {
+    if (skillText.toLowerCase().includes(term.toLowerCase())) {
+      throw new Error("Marketplace Skill payload contains prohibited promotion text: " + term);
+    }
   }
 
   const files = await collectFiles(SKILL_ROOT);
@@ -139,7 +160,7 @@ async function main() {
     throw new Error("Agensi package must contain exactly one SKILL.md at the archive root.");
   }
 
-  const output = path.resolve(ROOT, requestedOutput ?? `dist/ui-reference-replication-community-${version}.zip`);
+  const output = path.resolve(ROOT, requestedOutput || path.join("dist", "ui-reference-replication-community-" + version + ".zip"));
   await mkdir(path.dirname(output), { recursive: true });
   const archive = buildZip(entries);
   await writeFile(output, archive);

@@ -11,7 +11,7 @@ test("Community Edition workflow exposes Reference-Faithful only", async () => {
   const readme = await readFile(readmePath, "utf8");
   assert.match(skill, /Community Edition has one fidelity target: \*\*Reference-Faithful\*\*/);
   assert.match(readme, /One fidelity target: Reference-Faithful/);
-  assert.doesNotMatch(skill, /Premium Edition|Reference-Inspired Creative|creative-reference-mode|anti-ai-slop|Agensi\\.io/i);
+  assert.doesNotMatch(skill, /Premium Edition|Reference-Inspired Creative|creative-reference-mode|anti-ai-slop|Agensi[.]io/i);
 });
 
 test("README explains the separate Premium Edition without exposing its private source or external checkout", async () => {
