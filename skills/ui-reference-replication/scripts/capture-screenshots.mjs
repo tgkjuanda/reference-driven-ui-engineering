@@ -43,6 +43,7 @@ async function resolveWithinProject(root, requested, label = "path") {
 }
 export async function captureScreenshots(options) {
   const cwd = await realpath(path.resolve(options.cwd ?? process.cwd()));
+  const outputDir = await resolveWithinProject(cwd, options.out ?? "artifacts/ui-reference/screenshots", "Screenshot output");
   const require = createRequire(path.join(cwd, "package.json"));
   let chromium;
   try { ({ chromium } = require("playwright")); }
@@ -50,7 +51,6 @@ export async function captureScreenshots(options) {
     try { ({ chromium } = require("@playwright/test")); }
     catch { throw new Error("Playwright is not installed in the project. Install it with: npm install -D playwright && npx playwright install chromium"); }
   }
-  const outputDir = await resolveWithinProject(cwd, options.out ?? "artifacts/ui-reference/screenshots", "Screenshot output");
   await mkdir(outputDir, { recursive: true });
   const routes = options.routes ?? ["/"];
   const viewports = options.viewports ?? [{ width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1440, height: 900 }];

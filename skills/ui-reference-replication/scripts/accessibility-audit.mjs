@@ -8,11 +8,11 @@ function getArg(name, fallback) {
   const i = process.argv.indexOf(name);
   return i >= 0 ? process.argv[i + 1] : fallback;
 }
-export function isInside(root, candidate) {
+function isInside(root, candidate) {
   const relative = path.relative(root, candidate);
   return relative === "" || (!relative.startsWith(".." + path.sep) && relative !== ".." && !path.isAbsolute(relative));
 }
-async function resolveWithinProject(root, requested, label = "path") {
+export async function resolveWithinProject(root, requested, label = "path") {
   const base = await realpath(root);
   const candidate = path.resolve(base, requested);
   if (!isInside(base, candidate)) throw new Error(label + " must stay inside the project directory.");

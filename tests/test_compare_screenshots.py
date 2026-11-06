@@ -17,7 +17,7 @@ class ScreenshotComparisonTests(unittest.TestCase):
     def run_compare(self, reference, actual, diff, *args):
         return subprocess.run(
             [sys.executable, str(SCRIPT), str(reference), str(actual), "--diff", str(diff), "--heatmap", str(Path(diff).with_name("heatmap.png")), *args],
-            check=False, capture_output=True, text=True
+            check=False, capture_output=True, text=True, cwd=Path(reference).parent
         )
 
     def test_identical_images_report_zero_difference(self):
@@ -44,6 +44,20 @@ class ScreenshotComparisonTests(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertEqual(report["status"], "fail")
             self.assertEqual(report["changed_pixel_ratio"], 1)
+
+    def test_parent_directory_traversal_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as outside:
+            project = Path(tmp)
+            external_image = Path(outside) / "outside.png"
+            Image.new("RGB", (8, 8), (255, 255, 255)).save(external_image)
+            local_image = project / "local.png"
+            Image.new("RGB", (8, 8), (255, 255, 255)).save(local_image)
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), str(Path("..") / Path(outside).name / "outside.png"), str(local_image)],
+                cwd=project, check=False, capture_output=True, text=True
+            )
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("inside the current project directory", result.stderr)
 
     def test_dimension_mismatch_is_blocking(self):
         with tempfile.TemporaryDirectory() as tmp:
