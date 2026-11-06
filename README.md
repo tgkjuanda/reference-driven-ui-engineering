@@ -7,6 +7,16 @@
 
 UI Reference Replication is an open Agent Skill for coding agents. It helps create or redesign web interfaces from screenshots, reference images, Figma frame exports, public website pages, mockups, and wireframes. Its Community Edition has one clear objective: reproduce the supplied visual reference as faithfully as the available evidence allows.
 
+## Discover more AI skills
+
+**Find practical skills for AI agents at [AISKILL](https://aiskill.my.id/).** Explore the growing collection of free open-source workflows and upcoming premium editions.
+
+- Browse the marketplace: https://aiskill.my.id/
+- Explore this Community Edition: https://aiskill.my.id/#featured
+- Install this skill: `npx skills add tgkjuanda/reference-driven-ui-engineering`
+
+AISKILL is the product discovery home; this repository remains the canonical source for the free Community Edition.
+
 ## What it does
 
 - Inspects the visual reference before implementation.
