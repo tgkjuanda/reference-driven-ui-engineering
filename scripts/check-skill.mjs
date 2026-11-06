@@ -81,6 +81,8 @@ for (const required of ["ui-reference-replication", "Reference-Faithful", "visua
   if (!rule.toLowerCase().includes(required.toLowerCase())) errors.push("Antigravity rule is missing: " + required);
 }
 
+const editionBoundary = skill.split("## Edition boundary")[1]?.split("\n## ")[0] ?? "";
+const operationalSkill = skill.replace(editionBoundary, "");
 for (const forbidden of [
   "Reference-Inspired Creative",
   "creative-reference-mode.md",
@@ -91,7 +93,7 @@ for (const forbidden of [
   "validate-quality-report.mjs",
   "plan-task.mjs"
 ]) {
-  if (skill.includes(forbidden)) errors.push("Premium-only capability leaked into the Community Skill: " + forbidden);
+  if (operationalSkill.includes(forbidden)) errors.push("Premium-only capability leaked into the Community workflow: " + forbidden);
 }
 
 const packageScripts = packageJson.scripts ?? {};

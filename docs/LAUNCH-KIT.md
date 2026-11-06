@@ -1,6 +1,15 @@
 # Launch Kit — UI Reference Replication
 
-## Positioning
+## Product architecture
+
+UI Reference Replication has two editions:
+
+- **Community Edition (Free):** the open-source reference-faithful implementation workflow published in the public GitHub repository.
+- **Premium Edition:** a separately maintained edition that adds creative interpretation, advanced Figma intelligence, motion engineering, expanded QA/reporting, task planning, and benchmark capabilities. Premium is intended to be distributed through Agensi.io; availability is announced through its marketplace listing when published.
+
+The public Community Edition repository must not contain Premium source files or link to external checkouts.
+
+## Community Edition positioning
 
 **Product:** UI Reference Replication  
 **Tagline:** Build the interface shown in the reference.  
@@ -19,9 +28,9 @@
 
 ## Install
 
-```bash
+~~~bash
 npx skills add tgkjuanda/reference-driven-ui-engineering
-```
+~~~
 
 Repository: https://github.com/tgkjuanda/reference-driven-ui-engineering
 
@@ -50,4 +59,5 @@ Install: `npx skills add tgkjuanda/reference-driven-ui-engineering`
 - Run `npm test`, `npm run check`, and the GitHub Actions workflow.
 - Record a short demo with the source reference and the rendered comparison visible.
 - Label all untested capabilities accurately.
+- Keep Premium availability and purchase information on its Agensi.io listing.
 - Ask users for concrete examples and bug reports, not artificial engagement.
