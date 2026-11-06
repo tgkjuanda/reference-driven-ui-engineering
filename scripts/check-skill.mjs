@@ -83,7 +83,8 @@ for (const field of frontmatterFields) {
     errors.push("SKILL.md is missing Agensi frontmatter field: " + field);
   }
 }
-const description = skill.match(/^description:\\s*(.+)$/m)?.[1]?.toLowerCase() ?? "";
+const descriptionLine = skill.split("\n").find(line => line.startsWith("description:")) ?? "";
+const description = descriptionLine.slice("description:".length).trim().toLowerCase();
 for (const keyword of ["screenshots", "reference", "mockups", "wireframes", "by default"]) {
   if (!description.includes(keyword)) errors.push("Skill description is missing routing keyword: " + keyword);
 }
