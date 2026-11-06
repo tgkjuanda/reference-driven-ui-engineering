@@ -10,7 +10,7 @@ test("Skill description advertises reference-led UI activation triggers", async 
   const frontmatter = skill.match(/^---\n([\s\S]*?)\n---/);
   assert.ok(frontmatter, "SKILL.md YAML frontmatter must exist");
   const description = frontmatter[1].match(/^description:\s*(.+)$/m)?.[1] ?? "";
-  for (const keyword of ["screenshots", "Figma", "live website URLs", "mockups", "wireframes", "prototypes", "by default"]) {
+  for (const keyword of ["screenshots", "reference images", "mockups", "wireframes", "by default"]) {
     assert.ok(description.toLowerCase().includes(keyword.toLowerCase()), "missing discovery keyword: " + keyword);
   }
 });

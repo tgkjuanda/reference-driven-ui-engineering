@@ -1,11 +1,11 @@
 ---
 trigger: always_on
-description: Route reference-led web/app implementation and visual comparison to the ui-reference-replication Skill by default.
+description: Route reference-led web/app UI implementation and visual comparison to the ui-reference-replication Skill by default.
 ---
 
 # Default UI reference workflow
 
-When a user asks to create, build, implement, recreate, replicate, redesign, restyle, or visually compare a web/app interface and supplies or points to visual reference evidence, load and follow the installed ui-reference-replication Skill before analysis, planning, or code changes. Do this by default without requiring the user to mention the Skill.
+When a user asks to create, build, implement, recreate, replicate, redesign, restyle, or visually compare a reference-led web/app UI implementation, and supplies or points to visual reference evidence, load and follow the installed ui-reference-replication Skill before analysis, planning, or code changes. Do this by default without requiring the user to mention the Skill.
 
 Visual reference evidence includes screenshots, UI images, photos of screens, supplied Figma frame exports, public website pages, mockups, wireframes, prototypes, and visual specifications.
 
