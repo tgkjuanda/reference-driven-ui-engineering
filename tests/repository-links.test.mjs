@@ -5,7 +5,6 @@ import { readFile } from "node:fs/promises";
 const docs = [
   "../README.md",
   "../docs/AGENT-COMPATIBILITY.md",
-  "../docs/BASELINE-v2.5.0.md",
   "../docs/LAUNCH-KIT.md"
 ];
 const legacyRepository = "tgkjuanda/ui-reference-replication";

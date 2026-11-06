@@ -1,179 +1,43 @@
-# Automated validation and QA workflow
+# Community Edition Workflow and Validation
 
 ## Repository CI
 
-GitHub Actions runs on pushes to `main`, pull requests, and manual dispatch.
+GitHub Actions runs on pushes to `main`, pull requests, and manual dispatch. It checks:
+- JavaScript syntax for the Community Edition's remaining helper scripts.
+- Node unit tests.
+- Skill structure, version consistency, required files, and edition scope.
+- Screenshot-difference helper tests.
+- Python syntax for the screenshot comparison script.
 
-The workflow checks:
-- JavaScript syntax for repository scripts, including the task planner.
-- Node unit tests for DTCG-oriented token validation.
-- Skill structure, version consistency, progressive-disclosure file limit, required references, mandatory visual-capability wording, task-planner routes, and example token validation.
-- Python screenshot-diff tests including exact-match, mismatch-threshold, and size mismatch cases.
-- Python syntax and Pillow setup.
+A passing repository workflow validates the Skill package and helpers. It does not validate a consumer application's visual quality.
 
-These checks validate the repository and its tooling; they do not establish that a consumer UI looks or behaves correctly.
+## Consumer-project workflow
 
-## Token-efficient task planning
+1. Confirm that the current agent can directly inspect the source reference and the rendered implementation. Stop if not.
+2. Inspect the target project's framework, routes, components, design tokens, and current behavior.
+3. Record the work mode: New Build, Existing UI Redesign, or Hybrid.
+4. Analyze the source reference's observable geometry, hierarchy, typography, color, spacing, components, assets, and UI states.
+5. Implement within the existing stack and preserve existing product behavior during redesigns.
+6. Capture screenshots for matching routes and viewports.
+7. Inspect source and implementation side by side. Correct the largest confirmed visual gaps.
+8. Check representative responsive widths, important interactions, keyboard behavior, and accessible labels/focus.
+9. Run the project's existing tests and report their actual results.
+10. Deliver a concise record of changed files, visual checks, preserved behavior, deviations, and unresolved items.
 
-Before loading task-specific references, run the bundled planner with the selected work mode and fidelity mode:
+## Optional helper commands
 
-```bash
-node skills/ui-reference-replication/scripts/plan-task.mjs \\
-  --work-mode existing-redesign \\
-  --fidelity reference-inspired-creative \\
-  --motion --accessibility --responsive
-```
-
-Read only the references routed under **Read before implementation**. Load conditional references only when their subject enters scope. Reuse verified findings, avoid repeating unchanged scans, and return concise summaries with paths and relevant error excerpts. Do not claim token or cost savings unless the host runtime exposes reliable measurements. Mandatory verification cannot be skipped to reduce context.
-
-## Mandatory consumer-project visual preflight
-
-Before any project analysis or implementation, the executing agent must prove it can visually inspect both:
-- The source reference (screenshot, image, or rendered website).
-- The rendered implementation screenshots for matching routes, viewports, and UI states.
-
-When animation/effects are in scope, it must also inspect relevant recordings or sampled frames.
-
-A screenshot file being present, a path being readable as text, DOM/CSS inspection, Figma metadata, OCR, or numerical pixel-diff output alone does not satisfy the visual-perception prerequisite.
-
-**If the agent cannot inspect both reference and output visuals, reject the Skill for the task and stop before modifying the consumer project.** Do not silently downgrade to a text-only reconstruction.
-
-## Select the work mode and fidelity mode
-
-Work modes:
-- **New build:** inspect the reference and target project, implement the new interface, and verify visual and functional quality.
-- **Existing UI redesign:** read `references/existing-ui-redesign.md`; inventory current routes/features/contracts, capture baseline screenshots and run baseline tests, map the reference style to existing components, migrate incrementally, then run visual-direction and behavior-regression checks.
-- **Hybrid:** identify which existing routes/components are being redesigned and which new screens are being created.
-
-Fidelity modes:
-- **Reference-Faithful:** stay close to source composition, hierarchy, components, and visual language.
-- **Reference-Inspired Creative:** read `references/creative-reference-mode.md` and `references/anti-ai-slop.md`; identify Preserve, Reinterpret, Protect, and Avoid; write a product-specific design thesis; select one or two signature visual devices; reject generic template structures and unjustified trend stacking; evaluate against the creative direction brief rather than minimum pixel difference.
-
-Work mode and fidelity mode are independent. For existing UI redesign, the reference determines visual direction while the current application remains the source of truth for business behavior unless the user approves functional changes.
-
-## Structured visual evidence
-
-For each significant reference/implementation comparison, maintain a manifest based on `skills/ui-reference-replication/templates/visual-evidence.example.json` and validate it:
+Run these from the target project root when their prerequisites are available:
 
 ```bash
-npm run validate:visual-evidence -- --file artifacts/ui-reference/visual-evidence.json --root .
+node <skill>/scripts/inspect-project.mjs --root .
+node <skill>/scripts/capture-screenshots.mjs --url http://localhost:3000 --routes /,/dashboard --out artifacts/ui-reference
+python <skill>/scripts/compare-screenshots.py reference.png actual.png --diff artifacts/ui-reference/diff.png
+node <skill>/scripts/validate-tokens.mjs path/to/design-tokens.json
+node <skill>/scripts/accessibility-audit.mjs --url http://localhost:3000
 ```
 
-The validator checks evidence paths, PNG headers/dimensions, route/state/viewport metadata, SHA-256 hashes, and review-record completeness. The review status is agent-declared; the validator cannot prove actual image perception or correctness of judgement.
+The screenshot and accessibility helpers require their respective browser/project dependencies. Do not install packages without approval. Pixel metrics can locate differences but cannot judge visual quality. Automated accessibility results do not replace manual keyboard, focus, and content checks.
 
-## Functional regression runner
+## Scope boundary
 
-For existing UI redesign and hybrid work, create a project-specific config from `skills/ui-reference-replication/templates/functional-regression.example.json`. Use stable selectors and define only real application workflows.
-
-Run the same config before and after implementation:
-
-```bash
-npm run regression -- --config tests/ui-regression.json --label baseline --out artifacts/ui-reference/baseline.json
-npm run regression -- --config tests/ui-regression.json --label post-redesign --out artifacts/ui-reference/post-redesign.json
-npm run compare:regression -- --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json --out artifacts/ui-reference/regression-comparison.json
-```
-
-The runner requires Playwright in the target project and executes declared route checks and safe browser actions only. The comparator distinguishes regressions from pre-existing failures and missing checks. No-new-regressions is not a claim that every test passes.
-
-## Perceptual visual review scorecard
-
-After direct inspection of the reference and implementation, create a review manifest from `skills/ui-reference-replication/templates/perceptual-visual-review.example.json` and validate it against the visual evidence capture IDs:
-
-```bash
-npm run validate:visual-review -- --file artifacts/ui-reference/visual-review.json --evidence artifacts/ui-reference/visual-evidence.json --root .
-```
-
-Reference-Faithful and Reference-Inspired Creative require different review dimensions. Partial, failed, and not-tested dimensions remain visible and cannot be collapsed into an overall pass. The scorecard is agent-declared; validation checks completeness, not image understanding.
-
-## Consumer-project visual QA
-
-After the preflight passes:
-
-1. Run the project using its existing development command.
-2. Capture target routes, states, and viewports with the bundled Playwright script.
-3. Obtain the source visuals from the website or authorized Figma screenshot/export.
-4. Inspect reference and implementation side by side, with overlays and heatmaps as supporting evidence.
-5. In Reference-Faithful mode, compare visual hierarchy, geometry, typography, colors, components, assets, and motion against the source.
-6. In Reference-Inspired Creative mode, review retained design anchors, originality, coherence, product fit, and consistency against the creative brief. Run the anti-AI-slop review for interchangeable templates, repetitive card grids, unjustified effects, generic assets/copy, fabricated product claims, and missing product-specific visual rationale. A high pixel difference from the source is not automatically a defect.
-7. Test interactions, responsive behavior, reduced-motion behavior, keyboard access, and error recovery.
-8. In redesign mode, compare baseline and post-redesign behavior for navigation, forms, data views, permissions, and critical workflows.
-9. Run axe-core, performance, build, type, lint, functional, and regression checks where configured.
-10. Correct verified issues, recapture the exact states, and visually confirm improvements.
-11. Report test evidence, intentional creative deviations, preserved functionality, unresolved differences, and anything not tested.
-
-## Limits
-
-- Pixel comparison is not a perceptual quality score; it is sensitive to font rendering and antialiasing.
-- In Reference-Inspired Creative mode, pixel similarity is not the primary success criterion.
-- axe-core catches only the issues covered by its rules and page state; manual review remains required.
-- The token validator checks a supported subset, not full DTCG conformance.
-- Installing the Skill does not grant browser/Figma/image-perception access.
-- A CI pass for the repository does not mean visual fidelity for a consumer application has passed.
-- A redesign that looks aligned but breaks existing product workflows is not complete.
-
-
-## Responsive audit
-
-Run the route and viewport matrix against the target application:
-
-```bash
-npm run responsive:audit -- --url http://localhost:3000 --routes /,/dashboard --viewports 390x844,768x1024,1440x900 --out artifacts/ui-reference/responsive.json
-```
-
-The script checks document-level horizontal overflow, mobile viewport metadata, navigation failures, and uncaught page errors. It is not a visual-design evaluator.
-
-## Performance budget audit
-
-Copy the performance budget template, adjust it to the target product, and run:
-
-```bash
-npm run performance:audit -- --url http://localhost:3000 --budget artifacts/ui-reference/performance-budget.json --routes /,/dashboard --out artifacts/ui-reference/performance.json
-```
-
-These are browser lab measurements, not field Core Web Vitals. Observed blocking time is a Long Task approximation, and cross-origin transfer sizes can be unavailable.
-
-## Dependency security audit
-
-For npm projects with a committed package-lock.json or npm-shrinkwrap.json:
-
-```bash
-npm run security:audit -- --root . --fail-on high --out artifacts/ui-reference/dependency-audit.json
-```
-
-This summarizes npm dependency advisories. It does not install packages, modify the lockfile, run source-code SAST, inspect secrets, or perform penetration testing.
-
-## Unified quality report
-
-Complete the quality report template and validate the evidence references:
-
-```bash
-npm run validate:quality-report -- --file artifacts/ui-reference/quality-report.json --root .
-```
-
-The report requires task-dependent gates and existing evidence files. Pass/Partial/Fail/Not Tested are retained separately. The validator checks completeness and file references; it does not rerun the underlying tools.
-
-## Token and compute budget
-
-Reuse the same route/viewport matrix, retain baseline reports until relevant code or environment changes, and store full machine output in artifacts. During iteration, run checks targeted to changed surfaces; run all required gates before delivery. Do not skip mandatory checks to reduce token usage.
-
-
-## Controlled benchmark and token-cost comparison
-
-Use the benchmark protocol only when comparing Skill versions or agent execution efficiency. Keep the same task fixture, project commit, agent/model/runtime, and measurement source; run at least three repetitions per side.
-
-```bash
-npm run benchmark:validate -- --file artifacts/ui-reference/benchmark.json --root .
-npm run benchmark:compare -- --baseline artifacts/ui-reference/baseline-benchmark.json --candidate artifacts/ui-reference/candidate-benchmark.json --minimum-runs 3
-```
-
-Only provider/host-reported tokens and actual cost can support measured savings claims. Estimates are excluded. Any visual/functional quality regression or critical defect blocks the comparison from claiming savings.
-
-## Agent compatibility evidence
-
-Keep installation and runtime capabilities separate. Record actual test evidence for visual input, browser, terminal, file-write, Figma MCP, and motion review:
-
-```bash
-npm run compatibility:validate -- --file artifacts/ui-reference/agent-compatibility.json --root .
-```
-
-An empty matrix remains Not Tested. Do not claim support because a CLI installer lists an agent. The validator checks declared statuses and evidence-file existence, not the truth of model-perception claims.
+This Community Edition keeps reference-faithful implementation and essential visual checks. Advanced creative direction, structured Figma intelligence, motion engineering, benchmarking, agent capability certification, and extended automated QA reporting are not part of this package.

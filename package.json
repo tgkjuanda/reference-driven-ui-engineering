@@ -1,28 +1,18 @@
 {
   "name": "ui-reference-replication",
-  "version": "3.2.1",
+  "version": "4.0.0",
   "private": true,
   "type": "module",
-  "description": "Token-efficient UI reference implementation with evidence-backed QA, Figma mapping, benchmarks, and agent capability validation",
+  "description": "Community Agent Skill for reference-faithful UI implementation and essential visual verification",
   "engines": {
     "node": ">=20"
   },
   "scripts": {
     "test": "node --test tests/*.test.mjs",
     "check": "node scripts/check-skill.mjs",
-    "plan:task": "node skills/ui-reference-replication/scripts/plan-task.mjs",
-    "validate:visual-evidence": "node skills/ui-reference-replication/scripts/validate-visual-evidence.mjs",
+    "inspect:project": "node skills/ui-reference-replication/scripts/inspect-project.mjs --root .",
+    "capture:screenshots": "node skills/ui-reference-replication/scripts/capture-screenshots.mjs",
     "validate:tokens": "node skills/ui-reference-replication/scripts/validate-tokens.mjs skills/ui-reference-replication/templates/design-tokens.example.json",
-    "regression": "node skills/ui-reference-replication/scripts/run-functional-regression.mjs",
-    "compare:regression": "node skills/ui-reference-replication/scripts/compare-regression.mjs",
-    "validate:visual-review": "node skills/ui-reference-replication/scripts/validate-visual-review.mjs",
-    "responsive:audit": "node skills/ui-reference-replication/scripts/run-responsive-audit.mjs",
-    "performance:audit": "node skills/ui-reference-replication/scripts/run-performance-audit.mjs",
-    "security:audit": "node skills/ui-reference-replication/scripts/run-dependency-audit.mjs",
-    "validate:quality-report": "node skills/ui-reference-replication/scripts/validate-quality-report.mjs",
-    "validate:design-map": "node skills/ui-reference-replication/scripts/validate-design-map.mjs",
-    "benchmark:validate": "node skills/ui-reference-replication/scripts/benchmark.mjs validate",
-    "benchmark:compare": "node skills/ui-reference-replication/scripts/benchmark.mjs compare",
-    "compatibility:validate": "node skills/ui-reference-replication/scripts/validate-agent-compatibility.mjs"
+    "accessibility:audit": "node skills/ui-reference-replication/scripts/accessibility-audit.mjs"
   }
 }

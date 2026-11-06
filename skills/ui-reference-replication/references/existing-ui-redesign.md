@@ -1,168 +1,103 @@
-# Existing UI Redesign: Reference-Driven Restyling
+# Existing UI Redesign: Preserve the Product
 
 ## Purpose
 
-Use this mode when an application or website already exists and the user wants its visual design redesigned to follow a supplied reference style, theme, or interface. This is not a greenfield rebuild.
+Use this workflow when an application already exists and the user wants its visual presentation updated to follow a supplied reference. This is not a greenfield rebuild.
 
-The required outcome is:
+The visual reference determines the target appearance. The existing application remains the source of truth for product behavior unless the user explicitly approves a functional change.
 
-- Preserve the application's existing capabilities, content model, routes, permissions, data flow, and user workflows unless the user explicitly approves a functional change.
-- Transform the visual language and interaction presentation to match the supplied reference.
-- Verify the redesigned implementation visually against the reference and functionally against the existing application baseline.
+## 1. Define the scope
 
-The mandatory visual-capability gate still applies. If the agent cannot directly inspect both the reference and the current/redesigned UI, reject the task before modifying the project.
+Record:
+- Routes and screens included in the redesign.
+- Components and page regions that may change.
+- The supplied reference and its viewport dimensions.
+- Existing behavior that must remain unchanged.
+- Any user-approved functional changes.
 
-## 1. Identify the redesign scope
+A screenshot of one page does not authorize redesigning every route.
 
-Classify the request before editing:
+## 2. Establish the current baseline
 
-- **Theme/style transfer:** apply colors, typography, spacing, radii, borders, shadows, surfaces, icon style, motion language, and component appearance while preserving current layout and behavior as much as possible.
-- **Component redesign:** restyle selected components or page regions while retaining their contracts and behavior.
-- **Page redesign:** restructure selected screens to follow the reference's hierarchy and layout while preserving their information and workflows.
-- **System-wide redesign:** migrate the shared design system and all in-scope routes/components consistently.
-- **Hybrid redesign:** combine the above only for explicitly identified routes or components.
+Before editing, inspect the current application and record, where applicable:
+- Routes, navigation destinations, and deep links.
+- Features, user roles, and permissions.
+- Forms, validation, and submission behavior.
+- Data tables, search, filters, sorting, pagination, and actions.
+- API/data contracts and important workflows.
+- Loading, empty, success, and error states.
+- Keyboard behavior and focus order.
+- Existing project tests, build commands, and known defects.
 
-Record which routes, page families, components, states, and viewport sizes are in scope. Do not assume that one screenshot authorizes a redesign of every route.
-
-## 2. Establish the existing-product baseline
-
-Before changing code, inspect the current application and create a baseline inventory.
-
-### Product and behavior inventory
-
-Record, where applicable:
-- Routes, navigation destinations, deep links, and browser history behavior.
-- User roles, permissions, authentication states, and protected actions.
-- Forms, fields, validation rules, submission behavior, and error handling.
-- Data tables, sorting, filtering, search, pagination, bulk actions, and exports.
-- CRUD operations and API/service contracts.
-- Loading, empty, success, disabled, error, and offline states.
-- Keyboard interactions, focus order, accessible names, and shortcuts.
-- Analytics events and business-critical user flows.
-- Responsive behavior and supported browsers.
-- Existing tests, build commands, type checks, lint rules, and known defects.
-
-Capture a baseline of current routes and primary workflows. Record any behavior that cannot be tested because of missing credentials, unavailable backend services, or environment limitations.
-
-### Technical inventory
-
-Inspect the current framework, routing, component library, state management, styles, tokens, asset pipeline, and dependencies. Identify shared components and styling boundaries before deciding where to make changes.
-
-Do not replace the application's framework, router, component library, or state architecture merely to achieve the visual redesign.
+Capture representative screenshots of the existing application. Run the tests already configured in the project and record the result. Note what could not be verified because of missing credentials, services, or test coverage.
 
 ## 3. Analyze the visual reference
 
-Use the mandatory visual-perception workflow to inspect the reference. Extract only the design language and structure supported by the supplied evidence:
+Inspect the source image or rendered page directly. Record observable:
+- Layout, page regions, grid, alignment, and spacing.
+- Information hierarchy and reading order.
+- Typography, colors, borders, radii, and surfaces.
+- Component appearance, icons, and authorized assets.
+- Visible interaction states.
+- Responsive changes shown in supplied viewport references.
 
-- Color palette and semantic surface roles.
-- Typography families, scale, weights, line-height, and text hierarchy.
-- Spacing scale, container widths, grid, alignment, and responsive transitions.
-- Radius, borders, shadows, elevation, blur, transparency, and other effects.
-- Iconography, image treatment, component anatomy, and component variants.
-- Interaction states and feedback styling.
-- Motion purpose, trigger, timing, easing, and reduced-motion behavior when observable.
+Do not infer hidden pages, missing workflows, or behavior that the source does not show. When the reference is silent about an existing product feature, preserve the existing feature.
 
-Separate **style rules** from **reference-specific product content and behavior**. The reference may define the look and feel without defining the target application's business logic.
+## 4. Map visual changes to the current application
 
-When the target reference lacks information about a current application workflow, preserve the existing product behavior rather than copying or inventing behavior from the reference.
+Before broad edits, identify the existing components and styles responsible for each visible region. Prefer updating shared components and canonical tokens over creating parallel CSS or duplicate components.
 
-## 4. Map reference style to the existing application
+| Existing area | Behavior to preserve | Visual change |
+|---|---|---|
+| Navigation | Destinations, active route, permissions | Layout, spacing, typography, colors |
+| Buttons | Actions, loading, disabled state | Size, shape, color, focus style |
+| Forms | Values, validation, submit behavior | Labels, field styling, errors |
+| Data views | Sorting, filtering, pagination, actions | Density, typography, borders, surfaces |
+| Dialogs | Open/close, confirmation, focus | Dimensions and visual presentation |
 
-Create a migration map before broad edits.
+## 5. Implement incrementally
 
-| Existing element | Existing behavior/contract | Reference style pattern | Planned change | Regression evidence |
-|---|---|---|---|---|
-| Shared button | Submit, navigate, disable, loading | Reference button/variants | Visual and state styling | Action and state tests |
-| Navigation | Routes, permissions, active state | Reference navigation | Layout and appearance | Route/access tests |
-| Form controls | Values, validation, errors | Reference fields | Visual treatment and focus/error states | Form tests |
-| Data table | Sorting, pagination, selection | Reference table | Density, typography, surfaces | Table interaction tests |
-| Dialog/drawer | Open/close, focus, confirmation | Reference overlay | Surface and transition | Focus and workflow tests |
-
-Create a token mapping from the reference to the target design system. Prefer adapting existing semantic tokens and shared components over adding parallel CSS or duplicating components.
-
-Record exceptions where a reference component cannot be applied without harming the target application's usability or information density.
-
-## 5. Implement as a controlled migration
-
-Use small, reversible changes in this order:
-
-1. Capture baseline screenshots and run existing tests.
-2. Define or update canonical design tokens and theme variables.
-3. Restyle shared primitives: typography, surfaces, buttons, inputs, icons, spacing, and focus treatments.
-4. Update shared layout components and navigation.
-5. Migrate page families incrementally.
-6. Add reference-backed motion and visual effects with reduced-motion alternatives.
-7. Recheck responsive layouts and touch interactions.
-8. Remove obsolete styles only after confirming no in-scope or out-of-scope component still depends on them.
-
-Preserve component APIs and event/data contracts where possible. If a contract must change, document why, identify every consumer, and obtain user approval before changing externally visible behavior.
+1. Preserve a screenshot and test baseline.
+2. Update shared design tokens and theme values.
+3. Restyle shared primitives and components.
+4. Update the application shell and navigation.
+5. Migrate the agreed screens in small steps.
+6. Recheck narrow and wide viewports.
+7. Remove obsolete styles only after confirming that no other route or component depends on them.
 
 Do not:
-- Delete, hide, or disable existing features merely because they are absent from the reference.
-- Replace real data with sample/static content.
-- Remove validation, permissions, loading/error handling, keyboard support, or analytics hooks.
-- Change API payloads, database schemas, authentication, authorization, or business rules as part of a visual-only redesign.
+- Delete, hide, or disable existing features because they are absent from the reference.
+- Replace real data with static/demo content.
+- Remove validation, permissions, loading/error handling, or keyboard support.
+- Change API payloads, database schemas, authentication, authorization, or business rules during a visual-only redesign.
 - Apply broad global CSS overrides that cause untracked regressions.
-- Copy proprietary logos, images, fonts, or assets without authorization.
+- Copy third-party assets without authorization.
 
-## 6. Regression and visual verification
+## 6. Verify the result
 
-Run both forms of verification. Passing one does not compensate for failing the other.
+### Product behavior
 
-### Existing-product regression
-
-Re-run the baseline routes and critical workflows:
-- Navigation and deep links.
-- Authentication/authorization states.
-- Form entry, validation, submit, and recovery.
-- Search, filters, sorting, pagination, and table actions.
-- Dialogs, drawers, menus, and destructive-action confirmation.
-- Keyboard operation and focus behavior.
-- Loading, empty, success, and error states.
-- Responsive and touch behavior.
-- Build, type, lint, unit, integration, and end-to-end tests available in the project.
-
-Compare baseline test results with post-redesign results. Investigate newly failing tests and console/network errors before delivery.
+Revisit the baseline routes and important workflows. Run the same project tests and compare results with the baseline. Investigate new failures, console errors, broken assets, and navigation problems.
 
 ### Visual fidelity
 
-Inspect reference and redesigned screenshots at the same viewport, route, scroll position, and state. Review:
-- Overall composition and hierarchy.
-- Typography and text wrapping.
-- Colors, spacing, dimensions, and surface treatments.
-- Component styling and iconography.
-- Responsive changes and clipping/overflow.
-- Motion recordings or key frames when animation is in scope.
+Capture the redesigned application at the same viewport, route, scroll position, and state as the source reference. Inspect source and output side by side. Correct macro geometry and hierarchy first, then typography, color, component dimensions, spacing, and details.
 
-Use pixel diffs as diagnostics only. The agent must directly inspect both images and confirm that corrections improve alignment with the reference without breaking the existing application.
+Use pixel-difference output only as a diagnostic. The agent must directly inspect both images.
+
+### Responsive and accessible behavior
+
+Check representative widths, clipping/overflow, navigation, primary actions, keyboard operation, visible focus, labels, and readable contrast.
 
 ## 7. Delivery report
 
 Report:
-- Redesign mode and exact scope.
-- Routes and components migrated.
-- Design tokens/components reused or introduced.
-- Existing features and contracts intentionally preserved.
-- Any requested or approved functional changes.
-- Baseline tests vs post-redesign tests.
-- Reference and implementation screenshots visibly inspected.
-- Responsive, accessibility, reduced-motion, and performance results.
-- Regressions, unresolved deviations, and blocked checks.
+- Exact routes/screens and components changed.
+- Existing behavior and contracts preserved.
+- Any approved functional changes.
+- Screenshots visually inspected and their viewports.
+- Project tests run before and after.
+- Responsive and basic accessibility checks performed.
+- Regressions, deviations, blockers, and checks not performed.
 
-## Stop conditions
-
-Stop before implementation if the visual-capability gate fails. Stop and request approval before any unrequested change to business logic, data contracts, permissions, APIs, routes, or destructive functionality. A redesign is complete only when the visual reference checks and existing-product regression checks have both been reported honestly.
-
-## Executable baseline and post-redesign regression
-
-Where the application has a testable local runtime, define real route and interaction checks in `templates/functional-regression.example.json`. Run identical checks against the baseline before edits and the redesigned application after edits:
-
-```bash
-node <skill>/scripts/run-functional-regression.mjs --config tests/ui-regression.json --label baseline --out artifacts/ui-reference/baseline.json
-node <skill>/scripts/run-functional-regression.mjs --config tests/ui-regression.json --label post-redesign --out artifacts/ui-reference/post-redesign.json
-node <skill>/scripts/compare-regression.mjs --baseline artifacts/ui-reference/baseline.json --actual artifacts/ui-reference/post-redesign.json --out artifacts/ui-reference/regression-comparison.json
-```
-
-The runner supports explicit browser actions and assertions; it never invents product workflows. Keep checks deterministic and use stable selectors such as `data-testid` where appropriate. Review any environment-dependent failures manually.
-
-The comparator distinguishes new regressions, missing baseline checks, failing new checks, resolved failures, and failures already present before redesign. A report with no new regressions is not equivalent to a completely passing suite if pre-existing failures remain. Store sanitized reports only; do not place credentials, tokens, personal data, or production secrets in fixtures or evidence.
+A redesign is complete only when the visual comparison and product-behavior checks are both reported honestly.
