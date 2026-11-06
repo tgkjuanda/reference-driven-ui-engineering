@@ -6,15 +6,18 @@ const root = new URL("../", import.meta.url);
 const skillPath = new URL("../skills/ui-reference-replication/SKILL.md", import.meta.url);
 const readmePath = new URL("../README.md", import.meta.url);
 
-test("Community Edition exposes Reference-Faithful as its only fidelity target", async () => {
+test("Community Edition workflow exposes Reference-Faithful only", async () => {
   const skill = await readFile(skillPath, "utf8");
   const readme = await readFile(readmePath, "utf8");
-  assert.match(skill, /Reference-Faithful/);
-  assert.match(readme, /Reference-Faithful/);
-  assert.doesNotMatch(skill, /Reference-Inspired Creative|creative-reference-mode|anti-ai-slop/i);
+  const editionBoundary = skill.split("## Edition boundary")[1]?.split("\n## ")[0] ?? "";
+  const operationalSkill = skill.replace(editionBoundary, "");
+
+  assert.match(skill, /Community Edition has one fidelity target: \*\*Reference-Faithful\*\*/);
+  assert.match(readme, /One fidelity target: Reference-Faithful/);
+  assert.doesNotMatch(operationalSkill, /Reference-Inspired Creative|creative-reference-mode|anti-ai-slop/i);
 });
 
-test("README distinguishes Community and Premium editions without exposing private checkout/source", async () => {
+test("README explains the separate Premium Edition without exposing its private source or external checkout", async () => {
   const readme = await readFile(readmePath, "utf8");
   assert.match(readme, /Two editions: Community and Premium/);
   assert.match(readme, /Agensi\.io/);
