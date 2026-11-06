@@ -2,6 +2,18 @@
 
 All notable changes to UI Reference Replication are documented here.
 
+## [4.0.2] - 2026-11-06
+
+### Repository audit and Agensi submission readiness
+
+- Added a listing-preparation sheet with copy, compatibility notes, permission disclosure, limitations, and a real-demo evidence checklist.
+- Strengthened Agensi package validation for frontmatter field lengths, metadata list limits, HTTPS documentation URLs, and the required Skill name format.
+- Ensured the ZIP contains exactly one `SKILL.md` in the archive root; nested Skill files can no longer silently create a Skill pack.
+- Scanned every delivered text file for external-checkout domains and Premium promotion text.
+- Added UTF-8, ZIP integrity, and marketplace-payload tests.
+- Made the GitHub Actions artifact name and path follow the current package version automatically.
+- Updated the README with the submission guide and the exact Free Edition packaging boundary.
+
 ## [4.0.1] - 2026-11-06
 
 ### Agensi Free Edition packaging and repository hygiene
@@ -12,7 +24,6 @@ All notable changes to UI Reference Replication are documented here.
 - Removed Premium promotion from the marketplace Skill payload; the public README remains the edition comparison point.
 - Restored the complete standard MIT license text and added build-artifact ignores.
 - Updated package, Skill, and documentation versions to 4.0.1.
-
 
 ## [4.0.0] - 2026-11-06
 

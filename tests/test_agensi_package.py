@@ -5,6 +5,18 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+BLOCKED_DOMAINS = (
+    "gumroad.com",
+    "whop.com",
+    "lemonsqueezy.com",
+    "payhip.com",
+    "ko-fi.com",
+    "patreon.com",
+    "paypal.me",
+    "buymeacoffee.com",
+    "buy.stripe.com",
+    "checkout.stripe.com",
+)
 
 
 class AgensiPackageTests(unittest.TestCase):
@@ -20,11 +32,13 @@ class AgensiPackageTests(unittest.TestCase):
             )
 
             with zipfile.ZipFile(archive_path) as archive:
+                self.assertIsNone(archive.testzip(), "ZIP integrity check failed")
                 names = archive.namelist()
                 self.assertIn("SKILL.md", names)
                 self.assertIn("LICENSE", names)
                 self.assertIn("references/visual-capability-gate.md", names)
                 self.assertIn("scripts/README.md", names)
+                self.assertEqual(sum(Path(name).name == "SKILL.md" for name in names), 1)
                 self.assertEqual(names.count("SKILL.md"), 1)
                 self.assertLessEqual(len(names), 200)
                 self.assertLessEqual(sum(info.file_size for info in archive.infolist()), 6_000_000)
@@ -41,11 +55,18 @@ class AgensiPackageTests(unittest.TestCase):
                         name,
                     )
 
+                payload = "\\n".join(archive.read(name).decode("utf-8") for name in names)
+                self.assertNotRegex(payload, r"Premium Edition|Reference-Inspired Creative|Agensi[.]io")
+                for domain in BLOCKED_DOMAINS:
+                    self.assertNotIn(domain, payload.lower())
+
                 skill = archive.read("SKILL.md").decode("utf-8")
-                self.assertTrue(skill.startswith("---\n"))
+                self.assertTrue(skill.startswith("---\\n"))
+                frontmatter = skill.split("---", 2)[1]
                 for field in ["name:", "description:", "summary:", "version:", "tags:", "keywords:", "use_cases:", "docs_url:"]:
-                    self.assertIn(field, skill.split("---", 2)[1])
-                self.assertNotRegex(skill, r"Premium Edition|Reference-Inspired Creative|Agensi[.]io")
+                    self.assertIn(field, frontmatter)
+                self.assertLessEqual(len(next(line for line in frontmatter.splitlines() if line.startswith("description:")).split(":", 1)[1].strip()), 1024)
+                self.assertLessEqual(len(next(line for line in frontmatter.splitlines() if line.startswith("summary:")).split(":", 1)[1].strip().strip('"')), 300)
 
 
 if __name__ == "__main__":

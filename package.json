@@ -1,6 +1,6 @@
 {
   "name": "ui-reference-replication",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "private": true,
   "type": "module",
   "description": "Community Agent Skill for reference-faithful UI implementation and essential visual verification",

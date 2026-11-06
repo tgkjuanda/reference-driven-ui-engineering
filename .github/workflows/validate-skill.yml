@@ -26,11 +26,14 @@ jobs:
         run: |
           npm run package:agensi
           python -m unittest tests/test_agensi_package.py
+      - name: Read package version
+        id: package
+        run: echo "version=$(node -p \"require('./package.json').version\")" >> "$GITHUB_OUTPUT"
       - name: Upload Agensi package artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ui-reference-replication-community-4.0.1
-          path: dist/ui-reference-replication-community-4.0.1.zip
+          name: ui-reference-replication-community-${{ steps.package.outputs.version }}
+          path: dist/ui-reference-replication-community-${{ steps.package.outputs.version }}.zip
           if-no-files-found: error
           retention-days: 14
       - name: Check JavaScript syntax

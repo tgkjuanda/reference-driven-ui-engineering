@@ -145,11 +145,13 @@ Build a single-skill ZIP for Agensi's upload workflow:
 npm run package:agensi
 ~~~
 
-The command creates `dist/ui-reference-replication-community-4.0.1.zip`. The archive contains one root-level `SKILL.md`, its reference documents and optional text-based helper scripts, plus the MIT license. It excludes Git history, repository tests, CI configuration, development dependencies, and Premium materials.
+The command creates `dist/ui-reference-replication-community-4.0.2.zip`. The archive contains exactly one root-level `SKILL.md`, its reference documents and optional text-based helper scripts, plus the MIT license. It excludes Git history, repository tests, CI configuration, development dependencies, and Premium materials.
 
-The package includes Agensi-readable frontmatter for the skill name, description, summary, version, tags, keywords, use cases, and documentation URL. Generating the ZIP does not mean Agensi has approved or published the listing; every submission remains subject to Agensi's security scan and manual review.
+The package builder validates Agensi frontmatter, text-only file types, the single-Skill layout, file-count and text-size limits, and the absence of Premium promotion or external-checkout domains in the delivered payload. The GitHub Actions workflow builds, tests, and stores the ZIP as an artifact.
 
-The core workflow requires an agent that can directly inspect the source reference and rendered implementation. Helper scripts are optional and require the local runtime/dependencies described in the Skill.
+Use the [Agensi submission sheet](docs/AGENSI-SUBMISSION.md) for listing copy, compatibility and permission disclosures, and the final submission checklist. The sheet identifies the live demonstration still required: use a real project run and real screenshots rather than invented evidence.
+
+Generating the ZIP does not mean Agensi has approved or published the listing. Every submission remains subject to Agensi's security scan and manual review.
 
 ## Scope
 
@@ -159,7 +161,7 @@ The scripts are optional diagnostics. A passing repository test does not prove t
 
 ## Version
 
-Current Community Edition: **4.0.1**. Changes are recorded in [CHANGELOG.md](CHANGELOG.md).
+Current Community Edition: **4.0.2**. Changes are recorded in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
