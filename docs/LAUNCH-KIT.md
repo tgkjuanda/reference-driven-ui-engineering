@@ -53,6 +53,10 @@ Give it screenshots, a visual reference, or a public page. It guides the agent t
 
 Install: `npx skills add tgkjuanda/reference-driven-ui-engineering`
 
+## Agensi Free Edition
+
+Use [Agensi Submission Sheet](AGENSI-SUBMISSION.md) for marketplace copy, runtime compatibility, permission disclosures, limitations, and pre-submission checks. The listing's live demonstration must come from a real project run with genuine screenshots; repository tests are not user-facing proof.
+
 ## Launch checklist
 
 - Confirm the install command works with a clean environment.

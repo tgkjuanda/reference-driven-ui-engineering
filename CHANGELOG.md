@@ -2,6 +2,19 @@
 
 All notable changes to UI Reference Replication are documented here.
 
+## [4.0.3] - 2026-11-06
+
+### Agensi Free Edition readiness and repository audit
+
+- Added a submission sheet covering listing copy, helper compatibility, detected file/network behavior, limitations, and required live-demo evidence.
+- Strengthened package generation to validate Agensi frontmatter values and listing-field limits.
+- Enforced exactly one `SKILL.md` across the complete archive, at the archive root.
+- Scanned every delivered text file for Premium promotion and off-platform checkout destinations.
+- Added UTF-8, path, ZIP-integrity, file-count, payload-size, and metadata regression checks.
+- Enforced the recommended 20 KB review budget for each bundled script.
+- Made the CI artifact name and path derive from the package version rather than a hard-coded release.
+
+
 ## [4.0.2] - 2026-11-06
 
 ### Agensi security hardening

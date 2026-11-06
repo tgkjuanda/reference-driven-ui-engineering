@@ -3,7 +3,7 @@ name: ui-reference-replication
 description: Builds and redesigns web/app interfaces to closely match supplied screenshots, reference images, Figma frame exports, public website pages, mockups, and wireframes. Use by default for reference-led UI implementation and visual comparison.
 license: MIT
 summary: "Build reference-matched web interfaces and redesign existing UI while preserving product behavior."
-version: "4.0.2"
+version: "4.0.3"
 tags:
   - frontend
   - ui-design
@@ -21,7 +21,7 @@ docs_url: "https://github.com/tgkjuanda/reference-driven-ui-engineering/blob/mai
 metadata:
   domain: frontend-engineering
   workflow: reference-to-ui
-  version: "4.0.2"
+  version: "4.0.3"
   standard: agent-skills
 ---
 

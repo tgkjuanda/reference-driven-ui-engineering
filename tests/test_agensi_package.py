@@ -5,6 +5,10 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+BLOCKED_DOMAINS = (
+    "gumroad.com", "whop.com", "lemonsqueezy.com", "payhip.com", "ko-fi.com",
+    "patreon.com", "paypal.me", "buymeacoffee.com", "buy.stripe.com", "checkout.stripe.com",
+)
 
 
 class AgensiPackageTests(unittest.TestCase):
@@ -20,12 +24,13 @@ class AgensiPackageTests(unittest.TestCase):
             )
 
             with zipfile.ZipFile(archive_path) as archive:
+                self.assertIsNone(archive.testzip(), "ZIP integrity check failed")
                 names = archive.namelist()
-                self.assertIn("SKILL.md", names)
+                skill_files = [name for name in names if Path(name).name.lower() == "skill.md"]
+                self.assertEqual(skill_files, ["SKILL.md"])
                 self.assertIn("LICENSE", names)
                 self.assertIn("references/visual-capability-gate.md", names)
                 self.assertIn("scripts/README.md", names)
-                self.assertEqual(names.count("SKILL.md"), 1)
                 self.assertLessEqual(len(names), 200)
                 self.assertLessEqual(sum(info.file_size for info in archive.infolist()), 6_000_000)
                 self.assertEqual(len(names), len(set(names)))
@@ -43,11 +48,17 @@ class AgensiPackageTests(unittest.TestCase):
                     if Path(name).suffix in {".mjs", ".py"}:
                         self.assertLessEqual(archive.getinfo(name).file_size, 20 * 1024, name)
 
+                payload = "\n".join(archive.read(name).decode("utf-8") for name in names).lower()
+                for blocked in ("premium edition", "reference-inspired creative", *BLOCKED_DOMAINS):
+                    self.assertNotIn(blocked, payload)
+
                 skill = archive.read("SKILL.md").decode("utf-8")
                 self.assertTrue(skill.startswith("---\n"))
+                frontmatter = skill.split("---", 2)[1]
                 for field in ["name:", "description:", "summary:", "version:", "tags:", "keywords:", "use_cases:", "docs_url:"]:
-                    self.assertIn(field, skill.split("---", 2)[1])
-                self.assertNotRegex(skill, r"Premium Edition|Reference-Inspired Creative|Agensi[.]io")
+                    self.assertIn(field, frontmatter)
+                self.assertLessEqual(len(next(line for line in frontmatter.splitlines() if line.startswith("description:")).split(":", 1)[1].strip()), 1024)
+                self.assertLessEqual(len(next(line for line in frontmatter.splitlines() if line.startswith("summary:")).split(":", 1)[1].strip().strip('"')), 300)
 
 
 if __name__ == "__main__":
