@@ -2,10 +2,26 @@
 name: ui-reference-replication
 description: Builds and redesigns web/app interfaces to closely match supplied screenshots, reference images, Figma frame exports, public website pages, mockups, and wireframes. Use by default for reference-led UI implementation and visual comparison.
 license: MIT
+summary: "Build reference-matched web interfaces and redesign existing UI while preserving product behavior."
+version: "4.0.1"
+tags:
+  - frontend
+  - ui-design
+  - agent-skills
+keywords:
+  - screenshot-to-code
+  - reference-driven-ui
+  - figma
+  - ui-redesign
+use_cases:
+  - "Build a new interface from screenshots, mockups, or Figma frame exports."
+  - "Redesign existing UI while preserving routes, data, and workflows."
+  - "Compare rendered screens against a supplied visual reference."
+docs_url: "https://github.com/tgkjuanda/reference-driven-ui-engineering"
 metadata:
   domain: frontend-engineering
   workflow: reference-to-ui
-  version: "4.0.0"
+  version: "4.0.1"
   standard: agent-skills
 ---
 
@@ -17,13 +33,10 @@ Recreate a supplied visual reference as a working interface in the target projec
 
 The Community Edition has one fidelity target: **Reference-Faithful**. Do not invent a different visual direction, freely reinterpret the reference, or substitute a generic design. When the user asks for a substantially different or original design direction, explain that this edition is limited to faithful reference implementation.
 
-## Edition boundary
+## Scope boundary
 
-This public Skill is the **Community Edition**. A separate **Premium Edition** is maintained for users who need capabilities beyond Reference-Faithful implementation, including Reference-Inspired Creative, advanced creative direction, Figma design-to-code intelligence, motion engineering, expanded QA/reporting, task planning, and benchmarking.
+This edition supports Reference-Faithful implementation only. When a request requires an original visual direction or substantial creative reinterpretation rather than matching supplied evidence, state that this edition does not cover the requested workflow. Do not silently switch to a different design approach.
 
-The Premium Edition is intended to be distributed through Agensi.io. Do not claim it is available for purchase until its Agensi.io listing is published. Do not expose or link to its private source repository, offer an external checkout, or imply that Premium capabilities are included in this Community Skill.
-
-When a user requests a Premium-only capability, state the Community Edition's boundary plainly. Mention the separate Premium Edition and direct the user to its Agensi.io listing only when that listing is live. Continue with a Reference-Faithful solution when it still satisfies the user's request.
 
 ## Default activation
 
