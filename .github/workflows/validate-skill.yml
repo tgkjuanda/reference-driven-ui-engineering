@@ -29,8 +29,8 @@ jobs:
       - name: Upload Agensi package artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ui-reference-replication-community-4.0.1
-          path: dist/ui-reference-replication-community-4.0.1.zip
+          name: ui-reference-replication-community-4.0.2
+          path: dist/ui-reference-replication-community-4.0.2.zip
           if-no-files-found: error
           retention-days: 14
       - name: Check JavaScript syntax

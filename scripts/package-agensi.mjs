@@ -150,6 +150,9 @@ async function main() {
   let uncompressedBytes = 0;
   for (const file of files) {
     const data = await readFile(file.absolute);
+    if ([".mjs", ".py"].includes(path.extname(file.archivePath).toLowerCase()) && data.length > 20 * 1024) {
+      throw new Error("Agensi recommends keeping each script below 20 KB: " + file.archivePath);
+    }
     uncompressedBytes += data.length;
     entries.push({ name: file.archivePath, data });
   }

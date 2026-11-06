@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, writeFile, realpath } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { createRequire } from "node:module";
@@ -18,8 +18,32 @@ function parseViewports(value) {
 function slug(value) {
   return value.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "") || "root";
 }
+function isInside(root, candidate) {
+  const relative = path.relative(root, candidate);
+  return relative === "" || (!relative.startsWith(".." + path.sep) && relative !== ".." && !path.isAbsolute(relative));
+}
+export async function resolveWithinProject(root, requested, label = "path") {
+  const base = await realpath(root);
+  const candidate = path.resolve(base, requested);
+  if (!isInside(base, candidate)) throw new Error(label + " must stay inside the project directory.");
+  let probe = candidate;
+  while (true) {
+    try {
+      const actual = await realpath(probe);
+      if (!isInside(base, actual)) throw new Error(label + " resolves through a symlink outside the project directory.");
+      break;
+    } catch (error) {
+      if (error.code !== "ENOENT" && error.code !== "ENOTDIR") throw error;
+      const parent = path.dirname(probe);
+      if (parent === probe) throw error;
+      probe = parent;
+    }
+  }
+  return candidate;
+}
 export async function captureScreenshots(options) {
-  const cwd = path.resolve(options.cwd ?? process.cwd());
+  const cwd = await realpath(path.resolve(options.cwd ?? process.cwd()));
+  const outputDir = await resolveWithinProject(cwd, options.out ?? "artifacts/ui-reference/screenshots", "Screenshot output");
   const require = createRequire(path.join(cwd, "package.json"));
   let chromium;
   try { ({ chromium } = require("playwright")); }
@@ -27,7 +51,6 @@ export async function captureScreenshots(options) {
     try { ({ chromium } = require("@playwright/test")); }
     catch { throw new Error("Playwright is not installed in the project. Install it with: npm install -D playwright && npx playwright install chromium"); }
   }
-  const outputDir = path.resolve(cwd, options.out ?? "artifacts/ui-reference/screenshots");
   await mkdir(outputDir, { recursive: true });
   const routes = options.routes ?? ["/"];
   const viewports = options.viewports ?? [{ width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1440, height: 900 }];

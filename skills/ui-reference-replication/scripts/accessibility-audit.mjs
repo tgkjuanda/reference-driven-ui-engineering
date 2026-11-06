@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, writeFile, realpath } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { createRequire } from "node:module";
@@ -8,8 +8,33 @@ function getArg(name, fallback) {
   const i = process.argv.indexOf(name);
   return i >= 0 ? process.argv[i + 1] : fallback;
 }
+function isInside(root, candidate) {
+  const relative = path.relative(root, candidate);
+  return relative === "" || (!relative.startsWith(".." + path.sep) && relative !== ".." && !path.isAbsolute(relative));
+}
+export async function resolveWithinProject(root, requested, label = "path") {
+  const base = await realpath(root);
+  const candidate = path.resolve(base, requested);
+  if (!isInside(base, candidate)) throw new Error(label + " must stay inside the project directory.");
+  let probe = candidate;
+  while (true) {
+    try {
+      const actual = await realpath(probe);
+      if (!isInside(base, actual)) throw new Error(label + " resolves through a symlink outside the project directory.");
+      break;
+    } catch (error) {
+      if (error.code !== "ENOENT" && error.code !== "ENOTDIR") throw error;
+      const parent = path.dirname(probe);
+      if (parent === probe) throw error;
+      probe = parent;
+    }
+  }
+  return candidate;
+}
 export async function auditAccessibility({ url, out, cwd = process.cwd(), viewport = { width: 1440, height: 900 } }) {
-  const require = createRequire(path.join(path.resolve(cwd), "package.json"));
+  const projectRoot = await realpath(path.resolve(cwd));
+  const outputPath = out ? await resolveWithinProject(projectRoot, out, "Accessibility report output") : null;
+  const require = createRequire(path.join(projectRoot, "package.json"));
   let chromium, axe;
   try {
     ({ chromium } = require("playwright"));
@@ -51,9 +76,8 @@ export async function auditAccessibility({ url, out, cwd = process.cwd(), viewpo
       runtimeErrors
     };
     if (out) {
-      const destination = path.resolve(cwd, out);
-      await mkdir(path.dirname(destination), { recursive: true });
-      await writeFile(destination, JSON.stringify(report, null, 2) + "\n");
+      await mkdir(path.dirname(outputPath), { recursive: true });
+      await writeFile(outputPath, JSON.stringify(report, null, 2) + "\n");
     }
     return report;
   } finally {

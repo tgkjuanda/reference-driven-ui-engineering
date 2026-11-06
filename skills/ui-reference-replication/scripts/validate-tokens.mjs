@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readFile } from "node:fs/promises";
+import { readFile, realpath } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -17,6 +17,31 @@ const ALIAS_PATTERN = /^\{([^{}]+)\}$/;
 
 function isObject(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+export async function resolveWithinProject(root, requested, label = "token file") {
+  const base = await realpath(root);
+  const candidate = path.resolve(base, requested);
+  const relative = path.relative(base, candidate);
+  if (relative.startsWith(".." + path.sep) || relative === ".." || path.isAbsolute(relative)) {
+    throw new Error(label + " must stay inside the current project directory.");
+  }
+  let probe = candidate;
+  while (true) {
+    try {
+      const actual = await realpath(probe);
+      const resolvedRelative = path.relative(base, actual);
+      if (resolvedRelative.startsWith(".." + path.sep) || resolvedRelative === ".." || path.isAbsolute(resolvedRelative)) {
+        throw new Error(label + " resolves through a symlink outside the current project directory.");
+      }
+      break;
+    } catch (error) {
+      if (error.code !== "ENOENT" && error.code !== "ENOTDIR") throw error;
+      const parent = path.dirname(probe);
+      if (parent === probe) throw error;
+      probe = parent;
+    }
+  }
+  return candidate;
 }
 function isAlias(value) {
   return typeof value === "string" && ALIAS_PATTERN.test(value);
@@ -237,8 +262,10 @@ async function main() {
     return;
   }
   let document;
+  let resolvedFile;
   try {
-    document = JSON.parse(await readFile(path.resolve(file), "utf8"));
+    resolvedFile = await resolveWithinProject(process.cwd(), file);
+    document = JSON.parse(await readFile(resolvedFile, "utf8"));
   } catch (error) {
     console.error(JSON.stringify({
       valid: false,
@@ -249,7 +276,7 @@ async function main() {
     return;
   }
   const result = validateTokenDocument(document);
-  console.log(JSON.stringify({ file: path.resolve(file), ...result }, null, 2));
+  console.log(JSON.stringify({ file: resolvedFile, ...result }, null, 2));
   if (!result.valid) process.exitCode = 1;
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
