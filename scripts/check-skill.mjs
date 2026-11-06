@@ -27,6 +27,9 @@ const requiredFiles = [
   "LICENSE",
   "CHANGELOG.md",
   "package.json",
+  ".gitignore",
+  "scripts/package-agensi.mjs",
+  "tests/test_agensi_package.py",
   ".agents/rules/ui-reference-replication.md",
   "skills/ui-reference-replication/SKILL.md",
   "skills/ui-reference-replication/references/visual-capability-gate.md",
@@ -48,9 +51,12 @@ const skill = await read("skills/ui-reference-replication/SKILL.md");
 const rule = await read(".agents/rules/ui-reference-replication.md");
 const packageJson = JSON.parse(await read("package.json") || "{}");
 
-const version = skill.match(/^  version: "([^"]+)"$/m)?.[1];
+const version = skill.match(/^version: "([^"]+)"$/m)?.[1];
+const metadataVersion = skill.match(/^  version: "([^"]+)"$/m)?.[1];
 if (!skill.startsWith("---\n")) errors.push("SKILL.md must begin with YAML frontmatter.");
 if (!version) errors.push("SKILL.md frontmatter version is missing.");
+if (!metadataVersion) errors.push("SKILL.md metadata.version is missing.");
+if (version && metadataVersion && version !== metadataVersion) errors.push("Root and metadata Skill versions do not match.");
 if (version && packageJson.version !== version) errors.push("package.json and SKILL.md versions do not match.");
 if (version && !/^\d+\.\d+\.\d+$/.test(version)) errors.push("Skill version must use semantic versioning.");
 if (skill.split(/\r?\n/).length > 500) errors.push("SKILL.md must remain below 500 lines.");
@@ -71,7 +77,14 @@ for (const required of [
   }
 }
 
-const description = skill.match(/^description:\s*(.+)$/m)?.[1]?.toLowerCase() ?? "";
+const frontmatterFields = ["summary", "version", "tags", "keywords", "use_cases", "docs_url"];
+for (const field of frontmatterFields) {
+  if (!new RegExp("^" + field + ":", "m").test(skill.split("---")[1] ?? "")) {
+    errors.push("SKILL.md is missing Agensi frontmatter field: " + field);
+  }
+}
+const descriptionLine = skill.split("\n").find(line => line.startsWith("description:")) ?? "";
+const description = descriptionLine.slice("description:".length).trim().toLowerCase();
 for (const keyword of ["screenshots", "reference", "mockups", "wireframes", "by default"]) {
   if (!description.includes(keyword)) errors.push("Skill description is missing routing keyword: " + keyword);
 }
@@ -81,9 +94,8 @@ for (const required of ["ui-reference-replication", "Reference-Faithful", "visua
   if (!rule.toLowerCase().includes(required.toLowerCase())) errors.push("Antigravity rule is missing: " + required);
 }
 
-const editionBoundary = skill.split("## Edition boundary")[1]?.split("\n## ")[0] ?? "";
-const operationalSkill = skill.replace(editionBoundary, "");
 for (const forbidden of [
+  "Premium Edition",
   "Reference-Inspired Creative",
   "creative-reference-mode.md",
   "anti-ai-slop.md",
@@ -91,13 +103,18 @@ for (const forbidden of [
   "motion-design.md",
   "benchmark.mjs",
   "validate-quality-report.mjs",
-  "plan-task.mjs"
+  "plan-task.mjs",
+  "gumroad.com",
+  "lemon squeezy",
+  "stripe.com/pay"
 ]) {
-  if (operationalSkill.includes(forbidden)) errors.push("Premium-only capability leaked into the Community workflow: " + forbidden);
+  if (skill.toLowerCase().includes(forbidden.toLowerCase())) {
+    errors.push("Marketplace Skill payload contains out-of-scope or off-platform promotion text: " + forbidden);
+  }
 }
 
 const packageScripts = packageJson.scripts ?? {};
-for (const script of ["test", "check", "validate:tokens", "capture:screenshots"]) {
+for (const script of ["test", "check", "validate:tokens", "capture:screenshots", "package:agensi"]) {
   if (!packageScripts[script]) errors.push("package.json is missing script: " + script);
 }
 for (const script of ["plan:task", "benchmark:validate", "benchmark:compare", "validate:quality-report", "compatibility:validate", "regression", "compare:regression"]) {

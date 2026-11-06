@@ -1,6 +1,6 @@
 {
   "name": "ui-reference-replication",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "private": true,
   "type": "module",
   "description": "Community Agent Skill for reference-faithful UI implementation and essential visual verification",
@@ -13,6 +13,7 @@
     "inspect:project": "node skills/ui-reference-replication/scripts/inspect-project.mjs --root .",
     "capture:screenshots": "node skills/ui-reference-replication/scripts/capture-screenshots.mjs",
     "validate:tokens": "node skills/ui-reference-replication/scripts/validate-tokens.mjs skills/ui-reference-replication/templates/design-tokens.example.json",
-    "accessibility:audit": "node skills/ui-reference-replication/scripts/accessibility-audit.mjs"
+    "accessibility:audit": "node skills/ui-reference-replication/scripts/accessibility-audit.mjs",
+    "package:agensi": "node scripts/package-agensi.mjs"
   }
 }

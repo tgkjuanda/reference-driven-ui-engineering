@@ -22,9 +22,14 @@ jobs:
           python-version: "3.12"
       - name: Install screenshot QA dependency
         run: python -m pip install -r requirements-qa.txt
+      - name: Build and validate Agensi package
+        run: |
+          npm run package:agensi
+          python -m unittest tests/test_agensi_package.py
       - name: Check JavaScript syntax
         run: |
           node --check scripts/check-skill.mjs
+          node --check scripts/package-agensi.mjs
           node --check skills/ui-reference-replication/scripts/inspect-project.mjs
           node --check skills/ui-reference-replication/scripts/validate-tokens.mjs
           node --check skills/ui-reference-replication/scripts/capture-screenshots.mjs

@@ -9,12 +9,9 @@ const readmePath = new URL("../README.md", import.meta.url);
 test("Community Edition workflow exposes Reference-Faithful only", async () => {
   const skill = await readFile(skillPath, "utf8");
   const readme = await readFile(readmePath, "utf8");
-  const editionBoundary = skill.split("## Edition boundary")[1]?.split("\n## ")[0] ?? "";
-  const operationalSkill = skill.replace(editionBoundary, "");
-
   assert.match(skill, /Community Edition has one fidelity target: \*\*Reference-Faithful\*\*/);
   assert.match(readme, /One fidelity target: Reference-Faithful/);
-  assert.doesNotMatch(operationalSkill, /Reference-Inspired Creative|creative-reference-mode|anti-ai-slop/i);
+  assert.doesNotMatch(skill, /Premium Edition|Reference-Inspired Creative|creative-reference-mode|anti-ai-slop|Agensi[.]io/i);
 });
 
 test("README explains the separate Premium Edition without exposing its private source or external checkout", async () => {
