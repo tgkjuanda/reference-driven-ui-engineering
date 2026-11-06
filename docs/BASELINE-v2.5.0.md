@@ -3,7 +3,7 @@
 **Audit date:** 2026-11-05  
 **Baseline branch:** `main`  
 **Baseline commit:** `042616857733bab02eafc9b9532a7e249936ef14`  
-**Baseline CI:** [Run 42039539523](https://github.com/tgkjuanda/ui-reference-replication/actions/runs/42039539523) — success
+**Baseline CI:** [Run 42039539523](https://github.com/tgkjuanda/reference-driven-ui-engineering/actions/runs/42039539523) — success
 
 ## Verified baseline
 

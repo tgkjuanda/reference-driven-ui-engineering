@@ -1,6 +1,6 @@
 # UI Reference Replication Engine
 
-[![Validate Agent Skill](https://github.com/tgkjuanda/ui-reference-replication/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/tgkjuanda/ui-reference-replication/actions/workflows/validate-skill.yml)
+[![Validate Agent Skill](https://github.com/tgkjuanda/reference-driven-ui-engineering/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/tgkjuanda/reference-driven-ui-engineering/actions/workflows/validate-skill.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 **Rebuild or redesign interfaces from visual references—faithfully or with an original creative direction, using task-routed context and evidence-led QA.**
@@ -115,13 +115,13 @@ Read only the required references first; load conditional material when its topi
 Install from the repository with the [Vercel Skills CLI](https://github.com/vercel-labs/skills):
 
 ```bash
-npx skills add tgkjuanda/ui-reference-replication
+npx skills add tgkjuanda/reference-driven-ui-engineering
 ```
 
 To target selected agents explicitly:
 
 ```bash
-npx skills add tgkjuanda/ui-reference-replication \
+npx skills add tgkjuanda/reference-driven-ui-engineering \
   --skill ui-reference-replication \
   --agent antigravity \
   --agent claude-code \
@@ -330,7 +330,7 @@ Issues and pull requests are welcome. Useful contributions include:
 - Regression reports from real redesign projects.
 - Improvements to QA scripts and documentation.
 
-Open an issue: [github.com/tgkjuanda/ui-reference-replication/issues](https://github.com/tgkjuanda/ui-reference-replication/issues)
+Open an issue: [github.com/tgkjuanda/reference-driven-ui-engineering/issues](https://github.com/tgkjuanda/reference-driven-ui-engineering/issues)
 
 ## License
 
