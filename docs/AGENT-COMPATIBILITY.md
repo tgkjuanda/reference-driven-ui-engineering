@@ -20,13 +20,13 @@ The Skills CLI supports additional agents. Check its live agent list because sup
 ## Install interactively
 
 ```bash
-npx skills add tgkjuanda/ui-reference-replication
+npx skills add tgkjuanda/reference-driven-ui-engineering
 ```
 
 ## Install to selected agents
 
 ```bash
-npx skills add tgkjuanda/ui-reference-replication \
+npx skills add tgkjuanda/reference-driven-ui-engineering \
   --skill ui-reference-replication \
   --agent antigravity \
   --agent claude-code \
@@ -39,7 +39,7 @@ npx skills add tgkjuanda/ui-reference-replication \
 Use `--global` or `-g` for the selected CLI-supported destinations:
 
 ```bash
-npx skills add tgkjuanda/ui-reference-replication \
+npx skills add tgkjuanda/reference-driven-ui-engineering \
   --skill ui-reference-replication \
   --agent antigravity \
   --agent claude-code \

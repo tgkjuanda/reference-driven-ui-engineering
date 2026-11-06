@@ -24,10 +24,10 @@ A reusable Agent Skill plus optional QA scripts for reference inspection, token 
 ## Main call to action
 
 ```bash
-npx skills add tgkjuanda/ui-reference-replication
+npx skills add tgkjuanda/reference-driven-ui-engineering
 ```
 
-Repository: https://github.com/tgkjuanda/ui-reference-replication
+Repository: https://github.com/tgkjuanda/reference-driven-ui-engineering
 
 ## Product Hunt listing draft
 
@@ -52,9 +52,9 @@ I built an open-source Agent Skill for a common AI UI problem: matching the refe
 
 Give it a Figma link, URL, or screenshot. It helps inspect, build, compare screenshots, and report gaps.
 
-Install: `npx skills add tgkjuanda/ui-reference-replication`
+Install: `npx skills add tgkjuanda/reference-driven-ui-engineering`
 
-Feedback welcome: https://github.com/tgkjuanda/ui-reference-replication
+Feedback welcome: https://github.com/tgkjuanda/reference-driven-ui-engineering
 
 ## LinkedIn post
 
@@ -74,10 +74,10 @@ The Skill gives an agent a repeatable workflow:
 It is designed for Agent Skills-compatible coding tools, including Claude Code, OpenCode, and Antigravity through their supported skill directories.
 
 Install:
-`npx skills add tgkjuanda/ui-reference-replication`
+`npx skills add tgkjuanda/reference-driven-ui-engineering`
 
 Repository:
-https://github.com/tgkjuanda/ui-reference-replication
+https://github.com/tgkjuanda/reference-driven-ui-engineering
 
 I’m looking for practical feedback from frontend developers and design engineers: what is the biggest source of drift between your Figma designs and AI-generated UI?
 
@@ -92,10 +92,10 @@ I’ve been experimenting with a workflow for a problem I keep seeing in AI-assi
 I packaged the workflow as an open-source Agent Skill. It asks the agent to inspect the Figma/URL/screenshot and the existing codebase first, derive the design tokens and component structure, implement in the current stack, and then verify with screenshots and QA tools where available.
 
 Install:
-`npx skills add tgkjuanda/ui-reference-replication`
+`npx skills add tgkjuanda/reference-driven-ui-engineering`
 
 Source:
-https://github.com/tgkjuanda/ui-reference-replication
+https://github.com/tgkjuanda/reference-driven-ui-engineering
 
 I’d especially appreciate feedback on the installation flow, the usefulness of the screenshot comparison workflow, and which frontend stacks or agent environments should be tested next.
 
