@@ -59,3 +59,10 @@ Automated findings do not replace manual keyboard, focus, semantics, and content
 ## Runtime honesty
 
 No helper can prove that an agent visually understood the reference. The current agent must inspect the source and rendered screenshots directly. Report only checks that actually ran.
+
+## File scope and Agensi runtime
+
+Each helper is self-contained and runs independently when Agensi writes it to a temporary file. It does not load sibling files from the Skill package.
+
+Run commands from the target project root. Input files and generated outputs must remain inside that directory. The helpers reject parent-directory traversal and symlinks that resolve outside the project root. They do not read environment secrets or transmit project files. Screenshot capture visits only the URL and routes explicitly supplied for the task.
+

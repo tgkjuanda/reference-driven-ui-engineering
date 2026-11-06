@@ -1,10 +1,34 @@
 #!/usr/bin/env node
-import { readFile, writeFile, access } from "node:fs/promises";
+import { readFile, writeFile, access, realpath } from "node:fs/promises";
 import path from "node:path";
 
 function arg(name, fallback = undefined) {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : fallback;
+}
+
+function isInside(root, candidate) {
+  const relative = path.relative(root, candidate);
+  return relative === "" || (!relative.startsWith(".." + path.sep) && relative !== ".." && !path.isAbsolute(relative));
+}
+async function resolveWithinProject(root, requested, label = "path") {
+  const base = await realpath(root);
+  const candidate = path.resolve(base, requested);
+  if (!isInside(base, candidate)) throw new Error(label + " must stay inside the project directory.");
+  let probe = candidate;
+  while (true) {
+    try {
+      const actual = await realpath(probe);
+      if (!isInside(base, actual)) throw new Error(label + " resolves through a symlink outside the project directory.");
+      break;
+    } catch (error) {
+      if (error.code !== "ENOENT" && error.code !== "ENOTDIR") throw error;
+      const parent = path.dirname(probe);
+      if (parent === probe) throw error;
+      probe = parent;
+    }
+  }
+  return candidate;
 }
 const root = path.resolve(arg("--root", process.cwd()));
 const output = arg("--output");
@@ -68,7 +92,7 @@ const report = {
 };
 const json = JSON.stringify(report, null, 2);
 if (output) {
-  const destination = path.resolve(root, output);
+  const destination = await resolveWithinProject(root, output, "--output");
   await writeFile(destination, json + "\n", "utf8");
   console.error(`Wrote ${path.relative(root, destination)}`);
 }

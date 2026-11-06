@@ -40,6 +40,8 @@ class AgensiPackageTests(unittest.TestCase):
                         name == "LICENSE" or Path(name).suffix in {".md", ".mjs", ".py", ".json"},
                         name,
                     )
+                    if Path(name).suffix in {".mjs", ".py"}:
+                        self.assertLessEqual(archive.getinfo(name).file_size, 20 * 1024, name)
 
                 skill = archive.read("SKILL.md").decode("utf-8")
                 self.assertTrue(skill.startswith("---\n"))

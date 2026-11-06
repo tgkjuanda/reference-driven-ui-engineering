@@ -5,6 +5,18 @@ import json
 import sys
 from pathlib import Path
 
+PROJECT_ROOT = Path.cwd().resolve()
+
+
+def resolve_project_path(value: str, label: str) -> Path:
+    candidate = Path(value).resolve()
+    try:
+        candidate.relative_to(PROJECT_ROOT)
+    except ValueError as exc:
+        raise ValueError(f"{label} must stay inside the current project directory.") from exc
+    return candidate
+
+
 try:
     from PIL import Image, ImageChops, ImageStat, ImageOps
 except ImportError:
@@ -28,8 +40,15 @@ def main() -> int:
     if args.max_changed_pixel_ratio is not None and not 0 <= args.max_changed_pixel_ratio <= 1:
         parser.error("--max-changed-pixel-ratio must be between 0 and 1")
 
-    reference_path = Path(args.reference)
-    actual_path = Path(args.actual)
+    try:
+        reference_path = resolve_project_path(args.reference, "Reference screenshot")
+        actual_path = resolve_project_path(args.actual, "Implementation screenshot")
+        diff_path = resolve_project_path(args.diff, "Difference output")
+        heatmap_path = resolve_project_path(args.heatmap, "Heatmap output")
+        overlay_path = resolve_project_path(args.overlay, "Overlay output") if args.overlay else None
+    except ValueError as exc:
+        parser.error(str(exc))
+
     try:
         reference = Image.open(reference_path).convert("RGB")
         actual = Image.open(actual_path).convert("RGB")
@@ -55,16 +74,12 @@ def main() -> int:
     channel_means = ImageStat.Stat(difference).mean
     normalized_mae = sum(channel_means) / (3 * 255)
 
-    diff_path = Path(args.diff)
-    heatmap_path = Path(args.heatmap)
     diff_path.parent.mkdir(parents=True, exist_ok=True)
     heatmap_path.parent.mkdir(parents=True, exist_ok=True)
     difference.save(diff_path)
     heatmap = ImageOps.colorize(grayscale, black="#151515", white="#ff2020")
     heatmap.save(heatmap_path)
-    overlay_path = None
-    if args.overlay:
-        overlay_path = Path(args.overlay)
+    if overlay_path:
         overlay_path.parent.mkdir(parents=True, exist_ok=True)
         Image.blend(reference, actual, 0.5).save(overlay_path)
 

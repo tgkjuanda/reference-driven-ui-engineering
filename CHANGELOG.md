@@ -2,6 +2,17 @@
 
 All notable changes to UI Reference Replication are documented here.
 
+## [4.0.2] - 2026-11-06
+
+### Agensi security hardening
+
+- Confined helper-script inputs and outputs to the selected target project directory, including symlink escape checks.
+- Kept each bundled script self-contained so it does not read sibling files from the Skill package.
+- Enforced the Agensi recommended 20 KB per-script review budget during package generation and repository checks.
+- Pointed the marketplace documentation URL directly to the Free Skill instructions.
+- Updated the workflow artifact and package metadata to version 4.0.2.
+
+
 ## [4.0.1] - 2026-11-06
 
 ### Agensi Free Edition packaging and repository hygiene

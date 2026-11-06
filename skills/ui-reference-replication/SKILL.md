@@ -3,7 +3,7 @@ name: ui-reference-replication
 description: Builds and redesigns web/app interfaces to closely match supplied screenshots, reference images, Figma frame exports, public website pages, mockups, and wireframes. Use by default for reference-led UI implementation and visual comparison.
 license: MIT
 summary: "Build reference-matched web interfaces and redesign existing UI while preserving product behavior."
-version: "4.0.1"
+version: "4.0.2"
 tags:
   - frontend
   - ui-design
@@ -17,11 +17,11 @@ use_cases:
   - "Build a new interface from screenshots, mockups, or Figma frame exports."
   - "Redesign existing UI while preserving routes, data, and workflows."
   - "Compare rendered screens against a supplied visual reference."
-docs_url: "https://github.com/tgkjuanda/reference-driven-ui-engineering"
+docs_url: "https://github.com/tgkjuanda/reference-driven-ui-engineering/blob/main/skills/ui-reference-replication/SKILL.md"
 metadata:
   domain: frontend-engineering
   workflow: reference-to-ui
-  version: "4.0.1"
+  version: "4.0.2"
   standard: agent-skills
 ---
 
@@ -164,7 +164,7 @@ The repository includes optional helpers for common reference-led work:
 - `scripts/validate-tokens.mjs` — validate the supported subset of design-token structures used by the example.
 - `scripts/accessibility-audit.mjs` — run an axe-core scan when the target project has the required dependencies.
 
-Run scripts from the target project root where required. Install no dependencies silently. A helper's successful exit status proves only what that helper checks; it does not prove that a design is visually accurate.
+Run helper scripts individually from the target project root. Every file input and output must remain inside that project root; reject parent-directory traversal and symlink paths that resolve outside it. Scripts run as standalone temporary files and must not read sibling files from the Skill package. Install no dependencies silently. A helper's successful exit status proves only what that helper checks; it does not prove that a design is visually accurate.
 
 ## References
 

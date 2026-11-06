@@ -145,11 +145,11 @@ Build a single-skill ZIP for Agensi's upload workflow:
 npm run package:agensi
 ~~~
 
-The command creates `dist/ui-reference-replication-community-4.0.1.zip`. The archive contains one root-level `SKILL.md`, its reference documents and optional text-based helper scripts, plus the MIT license. It excludes Git history, repository tests, CI configuration, development dependencies, and Premium materials.
+The command creates `dist/ui-reference-replication-community-4.0.2.zip`. The archive contains one root-level `SKILL.md`, its reference documents and optional text-based helper scripts, plus the MIT license. It excludes Git history, repository tests, CI configuration, development dependencies, and Premium materials.
 
-The package includes Agensi-readable frontmatter for the skill name, description, summary, version, tags, keywords, use cases, and documentation URL. Generating the ZIP does not mean Agensi has approved or published the listing; every submission remains subject to Agensi's security scan and manual review.
+The package includes Agensi-readable frontmatter for the skill name, description, summary, version, tags, keywords, use cases, and a documentation URL pointing directly to the Free Skill instructions. Generating the ZIP does not mean Agensi has approved or published the listing; every submission remains subject to Agensi's security scan and manual review.
 
-The core workflow requires an agent that can directly inspect the source reference and rendered implementation. Helper scripts are optional and require the local runtime/dependencies described in the Skill.
+The core workflow requires an agent that can directly inspect the source reference and rendered implementation. Helper scripts are optional, run independently, and confine file inputs and outputs to the target project directory.
 
 ## Scope
 
@@ -159,7 +159,7 @@ The scripts are optional diagnostics. A passing repository test does not prove t
 
 ## Version
 
-Current Community Edition: **4.0.1**. Changes are recorded in [CHANGELOG.md](CHANGELOG.md).
+Current Community Edition: **4.0.2**. Changes are recorded in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 

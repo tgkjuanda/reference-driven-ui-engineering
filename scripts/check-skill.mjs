@@ -30,6 +30,7 @@ const requiredFiles = [
   ".gitignore",
   "scripts/package-agensi.mjs",
   "tests/test_agensi_package.py",
+  "tests/path-safety.test.mjs",
   ".agents/rules/ui-reference-replication.md",
   "skills/ui-reference-replication/SKILL.md",
   "skills/ui-reference-replication/references/visual-capability-gate.md",
@@ -110,6 +111,20 @@ for (const forbidden of [
 ]) {
   if (skill.toLowerCase().includes(forbidden.toLowerCase())) {
     errors.push("Marketplace Skill payload contains out-of-scope or off-platform promotion text: " + forbidden);
+  }
+}
+
+const bundledScripts = [
+  "skills/ui-reference-replication/scripts/inspect-project.mjs",
+  "skills/ui-reference-replication/scripts/capture-screenshots.mjs",
+  "skills/ui-reference-replication/scripts/compare-screenshots.py",
+  "skills/ui-reference-replication/scripts/validate-tokens.mjs",
+  "skills/ui-reference-replication/scripts/accessibility-audit.mjs"
+];
+for (const script of bundledScripts) {
+  const source = await read(script);
+  if (Buffer.byteLength(source, "utf8") > 20 * 1024) {
+    errors.push("Agensi recommends keeping each bundled script below 20 KB: " + script);
   }
 }
 
