@@ -17,6 +17,14 @@ Recreate a supplied visual reference as a working interface in the target projec
 
 The Community Edition has one fidelity target: **Reference-Faithful**. Do not invent a different visual direction, freely reinterpret the reference, or substitute a generic design. When the user asks for a substantially different or original design direction, explain that this edition is limited to faithful reference implementation.
 
+## Edition boundary
+
+This public Skill is the **Community Edition**. A separate **Premium Edition** is maintained for users who need capabilities beyond Reference-Faithful implementation, including Reference-Inspired Creative, advanced creative direction, Figma design-to-code intelligence, motion engineering, expanded QA/reporting, task planning, and benchmarking.
+
+The Premium Edition is intended to be distributed through Agensi.io. Do not claim it is available for purchase until its Agensi.io listing is published. Do not expose or link to its private source repository, offer an external checkout, or imply that Premium capabilities are included in this Community Skill.
+
+When a user requests a Premium-only capability, state the Community Edition's boundary plainly. Mention the separate Premium Edition and direct the user to its Agensi.io listing only when that listing is live. Continue with a Reference-Faithful solution when it still satisfies the user's request.
+
 ## Default activation
 
 Use this Skill by default when the user asks to create, build, implement, recreate, replicate, redesign, restyle, or visually compare a web/app interface and provides or points to visual reference evidence.

@@ -14,6 +14,15 @@ test("Community Edition exposes Reference-Faithful as its only fidelity target",
   assert.doesNotMatch(skill, /Reference-Inspired Creative|creative-reference-mode|anti-ai-slop/i);
 });
 
+test("README distinguishes Community and Premium editions without exposing private checkout/source", async () => {
+  const readme = await readFile(readmePath, "utf8");
+  assert.match(readme, /Two editions: Community and Premium/);
+  assert.match(readme, /Agensi\.io/);
+  assert.match(readme, /Reference-Inspired Creative/);
+  assert.doesNotMatch(readme, /reference-driven-ui-engineering-premium/);
+  assert.doesNotMatch(readme, /gumroad|lemon squeezy|stripe payment link/i);
+});
+
 test("premium-only modules are absent from the current Community Edition tree", async () => {
   const excluded = [
     "skills/ui-reference-replication/references/creative-reference-mode.md",

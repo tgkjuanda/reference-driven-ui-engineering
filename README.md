@@ -29,6 +29,27 @@ The Community Edition supports three work modes:
 | **Existing UI Redesign** | Update an application's visual layer while preserving its behavior. |
 | **Hybrid** | Redesign selected screens and build new screens in the same project. |
 
+## Two editions: Community and Premium
+
+UI Reference Replication is maintained in two editions. The public repository contains the Community Edition; a separate Premium Edition is developed independently for users who need capabilities beyond faithful reference implementation.
+
+| Capability | Community Edition (Free) | Premium Edition |
+|---|---:|---:|
+| Reference-Faithful implementation | Included | Included |
+| New Build, Existing UI Redesign, Hybrid | Included | Included |
+| Visual reference inspection and screenshot comparison | Essential workflow | Expanded workflow |
+| Reference-Inspired Creative mode | — | Included |
+| Creative direction and anti-generic design review | — | Included |
+| Advanced Figma analysis and design-to-code intelligence | — | Included |
+| Motion design and animation engineering | — | Included |
+| Extended visual evidence and perceptual review | — | Included |
+| Advanced regression, responsive, performance, and security QA | — | Included |
+| Task planning, benchmarking, and agent capability validation | — | Included |
+
+**Community Edition** remains free and independently useful. It focuses on reproducing a supplied reference accurately, preserving existing product behavior, and performing essential visual checks.
+
+**Premium Edition** adds creative interpretation and deeper design/engineering workflows. It is maintained in a separate private repository and is intended to be distributed through Agensi.io. Listing availability, access, and purchase are handled through Agensi.io once the listing is published. This public repository does not contain Premium files or provide an external checkout.
+
 ## Visual inspection is mandatory
 
 The active agent must be able to inspect both the source reference and screenshots of its implementation. Text-only reconstruction, DOM/CSS inspection, OCR, or pixel-difference metrics cannot replace visual inspection.
