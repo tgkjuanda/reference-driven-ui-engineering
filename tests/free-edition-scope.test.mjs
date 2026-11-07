@@ -16,8 +16,10 @@ test("Community Edition workflow exposes Reference-Faithful only", async () => {
 
 test("public README keeps separate-edition details generic", async () => {
   const readme = await readFile(readmePath, "utf8");
-  assert.match(readme, /A separate edition is distributed independently/);
-  assert.doesNotMatch(readme, /Two editions: Community and Premium|Premium Edition|Reference-Inspired Creative|advanced Figma|motion-design engineering|benchmark tooling|extended automated QA/i);
+  assert.match(readme, /A separate Premium edition is available independently/);
+  assert.match(readme, /https:\/\/aiskill\.my\.id\//);
+  assert.match(readme, /purchase route/i);
+  assert.doesNotMatch(readme, /Two editions: Community and Premium|Reference-Inspired Creative|advanced Figma|motion-design engineering|benchmark tooling|extended automated QA/i);
   assert.doesNotMatch(readme, /reference-driven-ui-engineering-premium|private repository|private source/i);
   assert.doesNotMatch(readme, /gumroad|lemon squeezy|stripe payment link/i);
 });
