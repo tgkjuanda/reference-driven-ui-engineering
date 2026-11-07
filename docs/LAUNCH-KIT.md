@@ -2,12 +2,11 @@
 
 ## Product architecture
 
-UI Reference Replication has two editions:
+The public GitHub repository contains the Community Edition: an open-source workflow for faithful implementation of supplied visual references.
 
-- **Community Edition (Free):** the open-source reference-faithful implementation workflow published in the public GitHub repository.
-- **Premium Edition:** a separately maintained edition that adds creative interpretation, advanced Figma intelligence, motion engineering, expanded QA/reporting, task planning, and benchmark capabilities. Premium is intended to be distributed through Agensi.io; availability is announced through its marketplace listing when published.
+A separate edition is maintained and distributed independently. Its implementation details are intentionally not documented in this public repository. Refer to its marketplace listing for availability and access information.
 
-The public Community Edition repository must not contain Premium source files or link to external checkouts.
+The public Community Edition repository must not contain private-edition source files or link to external checkouts.
 
 ## Community Edition positioning
 
