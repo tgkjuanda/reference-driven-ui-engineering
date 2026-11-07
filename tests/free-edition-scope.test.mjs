@@ -14,12 +14,11 @@ test("Community Edition workflow exposes Reference-Faithful only", async () => {
   assert.doesNotMatch(skill, /Premium Edition|Reference-Inspired Creative|creative-reference-mode|anti-ai-slop|Agensi[.]io/i);
 });
 
-test("README explains the separate Premium Edition without exposing its private source or external checkout", async () => {
+test("public README keeps separate-edition details generic", async () => {
   const readme = await readFile(readmePath, "utf8");
-  assert.match(readme, /Two editions: Community and Premium/);
-  assert.match(readme, /Agensi\.io/);
-  assert.match(readme, /Reference-Inspired Creative/);
-  assert.doesNotMatch(readme, /reference-driven-ui-engineering-premium/);
+  assert.match(readme, /A separate edition is distributed independently/);
+  assert.doesNotMatch(readme, /Two editions: Community and Premium|Premium Edition|Reference-Inspired Creative|advanced Figma|motion-design engineering|benchmark tooling|extended automated QA/i);
+  assert.doesNotMatch(readme, /reference-driven-ui-engineering-premium|private repository|private source/i);
   assert.doesNotMatch(readme, /gumroad|lemon squeezy|stripe payment link/i);
 });
 
