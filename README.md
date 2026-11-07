@@ -43,7 +43,7 @@ The Community Edition supports three work modes:
 
 This public repository contains the independently useful, open-source Community Edition. It focuses on faithful implementation of supplied visual references and essential verification.
 
-This repository contains the Community Edition only. Its design target is Reference-Faithful, and its documented scope is limited to the workflows and helpers included here.
+A separate edition is distributed independently. Its source and implementation materials are not part of this repository. Check the relevant marketplace listing for availability and access information.
 
 ## Visual inspection is mandatory
 
