@@ -9,7 +9,7 @@ UI Reference Replication is an open Agent Skill for coding agents. It helps crea
 
 ## Discover more AI skills
 
-**Find practical skills for AI agents at [AISKILL](https://aiskill.my.id/).** Explore the growing collection of free open-source workflows and upcoming premium editions.
+**Find practical skills for AI agents at [AISKILL](https://aiskill.my.id/).** Explore practical open-source workflows for AI agents.
 
 - Browse the marketplace: https://aiskill.my.id/
 - Explore this Community Edition: https://aiskill.my.id/#featured
@@ -39,26 +39,11 @@ The Community Edition supports three work modes:
 | **Existing UI Redesign** | Update an application's visual layer while preserving its behavior. |
 | **Hybrid** | Redesign selected screens and build new screens in the same project. |
 
-## Two editions: Community and Premium
+## Community Edition
 
-UI Reference Replication is maintained in two editions. The public repository contains the Community Edition; a separate Premium Edition is developed independently for users who need capabilities beyond faithful reference implementation.
+This public repository contains the independently useful, open-source Community Edition. It focuses on faithful implementation of supplied visual references and essential verification.
 
-| Capability | Community Edition (Free) | Premium Edition |
-|---|---:|---:|
-| Reference-Faithful implementation | Included | Included |
-| New Build, Existing UI Redesign, Hybrid | Included | Included |
-| Visual reference inspection and screenshot comparison | Essential workflow | Expanded workflow |
-| Reference-Inspired Creative mode | — | Included |
-| Creative direction and anti-generic design review | — | Included |
-| Advanced Figma analysis and design-to-code intelligence | — | Included |
-| Motion design and animation engineering | — | Included |
-| Extended visual evidence and perceptual review | — | Included |
-| Advanced regression, responsive, performance, and security QA | — | Included |
-| Task planning, benchmarking, and agent capability validation | — | Included |
-
-**Community Edition** remains free and independently useful. It focuses on reproducing a supplied reference accurately, preserving existing product behavior, and performing essential visual checks.
-
-**Premium Edition** adds creative interpretation and deeper design/engineering workflows. It is maintained in a separate private repository and is intended to be distributed through Agensi.io. Listing availability, access, and purchase are handled through Agensi.io once the listing is published. This public repository does not contain Premium files or provide an external checkout.
+A separate edition is distributed independently. Its source and implementation materials are not part of this repository. Check the relevant marketplace listing for availability and access information.
 
 ## Visual inspection is mandatory
 
@@ -165,7 +150,7 @@ Use the [Agensi submission sheet](docs/AGENSI-SUBMISSION.md) for prepared listin
 
 ## Scope
 
-This edition focuses on faithful reference implementation and essential visual verification. It does not include original creative-direction workflows, structured Figma-to-code intelligence, motion-design engineering, benchmark tooling, or the extended automated QA/reporting suite.
+This edition focuses on faithful reference implementation and essential visual verification. Its scope is intentionally limited to the workflows documented and packaged in this repository.
 
 The scripts are optional diagnostics. A passing repository test does not prove that an interface built in another project is visually accurate or functionally correct.
 
