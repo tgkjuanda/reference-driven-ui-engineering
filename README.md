@@ -148,7 +148,7 @@ The package builder validates Agensi-readable frontmatter and field limits, one 
 
 The core workflow requires an agent that can directly inspect the source reference and rendered implementation. Helper scripts are optional, run independently, and confine file inputs and outputs to the target project directory. Each bundled script is self-contained; no script reads sibling files from the Skill package.
 
-Use the [Agensi submission sheet](docs/AGENSI-SUBMISSION.md) for prepared listing copy, runtime compatibility, permission disclosures, known limitations, and a pre-submission checklist. The live demonstration field must be completed from a real project run with genuine screenshots; repository tests are not a substitute for that evidence.
+Use the [Agensi listing record](docs/AGENSI-SUBMISSION.md) for the currently published listing summary, runtime compatibility, permission disclosures, and known limitations. Keep the public example session grounded in an authorized project run; add genuine source/result screenshots before claiming measured visual fidelity. Repository tests are not a substitute for end-to-end demo evidence.
 
 ## Scope
 
