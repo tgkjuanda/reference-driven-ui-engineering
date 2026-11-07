@@ -43,7 +43,7 @@ The Community Edition supports three work modes:
 
 This public repository contains the independently useful, open-source Community Edition. It focuses on faithful implementation of supplied visual references and essential verification.
 
-A separate edition is distributed independently. Its source and implementation materials are not part of this repository. Check the relevant marketplace listing for availability and access information.
+A separate Premium edition is available independently and is not included in this repository. **Want the Premium edition? Visit [AISKILL](https://aiskill.my.id/) for product information and the purchase route.**
 
 ## Visual inspection is mandatory
 
