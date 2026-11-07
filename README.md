@@ -11,9 +11,9 @@ UI Reference Replication is an open Agent Skill for coding agents. It helps crea
 
 **Find practical skills for AI agents at [AISKILL](https://aiskill.my.id/).** Explore practical open-source workflows for AI agents.
 
-- Browse the marketplace: https://aiskill.my.id/
-- Explore this Community Edition: https://aiskill.my.id/#featured
-- Install this skill: `npx skills add tgkjuanda/reference-driven-ui-engineering`
+- **Use the published Free listing on Agensi:** https://www.agensi.io/skills/ui-reference-replication-community
+- Explore the AISKILL product page: https://aiskill.my.id/#featured
+- Browse the source and install with the Skills CLI: `npx skills add tgkjuanda/reference-driven-ui-engineering`
 
 AISKILL is the product discovery home; this repository remains the canonical source for the free Community Edition.
 
@@ -132,7 +132,9 @@ npm run validate:tokens
 
 See [Quality Gates](docs/QUALITY-GATES.md) and [Automated Workflow](docs/AUTOMATED-WORKFLOW.md) for the Community Edition's acceptance criteria.
 
-## Agensi.io package
+## Agensi.io listing
+
+The Community Edition is published as a free listing on Agensi: https://www.agensi.io/skills/ui-reference-replication-community. The Agensi listing is the hosted discovery and usage entry point; this GitHub repository remains the canonical open-source source and CLI installation path.
 
 Build a single-skill ZIP for Agensi's upload workflow:
 
